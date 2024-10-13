@@ -2,14 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
+const balooFont = localFont({
+  src: "./fonts/BalooPaaji2-VariableFont_wght.ttf",
+  variable: "--font-baloo",
   weight: "100 900",
 });
 
@@ -25,11 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <body className={`${balooFont.variable}  antialiased`}>{children}</body>
     </html>
   );
 }
