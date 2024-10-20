@@ -1,21 +1,25 @@
 header {
-  background-color: #ffffff;
-  box-shadow: 0 4px 7px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  position: fixed;
+  background-color: var(--background-color);
+  box-shadow: 0 4px 7px var(--shadow-color);
+  z-index: 3;
 }
 
 header nav#navbar {
+ 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 90px;
+  height: 4rem;
   max-width: 1240px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 1 2rem;
 }
 
 header nav#navbar .nav-img {
-  width: 25vh;
-  height: 20vh;
+  width: 15vh;
+  height: 15vh;
 }
 
 header nav#navbar .nav-brand {
@@ -26,9 +30,9 @@ header nav#navbar .nav-brand {
 }
 
 header nav#navbar .nav-brand h1 {
-  font-size: 1.2rem;
+  color: var(--primary-color);
+  font-size: 1.1rem;
   font-weight: 700;
-  color: #3590B5;
 }
 
 header nav#navbar ul.nav-list {
@@ -39,12 +43,11 @@ header nav#navbar ul.nav-list {
 }
 
 header nav#navbar ul.nav-list li a {
-  color: #4d4d4d;
-  font-size: 1.1rem;
-  transition: color 0.2s;
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: color 0.2s ease-in-out;
 }
 
 header nav#navbar ul.nav-list li a:hover {
-  color: #EAEAEA;
-  transition: color 0.2s;
+  color: var(--hover-color);
 }

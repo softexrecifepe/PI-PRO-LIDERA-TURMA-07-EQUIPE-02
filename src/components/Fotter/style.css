@@ -1,0 +1,47 @@
+:root {
+  --primary-color: #3590b5;
+  --text-color: #4d4d4d;
+  --hover-color: #3590b5;
+  --background-color: #ffffff;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+  padding: 2rem;
+}
+
+footer h2.contact {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.contact-area {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.contact-tel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.contact-mail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.contact-location {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
