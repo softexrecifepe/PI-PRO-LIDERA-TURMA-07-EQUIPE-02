@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Navbar from "@/components/navbar";
+import { Fotter } from "@/components/footer";
 
 const balooFont = localFont({
   src: "./fonts/BalooPaaji2-VariableFont_wght.ttf",
@@ -21,7 +23,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${balooFont.variable}  antialiased`}>{children}</body>
+      <body className={`${balooFont.variable}  antialiased`}>
+        <Navbar />
+        {children}
+        <Fotter />
+      </body>
     </html>
   );
 }
