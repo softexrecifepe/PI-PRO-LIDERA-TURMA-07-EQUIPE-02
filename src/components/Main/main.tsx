@@ -1,3 +1,6 @@
+"use client";
+
+import { CustomButton } from "../button/custom-button";
 import "./style.css";
 
 export function Main() {
@@ -12,8 +15,8 @@ export function Main() {
             teste especializado.
           </p>
           <div className="buttons">
-            <button>Log in</button>
-            <button>Log up</button>
+            <CustomButton onClick={() => {}}>Entrar</CustomButton>
+            <CustomButton onClick={() => {}}>Criar Conta</CustomButton>
           </div>
         </div>
       </section>
@@ -21,4 +24,3 @@ export function Main() {
     </main>
   );
 }
-
