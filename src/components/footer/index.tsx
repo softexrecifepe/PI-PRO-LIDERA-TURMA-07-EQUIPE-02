@@ -3,7 +3,7 @@ import { MdOutlineEmail } from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
 import "./style.css";
 
-export function Fotter() {
+export function Footer() {
   return (
     <footer>
       <div id="fotter">
