@@ -65,7 +65,7 @@
       </a>
     </td>
       <td align="center">
-      <a href="https://www.linkedin.com/in/catarinaguimaraess/" >
+      <a href="#" >
         <img src="https://avatars.githubusercontent.com/u/143666861?v=4" width="100" alt="Fabyanna Moreira Profile Picture">
       </a>
       <br>
