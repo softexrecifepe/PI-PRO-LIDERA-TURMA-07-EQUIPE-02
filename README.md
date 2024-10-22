@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+![logo](https://github.com/user-attachments/assets/07366c83-5302-44a1-9465-9a766d4ff115)
+# PRO Lidera Skills
+## Descrição
+<p align="justify">
+&nbsp;&nbsp;&nbsp;Aplicação web voltada para a avaliação de liderança, desenvolvida com next.js. A proposta é oferecer uma experiência interativa onde os usuários podem realizar um teste de 18 perguntas para medir suas habilidades de liderança. Cada pergunta possui quatro alternativas com pontuações específicas, que resultam em um de três níveis de liderança: "Liderança frágil e pouco trabalhada", "Liderança em desenvolvimento" ou "Líder de alta performance". <br/>
+&nbsp;&nbsp;&nbsp;Uma funcionalidade extra permite que o resultado final seja baixado em formato PDF, possibilitando ao usuário manter um registro de sua avaliação. Em etapas futuras, o sistema será integrado a uma homepage de vendas online, expandindo seu alcance e funcionalidades.
+</p>
 
-## Getting Started
+## Funcionalidades Principais
+- Cadastro de usuários.
+- Banco de dados para armazenar informações dos testes.
+- Exibição de resultados.
+- Geração de PDF com o resultado.
+- Integração futura com uma plataforma de vendas online.
+- O projeto visa simplificar o processo de avaliação de liderança, oferecendo uma interface intuitiva e recursos robustos para quem deseja compreender e melhorar suas habilidades de liderança.
 
-First, run the development server:
+## Tecnologias Utilizadas
+- Semantic HTML5 markup
+- CSS custom properties
+- Typescript
+- React.js
+- React-icons
+- NEXT.js
+- [**Tailwind Css**](https://tailwindcss.com/docs/guides/vite)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Screenshot
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+![image](https://github.com/user-attachments/assets/a2fbfbbe-d886-4aaf-ada5-7652dfd82f06)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Links
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Live Site URL: [clique aqui]
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Equipe
+<table align="center">
+  <tr>
+    <td align="center">
+      <a href="https://www.linkedin.com/in/catarinaguimaraess/" >
+        <img src="https://avatars.githubusercontent.com/u/110750750?v=4" width="100" alt="Catarina Guimarães Profile Picture">
+      </a>
+      <br>
+      <sub><b>Catarina Guimarães</b></sub>
+      <br>
+      <a href="https://github.com/CatarinaGuima">
+        <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub link">
+      </a>
+      <br>
+      <a href="https://www.linkedin.com/in/catarinaguimaraess/">
+        <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn link">
+      </a>
+    </td>
+  </tr>
+</table>
