@@ -50,7 +50,7 @@
       </a>
     </td>
      <td align="center">
-      <a href="https://www.linkedin.com/in/catarinaguimaraess/" >
+      <a href="#" >
         <img src="https://avatars.githubusercontent.com/u/163914578?v=4" width="100" alt="Claúdio José Profile Picture">
       </a>
       <br>
@@ -65,7 +65,7 @@
       </a>
     </td>
       <td align="center">
-      <a href="#" >
+      <a href="https://www.linkedin.com/in/fabyanna-moreira-733a7a244?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app " >
         <img src="https://avatars.githubusercontent.com/u/143666861?v=4" width="100" alt="Fabyanna Moreira Profile Picture">
       </a>
       <br>
@@ -75,12 +75,12 @@
         <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub link">
       </a>
       <br>
-      <a href="https://www.linkedin.com/in/fabyanna-moreira-733a7a244?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app ">
+      <a href="https://www.linkedin.com/in/fabyanna-moreira-733a7a244?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app">
         <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn link">
       </a>
     </td>
      <td align="center">
-      <a href="https://www.linkedin.com/in/catarinaguimaraess/" >
+      <a href="https://www.linkedin.com/in/leandro-c-s/" >
         <img src="https://avatars.githubusercontent.com/u/56963289?v=4" width="100" alt="Leandro Carvalho Profile Picture">
       </a>
       <br>
@@ -95,7 +95,7 @@
       </a>
     </td>
       <td align="center">
-      <a href="https://www.linkedin.com/in/catarinaguimaraess/" >
+      <a href="https://www.linkedin.com/in/thiago-felipe-045827268/" >
         <img src="https://avatars.githubusercontent.com/u/175509559?v=4" width="100" alt="Leandro Carvalho Profile Picture">
       </a>
       <br>
