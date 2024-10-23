@@ -1,0 +1,24 @@
+[
+    { 
+        "id": "", 
+        "pergunta": "Você precisa comunicar uma mudança importante na política da empresa para sua equipe, que pode causar preocupação entre os membros. Como você abordaria essa comunicação?", 
+        "options": [
+            {
+                "id": "", 
+                "value": "Envia um e-mail detalhado explicando a mudança, sem abrir espaço para perguntas", "score": 2
+            },
+            {
+                "id": "", 
+                "value": "Faz uma reunião com a equipe, explica a mudança e pede sugestões sobre como implementá-la.", "score": 4
+            },
+            {
+                "id": "", 
+                "value": "Menciona a mudança brevemente em uma reunião, sem abrir para discussões, para evitar reações negativas.", "score": 1
+            },
+            {
+                "id": "", 
+                "value": "Anuncia a mudança em uma reunião, mas só permite perguntas no final, para manter o controle da situação.", "score": 3
+            }
+        ]
+    }
+]
