@@ -18,12 +18,12 @@ export function Header() {
             </a>
           </li>
           <li>
-            <a href="/" className="text-[var(--text-color)] hover:text-primary text-base transition-colors duration-200 ease-in-out">
+            <a href="#about-us" className="text-[var(--text-color)] hover:text-primary text-base transition-colors duration-200 ease-in-out">
               Quem somos
             </a>
           </li>
           <li>
-            <a href="/" className="text-[var(--text-color)] hover:text-primary text-base transition-colors duration-200 ease-in-out">
+            <a href="#footer" className="text-[var(--text-color)] hover:text-primary text-base transition-colors duration-200 ease-in-out">
               Contato
             </a>
           </li>
