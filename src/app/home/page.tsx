@@ -13,7 +13,7 @@ export default function HomePage() {
         }}
       >
         <div className="absolute top-16 left-0 right-0 bottom-0 bg-[rgba(0,0,0,0.25)]"></div>
-        <div className="relative text-white mb-32 text-justify w-[35%] ml-16 flex flex-col gap-6 z-10">
+        <div className="relative text-white mb-32 text-justify w-[35%] ml-16 flex flex-col gap-6">
           <h2 className="text-4xl text-[var(--primary-color)] font-medium">
             Descubra seu potencial!
           </h2>
@@ -22,8 +22,12 @@ export default function HomePage() {
             teste especializado.
           </p>
           <div className="flex justify-evenly items-center gap-32">
-            <CustomButton onClick={() => {}}>Entrar</CustomButton>
-            <CustomButton onClick={() => {}}>Criar Conta</CustomButton>
+            <CustomButton onClick={() => {}}>
+              <a href="/login">Entrar</a>
+            </CustomButton>
+            <CustomButton onClick={() => {}}>
+              <a href="/cadastro">Criar Conta</a>
+            </CustomButton>
           </div>
         </div>
       </section>

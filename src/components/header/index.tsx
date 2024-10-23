@@ -4,7 +4,7 @@ import logo from "../../../src/assets/images/logo.png";
 
 export function Header() {
   return (
-    <header className="w-full fixed top-0 bg-[var(--background-color)] shadow-md">
+    <header className="w-full fixed top-0 bg-[var(--background-color)] shadow-md z-10">
       <nav className="flex items-center justify-between h-16 max-w-[1240px] mx-auto px-4">
         <div className="flex items-center text-[#4d4d4d]">
           <Image className="w-[15vh] h-[15vh]" src={logo} alt="logo" />

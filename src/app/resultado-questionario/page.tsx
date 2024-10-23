@@ -1,3 +1,3 @@
 export default function ResultadoQuestionario() {
-  return <h1>Página do Resultado do Questionario</h1>;
+  return <h1 className="p-24">Página do Resultado do Questionario</h1>;
 }

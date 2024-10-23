@@ -1,3 +1,3 @@
 export default function Login() {
-  return <h1 className="py-8">Página de Login</h1>;
+  return <h1 className="p-24">Página de Login</h1>;
 }
