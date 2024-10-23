@@ -1,9 +1,9 @@
 "use client";
 import { CustomButton } from "@/components/button/custom-button";
 import image from "@/assets/images/main-image.png";
-import image2 from "@/assets/images/image.png"
+import image2 from "@/assets/images/image.png";
 
-export function Main() {
+export default function HomePage() {
   return (
     <main>
       <section
@@ -27,17 +27,22 @@ export function Main() {
           </div>
         </div>
       </section>
-      <section id="about-us" className="flex w-[100vw] h-[80vh] justify-start items-center">
+      <section
+        id="about-us"
+        className="flex w-[100vw] h-[80vh] justify-start items-center"
+      >
         <div className="flex bg-no-repeat">
-          <img className="max-w-3xl h-fit" src={image2.src} alt="Image"/>
+          <img className="max-w-3xl h-fit" src={image2.src} alt="Image" />
           <div className="flex flex-col justify-center gap-6 text-justify max-w-xl">
-            <h2 className="font-bold text-2xl">Bem-vindo à PRO Lidera Skills</h2>
+            <h2 className="font-bold text-2xl">
+              Bem-vindo à PRO Lidera Skills
+            </h2>
             <p className="text-xl text-justify">
               É uma aplicação inovadora que proporciona a avaliação das suas
               capacidades de liderança. Nossa missão é auxiliar indivíduos a
               compreender suas habilidades de liderança para alcançar todo o seu
-              potencial. Através de uma abordagem personalizada. Buscamos promover
-              o desenvolvimento contínuo.
+              potencial. Através de uma abordagem personalizada. Buscamos
+              promover o desenvolvimento contínuo.
             </p>
           </div>
         </div>

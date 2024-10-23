@@ -34,6 +34,7 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: "Baloo Paaji 2", sans-serif;
+  height: 100vh;
 }
 
 @layer utilities {
@@ -43,7 +44,7 @@ body {
 }
 
 :root {
-  --primary-color: #3590B5;
+  --primary-color: #3590b5;
   --text-color: #4d4d4d;
   --shadow-color: rgba(0, 0, 0, 0.25);
   --background-color: #ffffff;
