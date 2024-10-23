@@ -50,7 +50,7 @@
       </a>
     </td>
      <td align="center">
-      <a href="#" >
+      <a href="https://www.linkedin.com/in/cl%C3%A1udio-rodrigues-52275b251/" >
         <img src="https://avatars.githubusercontent.com/u/163914578?v=4" width="100" alt="Claúdio José Profile Picture">
       </a>
       <br>
@@ -60,7 +60,7 @@
         <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub link">
       </a>
       <br>
-      <a href="#">
+      <a href="https://www.linkedin.com/in/cl%C3%A1udio-rodrigues-52275b251/">
         <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn link">
       </a>
     </td>
