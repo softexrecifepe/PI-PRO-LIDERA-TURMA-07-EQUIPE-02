@@ -5,24 +5,40 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
 
 export default function Cadastro() {
   return (
     <>
       <div className="text-center my-16 flex flex-col justify-center items-center gap-4 mx-48">
-        <h1 className="mt-11 font-bold text-primary">CRIAR CONTA</h1>
+        <div>
+          <h1 className="mt-11 font-bold text-primary">CRIAR CONTA</h1>
+          <Separator className="border border-primary w-11" />
+        </div>
+
         <div className="flex gap-16">
           <CustomButton
-            className="w-60 bg-transparent text-black border border-black shadow-lg"
+            className="w-60 bg-transparent text-black border border-black shadow-lg hover:bg-primary hover:text-white"
             onClick={() => {}}
           >
-            <Link href={"/cadastro"}>Cadastrar com o Google</Link>
+            <Link
+              href={"/cadastro"}
+              className="flex items-center justify-center gap-x-3"
+            >
+              <FcGoogle /> Cadastrar com o Google
+            </Link>
           </CustomButton>
           <CustomButton
-            className="w-60 bg-transparent text-black border border-black shadow-lg"
+            className="w-fit bg-transparent text-black border border-black shadow-lg hover:bg-primary hover:text-white"
             onClick={() => {}}
           >
-            <Link href={"/cadastro"}>Cadastrar com o Facebook</Link>
+            <Link
+              href={"/cadastro"}
+              className="flex items-center justify-center gap-x-2 "
+            >
+              <FaFacebook className="text-[#1d2c4c]" /> Cadastrar com o Facebook
+            </Link>
           </CustomButton>
         </div>
         <div className="flex items-center gap-6">
@@ -70,7 +86,7 @@ export default function Cadastro() {
               privacidade.*
             </span>
           </div>
-          <div className="flex flex-col gap-3 items-center">
+          <div className="flex flex-col gap-3 items-center mb-14">
             <CustomButton onClick={() => {}} className="text-white w-52">
               Cadastrar
             </CustomButton>
@@ -78,13 +94,13 @@ export default function Cadastro() {
             <div className="flex items-center gap-10">
               <CustomButton
                 onClick={() => {}}
-                className="text-primary w-fit bg-transparent"
+                className="text-primary w-fit bg-transparent hover:bg-primary hover:text-white"
               >
                 Já possuir cadastro?
               </CustomButton>
               <CustomButton
                 onClick={() => {}}
-                className="text-primary w-fit bg-transparent"
+                className="text-primary w-fit bg-transparent hover:bg-primary hover:text-white"
               >
                 ENTRAR
               </CustomButton>
