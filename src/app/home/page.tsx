@@ -2,6 +2,7 @@
 import { CustomButton } from "@/components/button/custom-button";
 import image from "@/assets/images/main-image.png";
 import image2 from "@/assets/images/image.png";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -23,10 +24,10 @@ export default function HomePage() {
           </p>
           <div className="flex justify-evenly items-center gap-32">
             <CustomButton onClick={() => {}}>
-              <a href="/login">Entrar</a>
+              <Link href={"/login"}>Entrar</Link>
             </CustomButton>
             <CustomButton onClick={() => {}}>
-              <a href="/cadastro">Criar Conta</a>
+              <Link href={"/cadastro"}>Criar Conta</Link>
             </CustomButton>
           </div>
         </div>
