@@ -2,6 +2,9 @@ import React from "react";
 import Image from "next/image";
 import logo from "../../../src/assets/images/logo.png";
 
+import { Switch } from "../ui/switch";
+import { TbAccessible } from "react-icons/tb";
+
 export function Header() {
   return (
     <header className="w-full fixed top-0 bg-[var(--background-color)] shadow-md z-10">
@@ -12,7 +15,6 @@ export function Header() {
             PRO Lidera Skills
           </h1>
         </div>
-
         <ul className="flex items-center list-none gap-4">
           <li>
             <a
@@ -38,6 +40,11 @@ export function Header() {
               Contato
             </a>
           </li>
+          <div className="flex items-center gap-1">
+            <Switch id="airplane-mode" className="bg-primary     " />
+            <span className="font-bold">Acessibilidade</span>
+            <TbAccessible />
+          </div>
         </ul>
       </nav>
     </header>
