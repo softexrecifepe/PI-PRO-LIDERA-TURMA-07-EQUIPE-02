@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${balooFont.variable}  antialiased`}>
+      <body className={`${balooFont.variable}  antialiased h-auto`}>
         <Header />
         {children}
         <Footer />
