@@ -41,7 +41,7 @@ export function Header() {
             </a>
           </li>
           <div className="flex items-center gap-1">
-            <Switch id="airplane-mode" className="bg-primary     " />
+            <Switch id="airplane-mode" className="bg-primary" />
             <span className="font-bold">Acessibilidade</span>
             <TbAccessible />
           </div>

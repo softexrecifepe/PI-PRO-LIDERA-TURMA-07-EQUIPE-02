@@ -6,7 +6,7 @@
   @font-face {
     font-family: "Baloo Paaji 2";
     font-style: normal;
-    font-weight: 100 900;
+    font-weight: 100-900; 
     font-display: optional;
     src: url("./fonts/BalooPaaji2-VariableFont_wght.ttf") format("truetype");
   }
@@ -21,6 +21,10 @@
 :root {
   --background: #d9d9d9;
   --foreground: #231f1f;
+  --primary-color: #3590b5;
+  --text-color: #4d4d4d;
+  --shadow-color: rgba(0, 0, 0, 0.25);
+  --background-color: #ffffff;
 }
 
 @media (prefers-color-scheme: light) {
@@ -41,11 +45,4 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-}
-
-:root {
-  --primary-color: #3590b5;
-  --text-color: #4d4d4d;
-  --shadow-color: rgba(0, 0, 0, 0.25);
-  --background-color: #ffffff;
 }

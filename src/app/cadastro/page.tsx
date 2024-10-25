@@ -7,10 +7,17 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
+import { FormEvent } from "react";
 
 export default function Cadastro() {
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    alert("Cadastro realizado com sucesso!");
+  };
+
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <div className="text-center my-16 flex flex-col justify-center items-center gap-4 mx-48">
         <div>
           <h1 className="mt-11 font-bold text-primary">CRIAR CONTA</h1>
@@ -19,7 +26,7 @@ export default function Cadastro() {
 
         <div className="flex gap-16">
           <CustomButton
-            className="w-60 bg-transparent text-black border border-black shadow-lg hover:bg-primary hover:text-white"
+            className="w-60 bg-transparent text-black border border-black shadow-lg hover hover:text-white"
             onClick={() => {}}
           >
             <Link
@@ -30,7 +37,7 @@ export default function Cadastro() {
             </Link>
           </CustomButton>
           <CustomButton
-            className="w-fit bg-transparent text-black border border-black shadow-lg hover:bg-primary hover:text-white"
+            className="w-fit bg-transparent text-black border border-black shadow-lg hover hover:text-white"
             onClick={() => {}}
           >
             <Link
@@ -48,19 +55,28 @@ export default function Cadastro() {
         </div>
         <div className="grid grid-cols-2 gap-x-16 gap-y-8">
           <Input
+            type="text"
             placeholder="Nome completo*"
             className="border border-black w-60"
+            required
           />
-          <Input placeholder="E-mail*" className="border border-black" />
           <Input
+            type="email"
+            placeholder="E-mail*"
+            className="border border-black"
+            required
+          />
+          <Input
+            type="password"
             placeholder="Crie sua senha*"
-            type="password"
             className="border border-black"
+            required
           />
           <Input
-            placeholder="Confirme sua senha*"
             type="password"
+            placeholder="Confirme sua senha*"
             className="border border-black"
+            required
           />
         </div>
         <div className=" font-bold text-justify flex flex-col gap-8">
@@ -82,32 +98,29 @@ export default function Cadastro() {
           <div className="flex items-center gap-3">
             <Checkbox />
             <span>
-              Li e estou de acordo com as políticas da empresa e políticas de
+              Li e estou de acordo com as políticas da empresa e políticas de
               privacidade.*
             </span>
           </div>
           <div className="flex flex-col gap-3 items-center mb-14">
             <CustomButton onClick={() => {}} className="text-white w-52">
-              Cadastrar
+              <Link href={"/login"}>Cadastrar</Link>
             </CustomButton>
             <Separator className="border border-primary w-52" />
-            <div className="flex items-center gap-10">
+            <div className="flex items-center gap-2">
+              <div className="text-primary w-fit bg-transparent">
+                Já possui cadastro?
+              </div>
               <CustomButton
                 onClick={() => {}}
-                className="text-primary w-fit bg-transparent hover:bg-primary hover:text-white"
+                className="text-primary w-fit bg-transparent hover:text-white"
               >
-                Já possuir cadastro?
-              </CustomButton>
-              <CustomButton
-                onClick={() => {}}
-                className="text-primary w-fit bg-transparent hover:bg-primary hover:text-white"
-              >
-                ENTRAR
+                <Link href={"/login"}>ENTRAR</Link>
               </CustomButton>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </form>
   );
 }
