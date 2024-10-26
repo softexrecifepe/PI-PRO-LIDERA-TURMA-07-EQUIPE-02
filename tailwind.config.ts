@@ -12,6 +12,7 @@ const config: Config = {
         primary: "#3590B5",
         hover: "bg-blue-700",
         textColor: "#4d4d4d",
+        btnTextColor: "#ffff",
         background: "var(--background)",
         foreground: "var(--foreground)",
       },

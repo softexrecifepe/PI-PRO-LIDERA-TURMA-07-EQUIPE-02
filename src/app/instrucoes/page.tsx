@@ -7,9 +7,9 @@ export default function Intrucoes() {
   return (
     <div className="p-24 text-justify">
       <div className=" mb-6">
-        <h2 className="flex justify-center items-center text-primary text-2xl font-bold mb-10">
+        <h1 className="flex justify-center items-center text-primary text-2xl font-bold mb-10">
           Teste de Liderança - PRO Lidera Skills
-        </h2>
+        </h1>
         <p className="font-semibold text-xl">
           Olá
           <span className=" text-primary font-semibold text-xl ml-2">
