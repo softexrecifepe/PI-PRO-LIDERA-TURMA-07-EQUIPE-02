@@ -1,3 +1,11 @@
+import image from "@/assets/images/img.login.png"
+
 export default function Login() {
-  return <h1 className="p-24">Página de Login</h1>;
+  return <> 
+    <div className="cadastro">
+      <div className="imagem">
+        <img src={image.src} alt="" />
+      </div>
+    </div>
+  </>;
 }
