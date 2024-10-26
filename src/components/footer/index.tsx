@@ -4,7 +4,7 @@ import { CiLocationOn } from "react-icons/ci";
 
 export function Footer() {
   return (
-    <footer className="flex flex-col bg-white p-8"> {/* Adaptei para Tailwind classes */}
+    <footer className="flex flex-col bg-white p-8">
       <div id="footer">
         <h2 className="text-2xl font-bold mb-6">Contato</h2>
         <div className="flex gap-8 justify-around items-center">

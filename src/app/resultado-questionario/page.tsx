@@ -1,37 +1,37 @@
-"use client"
-
+"use client";
 import { CustomButton } from "@/components/button/custom-button";
-import image from "@assets/images/img.result.png";
-import Link from "next/link";
+import image from "@/assets/images/img.result.png";
+import { Title } from "@/components/title";
 
 export default function ResultadoQuestionario() {
   return (
-    <div className="p-24 flex flex-col items-center justify-center text-center">
-      <h1 className="text-3xl font-bold mb-8">Teste de Liderança</h1>
+    <div className="py-24 flex flex-col items-center justify-center text-center w-[100vw]">
+      <Title />
+      <div className="relative text-black max-w-[45rem] flex flex-col gap-6">
+        <h2 className="flex justify-start font-bold text-xl">Parabéns!</h2>
 
-      <div className="relative text-black mb-32 w-full max-w-md flex flex-col gap-6">
-        <h2 className="text-4xl text-[var(--primary-color)] font-medium">
-          Parabéns!
+        <h2 className="text-xl font-semibold text-gray-500">
+          O resultado do seu teste é:
         </h2>
 
-        <h2 className="text-2xl font-semibold">O resultado do seu teste é:</h2>
-
-        <p className="text-lg font-semibold">
-          Eos <a href="#" style={{ color: '#007bff' }}>aspernatur omnis qui</a> iusto voluptas qui deleniti temporibus est
-          tenetur laboram a galisum amet non tempore fugit sed ipsam quaerat. Sit rerum dignissimos sed minima rerum 33 
-          pariatur reiciendis est ducimus reprehenderit aut dolore sint! Est galisum alias sed aliquam consequatur a 
-          galisum dolor aut provident esse? Eum odio nemo ut sint nostrum 33 consequatur animi quo laboriosam nemo.
+        <p className="text-lg font-semibold text-justify mb-8">
+          O tipo de{" "}
+          <span className="text-primary">Líder de Alta Performance</span>. Você
+          é um guia estratégico e emocional para sua equipe. Inspira pelo
+          exemplo, constrói um ambiente de trabalho saudável e está sempre em
+          busca de inovação e melhorias, garantindo que todos à sua volta
+          estejam engajados em um propósito maior e coletivo. Essa combinação de
+          habilidades permite que promova resultados excepcionais, que vão além
+          de metas e objetivos, alcançando um impacto profundo na vida dos
+          colaboradores e no sucesso da organização.
         </p>
-
-        <div className="flex justify-center items-center mt-8">
-          <CustomButton onClick={() => {}}>
-            <Link href={"/resultadoquestionario"}>Download</Link>
-          </CustomButton>
+        <div className="flex justify-center mb-8">
+          <img className="w-2/3 h-auto rounded" src={image.src} alt="imagem do resultado" />
         </div>
-      </div>
-
-      <div className="flex justify-center mb-8"> 
-        <img className="w-48 h-auto" src={"assets/image"} alt="Images" />
+        <small>Clique no botão abaixo para baixar o resulado em PDF:</small>
+        <div className="flex justify-center items-center ">
+          <CustomButton onClick={() => {}}>Download</CustomButton>
+        </div>
       </div>
     </div>
   );

@@ -2,14 +2,13 @@
 import { GoDotFill } from "react-icons/go";
 import { CustomButton } from "@/components/button/custom-button";
 import Link from "next/link";
+import { Title } from "@/components/title";
 
 export default function Intrucoes() {
   return (
     <div className="p-24 text-justify">
       <div className=" mb-6">
-        <h1 className="flex justify-center items-center text-primary text-2xl font-bold mb-10">
-          Teste de Liderança - PRO Lidera Skills
-        </h1>
+       <Title />
         <p className="font-semibold text-xl">
           Olá
           <span className=" text-primary font-semibold text-xl ml-2">
