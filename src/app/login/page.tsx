@@ -4,6 +4,9 @@ import imageline from "@/assets/images/img.linha.horizontal.png"
 import { Input } from "@/components/ui/input";
 import { CustomButton } from "@/components/button/custom-button";
 import Link from "next/link";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
+
 
 export default function Login() {
   return <> 
@@ -41,13 +44,23 @@ export default function Login() {
           <h2 style={{ color: '#2B2D43'}}>Quero acessar com minhas redes sociais</h2>
         </div>
         <div>
-              <h2>Google</h2>
-            </div>
-            <div>
-              <h2>Facebook</h2>
-            </div>
+          <CustomButton
+                className="w-80 flex items-center justify-center gap-x-3 shadow-lg"
+                onClick={() => {}}
+          >
+            <FcGoogle /> Google
+          </CustomButton>
+        </div>
         <div>
-          <div className="01 flex gap-3">
+        <CustomButton
+          className="w-80 flex items-center justify-center gap-x-3 shadow-lg"
+          onClick={() => {}}
+        >
+          <FaFacebook className="text-[#1d2c4c]" /> Facebook
+        </CustomButton>
+        </div>
+        <div>
+          <div className="01 flex gap-3 items-center justify-center">
             <div>
               <h2>Novo no PRO<br/>Lidera Skils</h2> <br/>
             </div>
