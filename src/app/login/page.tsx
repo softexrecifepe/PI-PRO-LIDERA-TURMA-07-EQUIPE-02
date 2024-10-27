@@ -7,4 +7,5 @@ export default function Login() {
       <img src={image.src} alt="imagem login" />
     </div>
   );
+
 }
