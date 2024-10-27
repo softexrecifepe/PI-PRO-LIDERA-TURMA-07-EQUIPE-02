@@ -8,45 +8,54 @@ export default function HomePage() {
   return (
     <main>
       <section
-        className="relative w-[100vw] h-[100vh] bg-cover bg-center bg-no-repeat flex items-center overflow-hidden"
+        className="w-full h-screen bg-cover flex items-center"
         style={{
           backgroundImage: `url(${image.src})`,
         }}
       >
-        <div className="absolute top-16 left-0 right-0 bottom-0 bg-[rgba(0,0,0,0.25)]"></div>
-        <div className="relative text-white mb-32 text-justify w-[35%] ml-16 flex flex-col gap-6">
-          <h2 className="text-4xl text-[var(--primary-color)] font-medium">
+        <div className="absolute inset-0 bg-[rgba(0,0,0,0.30)]"></div>
+
+        <div className="relative text-white text-justify w-1/2 md:w-[50%] lg:w-[35%] md:ml-16 flex flex-col gap-24 md:gap-10 p-4 md:p-0">
+          <h2 className="text-4xl md:text-3xl lg:text-4xl font-medium text-[var(--primary-color)] mb-2">
             Descubra seu potencial!
           </h2>
-          <p className="text-lg font-semibold text-[var(--text-color)] mb-10">
+
+          <p className="text-2xl md:text-lg font-semibold text-[var(--text-color)] md:mb-20 h-2 mb-2">
             Tenha a avaliação de suas habilidades de liderança através de um
             teste especializado.
           </p>
-          <div className="flex justify-evenly items-center gap-32">
-            <CustomButton onClick={() => {}}>
+
+          <div className="flex flex-col md:flex-row justify-around items-center md:gap-12 text-center">
+            <CustomButton className="w-32" onClick={() => {}}>
               <Link href={"/login"}>Entrar</Link>
             </CustomButton>
-            <CustomButton onClick={() => {}}>
+            <CustomButton className="w-32" onClick={() => {}}>
               <Link href={"/cadastro"}>Criar Conta</Link>
             </CustomButton>
           </div>
         </div>
       </section>
+
       <section
         id="about-us"
-        className="flex w-[100vw] h-[80vh] justify-start items-center"
+        className="flex flex-col lg:flex-row w-full h-auto lg:h-[60vh] justify-center items-center p-6 md:p-12"
       >
-        <div className="flex bg-no-repeat">
-          <img className="max-w-3xl h-fit" src={image2.src} alt="Image" />
-          <div className="flex flex-col justify-center gap-6 text-justify max-w-xl">
-            <h2 className="font-bold text-2xl">
+        <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-12">
+          <img
+            className="max-w-full h-auto lg:max-w-3xl"
+            src={image2.src}
+            alt="Image"
+          />
+
+          <div className="text-justify max-w-full lg:max-w-xl p-4">
+            <h2 className="font-bold text-xl md:text-2xl ">
               Bem-vindo à PRO Lidera Skills
             </h2>
-            <p className="text-xl text-justify">
+            <p className="text-base md:text-lg">
               É uma aplicação inovadora que proporciona a avaliação das suas
               capacidades de liderança. Nossa missão é auxiliar indivíduos a
               compreender suas habilidades de liderança para alcançar todo o seu
-              potencial. Através de uma abordagem personalizada. Buscamos
+              potencial. Através de uma abordagem personalizada, buscamos
               promover o desenvolvimento contínuo.
             </p>
           </div>

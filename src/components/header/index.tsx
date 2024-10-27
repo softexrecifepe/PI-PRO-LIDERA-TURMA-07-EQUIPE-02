@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
 import logo from "../../../src/assets/images/logo.png";
 
@@ -6,6 +7,8 @@ import { Switch } from "../ui/switch";
 import { TbAccessible } from "react-icons/tb";
 
 export function Header() {
+  const [isActive, setIsActive] = useState(false);
+
   return (
     <header className="w-full fixed top-0 bg-[var(--background-color)] shadow-md z-10">
       <nav className="flex items-center justify-between h-16 max-w-[1240px] mx-auto px-4">
@@ -40,11 +43,15 @@ export function Header() {
               Contato
             </a>
           </li>
-          <div className="flex items-center gap-1">
-            <Switch id="airplane-mode" className="bg-primary" />
+          <li className="flex items-center gap-1">
+            <Switch
+              id="airplane-mode"
+              onClick={() => setIsActive(!isActive)}
+              className={`peer inline-flex  ${isActive ? "bg-primary" : "bg-textColor border-textColor"}`}
+            />
             <span className="font-bold">Acessibilidade</span>
             <TbAccessible />
-          </div>
+          </li>
         </ul>
       </nav>
     </header>

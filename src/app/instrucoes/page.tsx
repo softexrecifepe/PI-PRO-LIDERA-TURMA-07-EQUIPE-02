@@ -7,7 +7,7 @@ import { Title } from "@/components/title";
 export default function Intrucoes() {
   return (
     <div className="p-24 text-justify">
-      <div className=" mb-6">
+      <div className="mb-6">
        <Title />
         <p className="font-semibold text-xl">
           Olá
