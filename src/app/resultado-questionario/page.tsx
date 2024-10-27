@@ -10,12 +10,12 @@ export default function ResultadoQuestionario() {
       <div className="relative text-black max-w-[45rem] flex flex-col gap-6">
         <h2 className="flex justify-start font-bold text-xl">Parabéns!</h2>
 
-        <h2 className="text-xl font-semibold text-gray-500">
+        <h3 className="text-xl font-semibold text-gray-500">
           O resultado do seu teste é:
-        </h2>
+        </h3>
 
         <p className="text-lg font-semibold text-justify mb-8">
-          O tipo de{" "}
+          O tipo de
           <span className="text-primary">Líder de Alta Performance</span>. Você
           é um guia estratégico e emocional para sua equipe. Inspira pelo
           exemplo, constrói um ambiente de trabalho saudável e está sempre em

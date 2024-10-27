@@ -1,3 +1,10 @@
+"use client";
+import image from "@/assets/images/login.jpg";
+
 export default function Login() {
-  return <h1 className="p-24">Página de Login</h1>;
+  return (
+    <div className="flex w-[50vw] bg-contain">
+      <img src={image.src} alt="imagem login" />
+    </div>
+  );
 }
