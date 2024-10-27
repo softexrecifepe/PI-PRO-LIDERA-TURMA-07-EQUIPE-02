@@ -18,15 +18,17 @@ export default function Cadastro() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen">
-      <section className="w-full md:w-[50vw] p-4 md:p-8 mt-14">
-        <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="text-center my-8">
+    <div className="flex min-h-screen">
+      <section className="w-full md:w-[50vw] p-4 md:p-8 flex flex-col items-center justify-center mx-8">
+        <form onSubmit={handleSubmit} className="w-full">
+          <div className="flex flex-col items-center justify-center">
             <div>
-              <h1 className="font-bold text-primary">CRIAR CONTA</h1>
-              <Separator className="border border-primary w-11 mx-auto my-2" />
+              <h1 className="font-bold text-primary text-center">
+                CRIAR CONTA
+              </h1>
+              <Separator className="border border-primary w-11 my-2" />
             </div>
-            <div className="flex flex-col md:flex-row gap-20 justify-center m-8">
+            <div className="flex flex-col md:flex-col gap-4 justify-center m-8 xl:flex-row xl:w-2/3">
               <CustomButton
                 className="w-80 flex items-center justify-center gap-x-3 shadow-lg"
                 onClick={() => {}}
@@ -42,13 +44,13 @@ export default function Cadastro() {
               </CustomButton>
             </div>
 
-            <div className="flex items-center gap-6 mb-4">
-              <Separator className="flex items-center border border-primary w-72 ml-7" />
+            <div className="flex items-center justify-center gap-6 mb-4 w-40 xl:w-[17rem]">
+              <Separator className="border border-primary" />
               <span className="font-bold text-primary">OU</span>
-              <Separator className="flex items-center border border-primary w-72" />
+              <Separator className="border border-primary" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 w-[40rem] ml-7">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 w-full xl:w-2/3">
               <Input
                 type="text"
                 placeholder="Nome completo*"
@@ -112,14 +114,9 @@ export default function Cadastro() {
           </div>
         </form>
       </section>
-      <section className="w-full md:w-[50vw] relative">
-        <Image
-          src={image.src}
-          alt="imagem login"
-          layout="fill"
-          objectFit="cover"
-        />
-      </section>
+      <div className="hidden md:flex w-1/2 relative">
+        <Image src={image.src} alt="imagem login" fill />
+      </div>
     </div>
   );
 }
