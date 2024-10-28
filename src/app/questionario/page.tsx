@@ -50,7 +50,7 @@ export default function TesteLideranca() {
             ))}
           </form>
 
-          <div className="absolute flex gap-[22.5rem] mt-10 bottom-20">
+          <div className="flex mt-10 justify-around">
             <CustomButton
               onClick={() =>
                 setCurrentQuestionIndex(Math.max(currentQuestionIndex - 1, 0))
