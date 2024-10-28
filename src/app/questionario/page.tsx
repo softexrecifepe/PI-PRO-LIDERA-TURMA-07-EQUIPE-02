@@ -15,59 +15,63 @@ export default function TesteLideranca() {
 
   return (
     <>
-      <div className="flex justify-center items-center h-full py-24">
+      <div className="flex justify-center items-center h-full py-24 flex-col">
         <div className="bg-white shadow-lg rounded-lg p-6 max-w-2xl w-full h-[600px]">
           <h1 className="flex justify-center items-center text-primary text-2xl font-bold mb-8">
             Teste de Liderança - PRO Lidera Skills
           </h1>
 
-          <h2 className="text-xl font-semibold mb-6">
-            Pergunta {currentQuestion.id}
-          </h2>
+          <div className="flex flex-col items-center justify-center">
+            <h2 className="text-xl font-semibold mb-6">
+              Pergunta {currentQuestion.id}
+            </h2>
 
-          <div className="mb-6">
-            <h3 className="text-xl mb-2 text-justify">
-              {currentQuestion.question}
-            </h3>
+            <div className="mb-6">
+              <h3 className="text-xl mb-2 text-justify">
+                {currentQuestion.question}
+              </h3>
+            </div>
+
+            <form className="space-y-4 ">
+              {currentQuestion.options.map((option) => (
+                <div key={option.id} className="flex items-center">
+                  <input
+                    type="radio"
+                    id={`option${option.id}`}
+                    name="question"
+                    value={option.value}
+                    checked={selectedOption === option.value}
+                    onChange={handleOptionChange}
+                    className="mr-2"
+                  />
+                  <label
+                    htmlFor={`option${option.id}`}
+                    className="text-gray-700"
+                  >
+                    {option.value}
+                  </label>
+                </div>
+              ))}
+            </form>
           </div>
-
-          <form className="space-y-4 ">
-            {currentQuestion.options.map((option) => (
-              <div key={option.id} className="flex items-center">
-                <input
-                  type="radio"
-                  id={`option${option.id}`}
-                  name="question"
-                  value={option.value}
-                  checked={selectedOption === option.value}
-                  onChange={handleOptionChange}
-                  className="mr-2"
-                />
-                <label htmlFor={`option${option.id}`} className="text-gray-700">
-                  {option.value}
-                </label>
-              </div>
-            ))}
-          </form>
-
-          <div className="flex mt-10 justify-around">
-            <CustomButton
-              onClick={() =>
-                setCurrentQuestionIndex(Math.max(currentQuestionIndex - 1, 0))
-              }
-            >
-              Anterior
-            </CustomButton>
-            <CustomButton
-              onClick={() =>
-                setCurrentQuestionIndex(
-                  Math.min(currentQuestionIndex + 1, data.length - 1)
-                )
-              }
-            >
-              Próximo
-            </CustomButton>
-          </div>
+        </div>
+        <div className=" bg-red-600 border border-black h-56 fixed bottom-0 w-full flex justify-around items-baseline rounded-t-xl">
+          <CustomButton
+            onClick={() =>
+              setCurrentQuestionIndex(Math.max(currentQuestionIndex - 1, 0))
+            }
+          >
+            Anterior
+          </CustomButton>
+          <CustomButton
+            onClick={() =>
+              setCurrentQuestionIndex(
+                Math.min(currentQuestionIndex + 1, data.length - 1)
+              )
+            }
+          >
+            Próximo
+          </CustomButton>
         </div>
       </div>
     </>
