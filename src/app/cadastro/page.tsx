@@ -1,5 +1,4 @@
 "use client";
-
 import { CustomButton } from "@/components/button/custom-button";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
@@ -33,13 +32,14 @@ export default function Cadastro() {
                 className="w-80 flex items-center justify-center gap-x-3 shadow-lg"
                 onClick={() => {}}
               >
-                <FcGoogle /> Cadastrar com o Google
+                <FcGoogle />
+                Google
               </CustomButton>
               <CustomButton
                 className="w-80 flex items-center justify-center gap-x-3 shadow-lg"
                 onClick={() => {}}
               >
-                <FaFacebook className="text-[#1d2c4c]" /> Cadastrar com o
+                <FaFacebook className="text-[#1d2c4c]" />
                 Facebook
               </CustomButton>
             </div>
@@ -96,27 +96,31 @@ export default function Cadastro() {
                 </span>
               </div>
               <div className="flex flex-col gap-4 items-center">
-                <CustomButton onClick={() => {}} className="w-52">
-                  <Link href={"/login"}>Cadastrar</Link>
-                </CustomButton>
+                <Link href={"/login"}>
+                  <CustomButton onClick={() => {}} className="w-52">
+                    Cadastrar
+                  </CustomButton>
+                </Link>
                 <Separator className="border border-primary w-52" />
                 <div className="flex items-center gap-2">
                   <div className="text-primary">Já possui cadastro?</div>
-                  <CustomButton
-                    onClick={() => {}}
-                    className="text-primary w-fit bg-transparent hover:text-white"
-                  >
-                    <Link href={"/login"}>ENTRAR</Link>
-                  </CustomButton>
+                  <Link href={"/login"}>
+                    <CustomButton
+                      onClick={() => {}}
+                      className="text-primary w-fit bg-transparent hover:text-white"
+                    >
+                      ENTRAR
+                    </CustomButton>
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
         </form>
       </section>
-      <div className="hidden md:flex w-1/2 relative">
+      <section className="hidden md:flex w-1/2 relative">
         <Image src={image.src} alt="imagem login" fill />
-      </div>
+      </section>
     </div>
   );
 }

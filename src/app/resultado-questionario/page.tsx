@@ -2,6 +2,7 @@
 import { CustomButton } from "@/components/button/custom-button";
 import image from "@/assets/images/img.result.png";
 import { Title } from "@/components/title";
+import Image from "next/image";
 
 export default function ResultadoQuestionario() {
   return (
@@ -16,7 +17,7 @@ export default function ResultadoQuestionario() {
 
         <p className="text-lg font-semibold text-justify mb-8">
           O tipo de
-          <span className="text-primary">Líder de Alta Performance</span>. Você
+          <span className="text-primary ml-2">Líder de Alta Performance</span>. Você
           é um guia estratégico e emocional para sua equipe. Inspira pelo
           exemplo, constrói um ambiente de trabalho saudável e está sempre em
           busca de inovação e melhorias, garantindo que todos à sua volta
@@ -26,7 +27,13 @@ export default function ResultadoQuestionario() {
           colaboradores e no sucesso da organização.
         </p>
         <div className="flex justify-center mb-8">
-          <img className="w-2/3 h-auto rounded" src={image.src} alt="imagem do resultado" />
+          <Image
+            className="rounded"
+            src={image.src}
+            alt="imagem do resultado"
+            width={500} 
+            height={250}
+          />
         </div>
         <small>Clique no botão abaixo para baixar o resulado em PDF:</small>
         <div className="flex justify-center items-center ">

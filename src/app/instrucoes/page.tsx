@@ -8,7 +8,7 @@ export default function Intrucoes() {
   return (
     <div className="p-24 text-justify">
       <div className="mb-6">
-       <Title />
+        <Title />
         <p className="font-semibold text-xl">
           Olá
           <span className=" text-primary font-semibold text-xl ml-2">
@@ -19,13 +19,13 @@ export default function Intrucoes() {
       </div>
       <span className="font-bold text-xl">Instruções!</span>
       <p className="text-xl mt-10 mb-8 ">
-        &nbsp;&nbsp;&nbsp;&nbsp;O teste contém 18 perguntas, após respondê-lo você receberá
-        um dos três resultados possíveis: “Liderança Frágil e pouco trabalhada”
-        , “Liderança em Desenvolvimento” , “Liderança de alta performace” ,
-        juntamente com uma análise do seu desempenho. Deve responder a todas as
-        perguntas. Tente ser o mais honesto possível. A precisão dos resultados
-        depende da exatidão de suas respostas. O tempo não é uma restrição. Não
-        existem respostas certas ou erradas.
+        &nbsp;&nbsp;&nbsp;&nbsp;O teste contém 18 perguntas, após respondê-lo
+        você receberá um dos três resultados possíveis: “Liderança Frágil e
+        pouco trabalhada” , “Liderança em Desenvolvimento” , “Liderança de alta
+        performace” , juntamente com uma análise do seu desempenho. Deve
+        responder a todas as perguntas. Tente ser o mais honesto possível. A
+        precisão dos resultados depende da exatidão de suas respostas. O tempo
+        não é uma restrição. Não existem respostas certas ou erradas.
       </p>
       <p className="text-xl mb-8 ">
         Você está prestes a inicializar o teste de liderança da PRO Lidera
@@ -64,9 +64,11 @@ export default function Intrucoes() {
         </div>
       </div>
       <div className="flex justify-center items-center mt-24">
-        <CustomButton className="text-white" onClick={() => {}}>
-          <Link href={"/questionario"}>Iniciar Teste</Link>
-        </CustomButton>
+        <Link href={"/questionario"}>
+          <CustomButton className="text-white" onClick={() => {}}>
+            Iniciar Teste
+          </CustomButton>
+        </Link>
       </div>
     </div>
   );
