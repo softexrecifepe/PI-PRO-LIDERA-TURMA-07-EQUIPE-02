@@ -14,13 +14,13 @@ export default function TesteLideranca() {
   };
 
   return (
-    <>
-      <div className="flex justify-center items-center h-full py-24">
-        <div className="bg-white shadow-lg rounded-lg p-6 max-w-2xl w-full h-[600px] relative">
-          <h1 className="flex justify-center items-center text-primary text-2xl font-bold mb-8">
-            Teste de Liderança - PRO Lidera Skills
-          </h1>
+    <div className="flex justify-center items-center h-full py-24">
+      <div className="bg-white shadow-lg rounded-lg p-6 max-w-2xl w-full h-[600px] relative">
+        <h1 className="flex justify-center items-center text-primary text-2xl font-bold mb-8">
+          Teste de Liderança - PRO Lidera Skills
+        </h1>
 
+        <div className="flex flex-col items-center justify-center">
           <h2 className="text-xl font-semibold mb-6">
             Pergunta {currentQuestion.id}
           </h2>
@@ -69,7 +69,25 @@ export default function TesteLideranca() {
             </CustomButton>
           </div>
         </div>
+        <div className=" bg-red-600 border border-black h-56 fixed bottom-0 w-full flex justify-around items-baseline rounded-t-xl">
+          <CustomButton
+            onClick={() =>
+              setCurrentQuestionIndex(Math.max(currentQuestionIndex - 1, 0))
+            }
+          >
+            Anterior
+          </CustomButton>
+          <CustomButton
+            onClick={() =>
+              setCurrentQuestionIndex(
+                Math.min(currentQuestionIndex + 1, data.length - 1)
+              )
+            }
+          >
+            Próximo
+          </CustomButton>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
