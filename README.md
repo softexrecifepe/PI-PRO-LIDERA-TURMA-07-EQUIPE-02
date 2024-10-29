@@ -15,22 +15,34 @@
 - O projeto visa simplificar o processo de avaliação de liderança, oferecendo uma interface intuitiva e recursos robustos para quem deseja compreender e melhorar suas habilidades de liderança.
 
 ## Tecnologias Utilizadas
-- Semantic HTML5 markup
-- CSS custom properties
-- Typescript
-- React.js
+- ![HTML5](https://img.icons8.com/color/20/000000/html-5.png) Semantic HTML5 markup
+- ![CSS3](https://img.icons8.com/color/20/000000/css3.png) CSS custom properties
+- ![TypeScript](https://img.icons8.com/color/20/000000/typescript.png) Typescript
+- ![React](https://img.icons8.com/color/20/000000/react-native.png) React.js
 - React-icons
 - NEXT.js
 - [**Tailwind Css**](https://tailwindcss.com/docs/guides/vite)
 
 ### Screenshot
 
-![image](https://github.com/user-attachments/assets/a2fbfbbe-d886-4aaf-ada5-7652dfd82f06)
+![image](https://github.com/user-attachments/assets/e9e16664-9a37-41ca-821b-ecc77a5771c1)
 
-### Links
+## Como Executar o Projeto
 
-- Live Site URL: [clique aqui]
-
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/softexrecifepe/PI-PRO-LIDERA-TURMA-07-EQUIPE-02.git
+   ```
+2. Instale as dependências:
+   ```bash
+   cd seu-repositorio
+   npm install
+   ```
+3. Execute o projeto:
+   ```bash
+   npm run dev
+   ```
+   
 ## Equipe
 <table align="center">
   <tr>
