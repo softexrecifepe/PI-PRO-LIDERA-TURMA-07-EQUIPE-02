@@ -16,7 +16,7 @@ export default function TesteLideranca() {
   return (
     <>
       <div className="flex justify-center items-center h-full py-24">
-        <div className="bg-white shadow-lg rounded-lg p-6 max-w-2xl w-full h-[600px]">
+        <div className="bg-white shadow-lg rounded-lg p-6 max-w-2xl w-full h-[600px] relative">
           <h1 className="flex justify-center items-center text-primary text-2xl font-bold mb-8">
             Teste de Liderança - PRO Lidera Skills
           </h1>
@@ -50,7 +50,7 @@ export default function TesteLideranca() {
             ))}
           </form>
 
-          <div className="absolute flex gap-[22.5rem] mt-10 bottom-20">
+          <div className="absolute flex justify-between w-full px-16 bottom-6">
             <CustomButton
               onClick={() =>
                 setCurrentQuestionIndex(Math.max(currentQuestionIndex - 1, 0))

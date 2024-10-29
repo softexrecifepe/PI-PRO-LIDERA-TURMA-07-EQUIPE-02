@@ -17,8 +17,8 @@ export default function HomePage() {
         />
         <div className="absolute inset-0 bg-[rgba(0,0,0,0.30)]"></div>
 
-        <div className="relative text-white text-justify w-1/2 md:w-[50%] lg:w-[35%] md:ml-16 flex flex-col gap-24 md:gap-10 p-4 md:p-0 mb-24">
-          <h2 className="text-4xl md:text-3xl lg:text-4xl font-medium text-[var(--primary-color)] mb-2">
+        <div className="relative text-white text-justify w-1/2 md:w-[50%] lg:w-[35%] md:ml-16 flex flex-col justify-center items-center gap-24 md:gap-10 p-4 md:p-0 mb-24">
+          <h2 className="flex items-start text-4xl md:text-3xl lg:text-4xl font-medium text-[var(--primary-color)] mb-2">
             Descubra seu potencial!
           </h2>
 
@@ -27,15 +27,15 @@ export default function HomePage() {
             teste especializado.
           </p>
 
-          <div className="flex flex-col md:flex-row justify-around items-center md:gap-12 mr-12">
+          <div className="flex flex-col md:flex-row justify-around items-center md:gap-12">
             <Link href={"/login"}>
-              <CustomButton className="w-52" onClick={() => {}}>
+              <CustomButton className="w-40" onClick={() => {}}>
                 Entrar
               </CustomButton>
             </Link>
 
             <Link href={"/cadastro"}>
-              <CustomButton className="w-52" onClick={() => {}}>
+              <CustomButton className="w-40" onClick={() => {}}>
                 Criar Conta
               </CustomButton>
             </Link>

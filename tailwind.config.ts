@@ -13,6 +13,7 @@ const config: Config = {
         hover: "bg-blue-700",
         textColor: "#4d4d4d",
         btnTextColor: "#ffff",
+        shadowColor: "rgba(0, 0, 0, 0.25)",
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
