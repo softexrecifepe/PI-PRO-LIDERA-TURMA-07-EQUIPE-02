@@ -15,7 +15,7 @@ export default function TesteLideranca() {
 
   return (
     <>
-      <div className="flex justify-center items-center h-full py-24">
+      <div className="flex justify-center items-center h-full py-24 min-h-screen">
         <div className="bg-white shadow-lg rounded-lg p-6 max-w-2xl w-full h-[600px] relative">
           <h1 className="flex justify-center items-center text-primary text-2xl font-bold mb-8">
             Teste de Liderança - PRO Lidera Skills
