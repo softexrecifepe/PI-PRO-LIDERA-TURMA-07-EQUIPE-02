@@ -10,7 +10,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function Login() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex mt-16">
       <section className="hidden md:flex w-1/2 relative">
         <Image src={image.src} alt="Imagem de Login" fill />
       </section>

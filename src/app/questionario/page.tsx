@@ -1,75 +1,124 @@
 "use client";
-import { CustomButton } from "@/components/button/custom-button";
+
 import React, { useState } from "react";
 import data from "../../lib/data.json";
+import { useForm, Controller } from "react-hook-form";
+import { CustomButton } from "@/components/button/custom-button";
+
+type Option = {
+  id: string;
+  value: string;
+  score: number;
+};
+
+type Question = {
+  id: string;
+  question: string;
+  options: Option[];
+};
+
+type FormData = {
+  [key: string]: string;
+};
+
+const questions: Question[] = data as Question[];
 
 export default function TesteLideranca() {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const { control, handleSubmit, watch } = useForm<FormData>();
+  const [currentPage, setCurrentPage] = useState(0);
 
-  const currentQuestion = data[currentQuestionIndex];
+  const questionsPerPage = 3;
+  const totalPages = Math.ceil(questions.length / questionsPerPage);
+  const currentQuestions = questions.slice(
+    currentPage * questionsPerPage,
+    currentPage * questionsPerPage + questionsPerPage
+  );
 
-  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption(event.target.value);
+  // Função para avançar de página se todas as perguntas estiverem respondidas
+  const handleNextPage = () => {
+    if (isPageComplete()) {
+      setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
+    }
+  };
+
+  const handlePreviousPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 0));
+  };
+
+  const isPageComplete = () =>
+    currentQuestions.every((question) => watch(`question${question.id}`));
+
+  const onSubmit = (data: FormData) => {
+    console.log("Respostas enviadas:", data);
+    // Aqui você pode processar ou enviar as respostas finais
   };
 
   return (
-    <>
-      <div className="flex justify-center items-center h-full py-24 min-h-screen">
-        <div className="bg-white shadow-lg rounded-lg p-6 max-w-2xl w-full h-[600px] relative">
-          <h1 className="flex justify-center items-center text-primary text-2xl font-bold mb-8">
+    <div className="flex justify-center items-center h-full py-24 min-h-screen">
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-screen-md">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <h1 className="text-2xl font-bold text-center mb-8 text-primary">
             Teste de Liderança - PRO Lidera Skills
           </h1>
 
-          <h2 className="text-xl font-semibold mb-6">
-            Pergunta {currentQuestion.id}
-          </h2>
-
-          <div className="mb-6">
-            <h3 className="text-xl mb-2 text-justify">
-              {currentQuestion.question}
-            </h3>
-          </div>
-
-          <form className="space-y-4 ">
-            {currentQuestion.options.map((option) => (
-              <div key={option.id} className="flex items-center">
-                <input
-                  type="radio"
-                  id={`option${option.id}`}
-                  name="question"
-                  value={option.value}
-                  checked={selectedOption === option.value}
-                  onChange={handleOptionChange}
-                  className="mr-2"
+          {currentQuestions.map((question) => (
+            <div key={question.id} className="space-y-4">
+              <h1 className="text-xl text-primary font-bold">
+                Pergunta {question.id}
+              </h1>
+              <h2 className="font-semibold text-base">{question.question}</h2>
+              {question.options.map((option) => (
+                <Controller
+                  key={option.id}
+                  name={`question${question.id}`}
+                  control={control}
+                  defaultValue=""
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <div className="flex items-center">
+                      <input
+                        {...field}
+                        type="radio"
+                        id={`question${question.id}_option${option.id}`}
+                        value={option.value}
+                        checked={field.value === option.value}
+                        className="mr-2"
+                      />
+                      <label
+                        htmlFor={`question${question.id}_option${option.id}`}
+                        className="text-gray-700"
+                      >
+                        {option.value}
+                      </label>
+                    </div>
+                  )}
                 />
-                <label htmlFor={`option${option.id}`} className="text-gray-700">
-                  {option.value}
-                </label>
-              </div>
-            ))}
-          </form>
+              ))}
+            </div>
+          ))}
 
-          <div className="absolute flex justify-between w-[39rem] bottom-6">
+          <div className="flex justify-between mt-8">
             <CustomButton
-              onClick={() =>
-                setCurrentQuestionIndex(Math.max(currentQuestionIndex - 1, 0))
-              }
+              onClick={handlePreviousPage}
+              disabled={currentPage === 0}
             >
               Anterior
             </CustomButton>
-            <CustomButton
-              onClick={() =>
-                setCurrentQuestionIndex(
-                  Math.min(currentQuestionIndex + 1, data.length - 1)
-                )
-              }
-            >
-              Próximo
-            </CustomButton>
+            {currentPage < totalPages - 1 ? (
+              <CustomButton
+                onClick={handleNextPage}
+                disabled={!isPageComplete()}
+              >
+                Próximo
+              </CustomButton>
+            ) : (
+              <CustomButton onClick={handleSubmit(onSubmit)} disabled={false}>
+                Enviar
+              </CustomButton>
+            )}
           </div>
-        </div>
+        </form>
       </div>
-    </>
+    </div>
   );
 }
