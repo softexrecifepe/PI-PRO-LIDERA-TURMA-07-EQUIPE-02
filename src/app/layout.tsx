@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { Toaster } from "@/components/ui/toaster";
 
 const balooFont = localFont({
   src: "./fonts/BalooPaaji2-VariableFont_wght.ttf",
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body className={`${balooFont.variable}  antialiased h-auto`}>
         <Header />
         {children}
+        <Toaster />
         <Footer />
       </body>
     </html>

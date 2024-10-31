@@ -3,7 +3,7 @@ export const CustomButton = ({
   children,
   onClick,
   className,
-  disabled,
+  disabled = false,
 }: {
   children: React.ReactNode;
   onClick: () => void;

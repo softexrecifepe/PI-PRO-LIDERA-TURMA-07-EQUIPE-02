@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import data from "../../lib/data.json";
 import { useForm, Controller } from "react-hook-form";
 import { CustomButton } from "@/components/button/custom-button";
+import { useToast } from "@/hooks/use-toast"
+
 
 type Option = {
   id: string;
@@ -26,6 +28,7 @@ const questions: Question[] = data.flatMap(item => item.questions) as Question[]
 export default function TesteLideranca() {
   const { control, handleSubmit, watch } = useForm<FormData>();
   const [currentPage, setCurrentPage] = useState(0);
+  const { toast } = useToast()
 
   const questionsPerPage = 3;
   const totalPages = Math.ceil(questions.length / questionsPerPage);
@@ -41,6 +44,12 @@ export default function TesteLideranca() {
   const handleNextPage = () => {
     if (isPageComplete()) {
       setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
+    } else {
+      toast({
+        title: "Preencha todas as perguntas",
+        description: "Por favor, responda todas as perguntas antes de continuar.",
+        className: "bg-primary text-white"
+      });
     }
   };
 
@@ -111,7 +120,6 @@ export default function TesteLideranca() {
             {currentPage < totalPages - 1 ? (
               <CustomButton
                 onClick={handleNextPage}
-                disabled={!isPageComplete()}
               >
                 Próximo
               </CustomButton>
