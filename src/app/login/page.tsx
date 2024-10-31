@@ -10,33 +10,42 @@ import { Separator } from "@/components/ui/separator";
 
 export default function Login() {
   return (
-    <div className="flex mt-16 min-h-screen">
+    <div className="flex flex-col md:flex-row min-h-screen">
       <section className="hidden md:flex w-1/2 relative">
-        <Image src={image.src} alt="Imagem de Login" fill />
+        <Image
+          src={image.src}
+          alt="Imagem de Login"
+          fill
+          className="object-cover"
+        />
       </section>
-      <section className="w-full md:w-[50vw] p-4 md:p-8 flex flex-col items-center justify-center mx-8">
-        <div className="flex flex-col items-center gap-5 w-80">
-          <h1 className="font-bold text-primary">FAZER LOGIN</h1>
+      <section className="w-full md:w-1/2 flex flex-col items-center justify-center p-6 sm:p-8 md:p-12 lg:p-16">
+        <div className="flex flex-col items-center gap-5 w-full max-w-md">
+          <h1 className="font-bold text-primary text-lg md:text-xl">
+            FAZER LOGIN
+          </h1>
           <Input
             type="email"
             placeholder="E-mail"
-            className="border border-black w-80"
+            className="border border-black w-full"
             required
           />
           <Input
             type="password"
             placeholder="Senha"
-            className="border border-black w-80"
+            className="border border-black w-full"
             required
           />
-          <Link href={"/instrucoes"}>
-            <CustomButton
-              onClick={() => { }}
-              className="text-white w-80 flex items-center justify-center gap-x-3 shadow-lg"
-            >
-              Entrar
-            </CustomButton>
-          </Link>
+          <div className="w-full">
+            <Link href={"/instrucoes"}>
+              <CustomButton
+                className="w-full flex items-center justify-center gap-x-3 shadow-lg"
+                onClick={() => {}}
+              >
+                Entrar
+              </CustomButton>
+            </Link>
+          </div>
 
           <div className="w-full text-right">
             <span className="text-textColor underline opacity-70">
@@ -50,31 +59,29 @@ export default function Login() {
           </h2>
 
           <CustomButton
-            className="w-80 flex items-center justify-center gap-x-3 shadow-lg"
-            onClick={() => { }}
+            className="w-full flex items-center justify-center gap-x-3 shadow-lg"
+            onClick={() => {}}
           >
             <FcGoogle /> Google
           </CustomButton>
           <CustomButton
-            className="w-80 flex items-center justify-center gap-x-3 shadow-lg"
-            onClick={() => { }}
+            className="w-full flex items-center justify-center gap-x-3 shadow-lg"
+            onClick={() => {}}
           >
             <FaFacebook className="text-[#1d2c4c]" /> Facebook
           </CustomButton>
-          <div className="flex items-center justify-center gap-x-3">
+          <div className="flex flex-col items-center gap-2 md:flex-row md:justify-center md:gap-3 ">
             <h2 className="text-textColor text-center">
-              Novo no PRO Lidera Skills
+              Novo no PRO Lidera Skills?
             </h2>
-            <div>
-              <Link href={"/cadastro"}>
-                <CustomButton
-                  onClick={() => { }}
-                  className="text-primary w-fit bg-transparent hover:text-white"
-                >
-                  CADASTRE-SE{" "}
-                </CustomButton>
-              </Link>
-            </div>
+            <Link href={"/cadastro"}>
+              <CustomButton
+                onClick={() => {}}
+                className="text-primary bg-transparent hover:text-white lg:w-40"
+              >
+                CADASTRE-SE
+              </CustomButton>
+            </Link>
           </div>
         </div>
       </section>

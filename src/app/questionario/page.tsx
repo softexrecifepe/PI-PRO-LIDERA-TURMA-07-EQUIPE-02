@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import data from "../../lib/data.json";
 import { useForm, Controller } from "react-hook-form";
@@ -21,7 +20,8 @@ type FormData = {
   [key: string]: string;
 };
 
-const questions: Question[] = data as Question[];
+// Extrair todas as perguntas do JSON
+const questions: Question[] = data.flatMap(item => item.questions) as Question[];
 
 export default function TesteLideranca() {
   const { control, handleSubmit, watch } = useForm<FormData>();
@@ -34,7 +34,10 @@ export default function TesteLideranca() {
     currentPage * questionsPerPage + questionsPerPage
   );
 
-  // Função para avançar de página se todas as perguntas estiverem respondidas
+  // Determina o índice do tema atual
+  const currentThemeIndex = Math.floor(currentPage / (data[0].questions.length / questionsPerPage));
+  const currentTheme = data[currentThemeIndex]?.theme || "Tema não disponível";
+
   const handleNextPage = () => {
     if (isPageComplete()) {
       setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
@@ -60,13 +63,14 @@ export default function TesteLideranca() {
           <h1 className="text-2xl font-bold text-center mb-8 text-primary">
             Teste de Liderança - PRO Lidera Skills
           </h1>
+          <span className="bg-terciary text-white rounded p-1">Tema: {currentTheme}</span>
 
           {currentQuestions.map((question) => (
-            <div key={question.id} className="space-y-4">
-              <h1 className="text-xl text-primary font-bold">
+            <div key={question.id} className="flex flex-col text-justify space-y-4">
+              <h2 className="text-xl text-secundary font-bold">
                 Pergunta {question.id}
-              </h1>
-              <h2 className="font-semibold text-base">{question.question}</h2>
+              </h2>
+              <h3 className="font-semibold text-base">{question.question}</h3>
               {question.options.map((option) => (
                 <Controller
                   key={option.id}

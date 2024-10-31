@@ -10,6 +10,8 @@ const config: Config = {
     extend: {
       colors: {
         primary: "#3590B5",
+        secundary: "#88C16C",
+        terciary: "#AE85E9",
         hover: "bg-blue-700",
         textColor: "#4d4d4d",
         btnTextColor: "#ffff",

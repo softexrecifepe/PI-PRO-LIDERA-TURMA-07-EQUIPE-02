@@ -6,64 +6,68 @@ import { Title } from "@/components/title";
 
 export default function Intrucoes() {
   return (
-    <div className="p-24 text-justify">
+    <div className="p-4 sm:p-8 md:p-16 lg:p-24 text-justify max-w-4xl mx-auto">
       <div className="mb-6">
         <Title />
-        <p className="font-semibold text-xl">
+        <p className="font-semibold text-lg sm:text-xl">
           Olá
-          <span className=" text-primary font-semibold text-xl ml-2">
-            Pessoa
-          </span>
-          ,
+          <span className="text-primary font-semibold ml-2">Pessoa</span>,
         </p>
       </div>
-      <span className="font-bold text-xl">Instruções!</span>
-      <p className="text-xl mt-10 mb-8 ">
-        &nbsp;&nbsp;&nbsp;&nbsp;O teste contém 18 perguntas, após respondê-lo
+      <span className="font-bold text-lg sm:text-xl">Instruções!</span>
+      <p className="text-base sm:text-lg md:text-xl mt-6 sm:mt-8 mb-6">
+        &nbsp;&nbsp;&nbsp;&nbsp;O teste contém 18 perguntas, após respondê-lo,
         você receberá um dos três resultados possíveis: “Liderança Frágil e
-        pouco trabalhada” , “Liderança em Desenvolvimento” , “Liderança de alta
-        performace” , juntamente com uma análise do seu desempenho. Deve
-        responder a todas as perguntas. Tente ser o mais honesto possível. A
-        precisão dos resultados depende da exatidão de suas respostas. O tempo
-        não é uma restrição. Não existem respostas certas ou erradas.
+        pouco trabalhada”, “Liderança em Desenvolvimento” ou “Liderança de alta
+        performance”, juntamente com uma análise do seu desempenho. Responda a
+        todas as perguntas com honestidade, pois a precisão dos resultados
+        depende da exatidão de suas respostas. O tempo não é uma restrição, e
+        não existem respostas certas ou erradas.
       </p>
-      <p className="text-xl mb-8 ">
+      <p className="text-base sm:text-lg md:text-xl mb-6">
         Você está prestes a inicializar o teste de liderança da PRO Lidera
-        Skills. Está é uma página de acompanhamento da sua avaliação. Aqui vão
+        Skills. Esta é uma página de acompanhamento da sua avaliação. Aqui vão
         algumas dicas:
       </p>
-      <div className="text-xl ">
+      <div className="text-base sm:text-lg md:text-xl space-y-4">
         <div className="flex gap-2 items-center">
-          <GoDotFill />
-          <p>Verifique a sua conexão com a internet antes de iniciar</p>
+          <div className="flex items-center justify-center w-5 h-5">
+            <GoDotFill fontSize={20} />
+          </div>
+          <p>Verifique a sua conexão com a internet antes de iniciar.</p>
         </div>
-        <br />
         <div className="flex gap-2 items-center">
-          <GoDotFill />
+          <div className="flex items-center justify-center w-5 h-5">
+            <GoDotFill fontSize={20} />
+          </div>
           <p>
-            Fique atento(a): caso você saia do teste após iniciado, ao retornar
+            Fique atento(a): caso você saia do teste após iniciado, ao retornar,
             ele estará na página em que parou.
           </p>
         </div>
-        <br />
         <div className="flex gap-2 items-center">
-          <GoDotFill /> <p>Busque um lugar calmo e livre de perturbações</p>
+          <div className="flex items-center justify-center w-5 h-5">
+            <GoDotFill fontSize={20} />
+          </div>
+          <p>Busque um lugar calmo e livre de perturbações.</p>
         </div>
-        <br />
         <div className="flex gap-2 items-center">
-          <GoDotFill />
-          <p>Faça os testes, preferencialmente, pelo computador</p>
+          <div className="flex items-center justify-center w-5 h-5">
+            <GoDotFill fontSize={20} />
+          </div>
+          <p>Faça os testes, preferencialmente, pelo computador.</p>
         </div>
-        <br />
         <div className="flex gap-2 items-center">
-          <GoDotFill />
+          <div className="flex items-center justify-center w-5 h-5">
+            <GoDotFill fontSize={20} />
+          </div>
           <p>
             Caso alguma página, imagem ou texto não carregue, clique no botão
             &quot;Atualizar&quot; do seu navegador para carregá-la novamente.
           </p>
         </div>
       </div>
-      <div className="flex justify-center items-center mt-24">
+      <div className="flex justify-center items-center mt-16">
         <Link href={"/questionario"}>
           <CustomButton className="text-white" onClick={() => {}}>
             Iniciar Teste

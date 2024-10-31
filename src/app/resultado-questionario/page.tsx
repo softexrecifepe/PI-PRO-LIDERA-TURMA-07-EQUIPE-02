@@ -6,16 +6,16 @@ import Image from "next/image";
 
 export default function ResultadoQuestionario() {
   return (
-    <div className="py-24 flex flex-col items-center justify-center text-center w-[100vw]">
+    <div className="py-10 px-4 sm:px-8 md:py-24 flex flex-col items-center justify-center text-center w-full">
       <Title />
-      <div className="relative text-black max-w-[45rem] flex flex-col gap-6">
-        <h2 className="flex justify-start font-bold text-xl">Parabéns!</h2>
+      <div className="text-black max-w-3xl flex flex-col gap-6 px-4 sm:px-8">
+        <h2 className="flex justify-start font-bold text-lg sm:text-xl">Parabéns!</h2>
 
-        <h3 className="text-xl font-semibold text-gray-500">
+        <h3 className="text-lg sm:text-xl font-semibold text-gray-500">
           O resultado do seu teste é:
         </h3>
 
-        <p className="text-lg font-semibold text-justify mb-8">
+        <p className="text-base sm:text-lg font-semibold text-justify mb-8">
           O tipo de
           <span className="text-primary ml-2">Líder de Alta Performance</span>. Você
           é um guia estratégico e emocional para sua equipe. Inspira pelo
@@ -28,15 +28,15 @@ export default function ResultadoQuestionario() {
         </p>
         <div className="flex justify-center mb-8">
           <Image
-            className="rounded"
+            className="rounded max-w-full"
             src={image.src}
             alt="imagem do resultado"
             width={500} 
             height={250}
           />
         </div>
-        <small>Clique no botão abaixo para baixar o resulado em PDF:</small>
-        <div className="flex justify-center items-center ">
+        <small className="text-sm text-gray-600">Clique no botão abaixo para baixar o resultado em PDF:</small>
+        <div className="flex justify-center items-center mt-4">
           <CustomButton onClick={() => {}}>Download</CustomButton>
         </div>
       </div>

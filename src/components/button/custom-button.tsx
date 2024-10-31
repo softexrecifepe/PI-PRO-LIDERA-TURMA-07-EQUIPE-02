@@ -13,7 +13,7 @@ export const CustomButton = ({
   return (
     <button
       onClick={onClick}
-      className={`text-btnTextColor bg-primary w-32 hover:bg-[#0056b3] font-bold py-2 px-4 rounded transition duration-300 ease-in-out shadow-shadowColor ${className}`}
+      className={`text-btnTextColor bg-primary w-32 hover:bg-[#0056b3] font-bold cursor-pointer py-2 px-4 rounded transition duration-300 ease-in-out shadow-shadowColor ${className}`}
       disabled={disabled}
     >
       {children}
