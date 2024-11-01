@@ -5,6 +5,9 @@ import { useForm, Controller } from "react-hook-form";
 import { CustomButton } from "@/components/button/custom-button";
 import { useToast } from "@/hooks/use-toast"
 
+import { useRouter } from 'next/compat/router'
+
+
 type Option = {
   id: string;
   value: string;
@@ -25,9 +28,11 @@ type FormData = {
 const questions: Question[] = data.flatMap(item => item.questions) as Question[];
 
 export default function TesteLideranca() {
+  // const navigate = useNavigate();
   const { control, handleSubmit, watch } = useForm<FormData>();
   const [currentPage, setCurrentPage] = useState(0);
   const { toast } = useToast()
+  const router = useRouter();
 
   const questionsPerPage = 3;
   const totalPages = Math.ceil(questions.length / questionsPerPage);
@@ -48,8 +53,8 @@ export default function TesteLideranca() {
         title: "Preencha todas as perguntas",
         description: "Por favor, responda todas as perguntas antes de continuar.",
         className: "flex w-full max-w-sm py-5 px-6 bg-white rounded-xl border border-gray-200 shadow-sm mb-4 gap-4",
-        role:"alert"
-        
+        role: "alert"
+
       });
     }
   };
@@ -61,10 +66,34 @@ export default function TesteLideranca() {
   const isPageComplete = () =>
     currentQuestions.every((question) => watch(`question${question.id}`));
 
-  const onSubmit = (data: FormData) => {
-    console.log("Respostas enviadas:", data);
-    // Aqui você pode processar ou enviar as respostas finais
+  const onSubmit = async (formData: FormData) => {
+    let totalScore = 0;
+
+    // Itera sobre as respostas para calcular a pontuação total
+    for (const key in formData) {
+      const question = questions.find(q => `question${q.id}` === key);
+      const option = question?.options.find(opt => opt.value === formData[key]);
+      totalScore += option ? option.score : 0;
+    }
+
+    // Determina a categoria de liderança com base na pontuação
+    let resultCategory;
+    if (totalScore >= 18 && totalScore <= 35) {
+      resultCategory = "Liderança frágil e pouco trabalhada";
+    } else if (totalScore >= 36 && totalScore <= 53) {
+      resultCategory = "Liderança em desenvolvimento";
+    } else if (totalScore >= 54 && totalScore <= 72) {
+      resultCategory = "Líder de alta performance";
+    }
+
+    // Redireciona para a página de resultados com o totalScore e resultCategory
+    /*     navigate(`/resultado-questionario`, { state: { totalScore, resultCategory } }); */
+
+    await router?.push(`/resultado-questionario?resultCategory=${resultCategory}`,);
+
+    console.log(resultCategory);
   };
+
 
   return (
     <div className="flex justify-center items-center h-full py-24 min-h-screen">

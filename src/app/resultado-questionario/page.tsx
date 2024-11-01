@@ -3,8 +3,13 @@ import { CustomButton } from "@/components/button/custom-button";
 import image from "@/assets/images/img.result.png";
 import { Title } from "@/components/title";
 import Image from "next/image";
+import { useRouter } from "next/router";
+
 
 export default function ResultadoQuestionario() {
+  const router = useRouter();
+  const { resultCategory } = router.query;
+
   return (
     <div className="py-10 px-4 sm:px-8 md:py-24 flex flex-col items-center justify-center text-center w-full">
       <Title />
@@ -17,7 +22,7 @@ export default function ResultadoQuestionario() {
 
         <p className="text-base sm:text-lg font-semibold text-justify mb-8">
           O tipo de
-          <span className="text-primary ml-2">Líder de Alta Performance</span>. Você
+          <span className="text-primary ml-2">{resultCategory}</span>. Você
           é um guia estratégico e emocional para sua equipe. Inspira pelo
           exemplo, constrói um ambiente de trabalho saudável e está sempre em
           busca de inovação e melhorias, garantindo que todos à sua volta
@@ -31,13 +36,13 @@ export default function ResultadoQuestionario() {
             className="rounded max-w-full"
             src={image.src}
             alt="imagem do resultado"
-            width={500} 
+            width={500}
             height={250}
           />
         </div>
         <small className="text-sm text-gray-600">Clique no botão abaixo para baixar o resultado em PDF:</small>
         <div className="flex justify-center items-center mt-4">
-          <CustomButton onClick={() => {}}>Download</CustomButton>
+          <CustomButton onClick={() => { }}>Download</CustomButton>
         </div>
       </div>
     </div>

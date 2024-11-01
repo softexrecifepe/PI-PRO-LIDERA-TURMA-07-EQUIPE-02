@@ -4,7 +4,7 @@ import { CustomButton } from "@/components/button/custom-button";
 import Link from "next/link";
 import { Title } from "@/components/title";
 
-export default function Intrucoes() {
+export default function Instrucoes() {
   return (
     <div className="p-4 sm:p-8 md:p-16 lg:p-24 text-justify max-w-4xl mx-auto">
       <div className="mb-6">
@@ -69,7 +69,7 @@ export default function Intrucoes() {
       </div>
       <div className="flex justify-center items-center mt-16">
         <Link href={"/questionario"}>
-          <CustomButton className="text-white" onClick={() => {}}>
+          <CustomButton className="text-white" onClick={() => { }}>
             Iniciar Teste
           </CustomButton>
         </Link>
