@@ -1,6 +1,6 @@
 import HomePage from "./home/page";
 
-export default function Home() {
+export default function App() {
   return (
     <>
       <HomePage />
