@@ -10,10 +10,10 @@ export function Header() {
   const [isActive, setIsActive] = useState(false);
 
   return (
-    <header className="w-full fixed top-0 bg-[var(--background-color)] shadow-md z-10">
+    <header className="w-full fixed top-0 bg-[var(--background-color)] shadow-md z-20">
       <nav className="flex items-center justify-between h-16 max-w-[1240px] mx-auto px-4">
         <div className="flex items-center text-[#4d4d4d]">
-          <Image className="w-[15vh] h-[15vh]" src={logo} alt="logo" />
+          <Image className="w-[8vh] h-[8vh]" src={logo} alt="logo" />
           <h1 className="text-[var(--primary-color)] text-lg font-bold">
             PRO Lidera Skills
           </h1>

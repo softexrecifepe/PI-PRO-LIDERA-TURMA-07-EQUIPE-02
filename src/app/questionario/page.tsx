@@ -5,7 +5,6 @@ import { useForm, Controller } from "react-hook-form";
 import { CustomButton } from "@/components/button/custom-button";
 import { useToast } from "@/hooks/use-toast"
 
-
 type Option = {
   id: string;
   value: string;
@@ -48,7 +47,9 @@ export default function TesteLideranca() {
       toast({
         title: "Preencha todas as perguntas",
         description: "Por favor, responda todas as perguntas antes de continuar.",
-        className: "bg-primary text-white"
+        className: "flex w-full max-w-sm py-5 px-6 bg-white rounded-xl border border-gray-200 shadow-sm mb-4 gap-4",
+        role:"alert"
+        
       });
     }
   };
@@ -72,11 +73,11 @@ export default function TesteLideranca() {
           <h1 className="text-2xl font-bold text-center mb-8 text-primary">
             Teste de Liderança - PRO Lidera Skills
           </h1>
-          <span className="bg-terciary text-white rounded p-1">Tema: {currentTheme}</span>
+          <span className="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:text-purple-400 border border-purple-400">Tema: {currentTheme}</span>
 
           {currentQuestions.map((question) => (
             <div key={question.id} className="flex flex-col text-justify space-y-4">
-              <h2 className="text-xl text-secundary font-bold">
+              <h2 className="text-xl text-primary font-bold">
                 Pergunta {question.id}
               </h2>
               <h3 className="font-semibold text-base">{question.question}</h3>

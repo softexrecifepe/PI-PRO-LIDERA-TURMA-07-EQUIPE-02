@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import image from "@/assets/images/img.login.png";
+import image from "@/assets/images/sign.jpg";
 import { Input } from "@/components/ui/input";
 import { CustomButton } from "@/components/button/custom-button";
 import Link from "next/link";
@@ -16,8 +16,9 @@ export default function Login() {
           src={image.src}
           alt="Imagem de Login"
           fill
-          className="object-cover"
+          className="object-cover bg-no-repeat"
         />
+        <div className="absolute inset-0 bg-[rgba(0,0,0,0.65)]"></div>
       </section>
       <section className="w-full md:w-1/2 flex flex-col items-center justify-center p-6 sm:p-8 md:p-12 lg:p-16">
         <div className="flex flex-col items-center gap-5 w-full max-w-md">

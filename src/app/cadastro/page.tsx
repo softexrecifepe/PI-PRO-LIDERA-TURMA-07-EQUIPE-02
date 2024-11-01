@@ -8,7 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { FormEvent } from "react";
 import Image from "next/image";
-import image from "@/assets/images/login.jpg";
+import image from "@/assets/images/sign.jpg";
 
 export default function Cadastro() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -120,6 +120,7 @@ export default function Cadastro() {
       </section>
       <section className="hidden md:flex w-1/2 relative">
         <Image src={image.src} alt="imagem login" fill />
+        <div className="absolute inset-0 bg-[rgba(0,0,0,0.65)]"></div>
       </section>
     </div>
   );
