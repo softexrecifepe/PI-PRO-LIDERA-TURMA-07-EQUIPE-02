@@ -3,12 +3,14 @@ import { CustomButton } from "@/components/button/custom-button";
 import image from "@/assets/images/img.result.png";
 import { Title } from "@/components/title";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 
 
 export default function ResultadoQuestionario() {
-  const router = useRouter();
-  const { resultCategory } = router.query;
+  const searchParams = useSearchParams();
+  const resultCategoryFromQuery = searchParams.get('resultCategory');
+
+
 
   return (
     <div className="py-10 px-4 sm:px-8 md:py-24 flex flex-col items-center justify-center text-center w-full">
@@ -22,7 +24,7 @@ export default function ResultadoQuestionario() {
 
         <p className="text-base sm:text-lg font-semibold text-justify mb-8">
           O tipo de
-          <span className="text-primary ml-2">{resultCategory}</span>. Você
+          <span className="text-primary ml-2">{resultCategoryFromQuery}</span>. Você
           é um guia estratégico e emocional para sua equipe. Inspira pelo
           exemplo, constrói um ambiente de trabalho saudável e está sempre em
           busca de inovação e melhorias, garantindo que todos à sua volta

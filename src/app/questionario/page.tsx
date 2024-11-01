@@ -4,9 +4,7 @@ import data from "../../lib/data.json";
 import { useForm, Controller } from "react-hook-form";
 import { CustomButton } from "@/components/button/custom-button";
 import { useToast } from "@/hooks/use-toast"
-
-import { useRouter } from 'next/compat/router'
-
+import { useRouter } from "next/navigation";
 
 type Option = {
   id: string;
@@ -40,7 +38,6 @@ export default function TesteLideranca() {
     currentPage * questionsPerPage,
     currentPage * questionsPerPage + questionsPerPage
   );
-
   // Determina o índice do tema atual
   const currentThemeIndex = Math.floor(currentPage / (data[0].questions.length / questionsPerPage));
   const currentTheme = data[currentThemeIndex]?.theme || "Tema não disponível";
@@ -66,7 +63,7 @@ export default function TesteLideranca() {
   const isPageComplete = () =>
     currentQuestions.every((question) => watch(`question${question.id}`));
 
-  const onSubmit = async (formData: FormData) => {
+  const onSubmit = (formData: FormData) => {
     let totalScore = 0;
 
     // Itera sobre as respostas para calcular a pontuação total
@@ -86,12 +83,11 @@ export default function TesteLideranca() {
       resultCategory = "Líder de alta performance";
     }
 
-    // Redireciona para a página de resultados com o totalScore e resultCategory
-    /*     navigate(`/resultado-questionario`, { state: { totalScore, resultCategory } }); */
-
-    await router?.push(`/resultado-questionario?resultCategory=${resultCategory}`,);
-
     console.log(resultCategory);
+
+    const encodedResultCategory = encodeURIComponent(resultCategory || '');
+
+    router?.push(`/resultado-questionario?resultCategory=${encodedResultCategory}`,);
   };
 
 
@@ -154,7 +150,7 @@ export default function TesteLideranca() {
                 Próximo
               </CustomButton>
             ) : (
-              <CustomButton onClick={handleSubmit(onSubmit)} disabled={false}>
+              <CustomButton type="submit">
                 Enviar
               </CustomButton>
             )}
