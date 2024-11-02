@@ -25,7 +25,7 @@
 
 ### Screenshot
 
-![image](https://github.com/user-attachments/assets/e9e16664-9a37-41ca-821b-ecc77a5771c1)
+![image](https://github.com/user-attachments/assets/3c831876-20dc-4a81-9905-df2f079a5613)
 
 ## Como Executar o Projeto
 
