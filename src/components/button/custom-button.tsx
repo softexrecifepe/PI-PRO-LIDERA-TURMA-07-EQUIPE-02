@@ -1,5 +1,6 @@
 type CustomButtonProps = {
   type?: "button" | "submit" | "reset";
+  variant?: "cancel";
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;
