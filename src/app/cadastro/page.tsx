@@ -22,7 +22,7 @@ export default function Cadastro() {
         <form onSubmit={handleSubmit} className="w-full">
           <div className="flex flex-col items-center justify-center">
             <div>
-              <h1 className="font-bold text-primary text-center">
+              <h1 className="font-bold text-primary text-center max-sm: pt-20 max-sm:mb-1">
                 CRIAR CONTA
               </h1>
               <Separator className="border border-primary w-11 my-2" />

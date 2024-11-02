@@ -22,7 +22,7 @@ export default function Login() {
       </section>
       <section className="w-full md:w-1/2 flex flex-col items-center justify-center p-6 sm:p-8 md:p-12 lg:p-16">
         <div className="flex flex-col items-center gap-5 w-full max-w-md">
-          <h1 className="font-bold text-primary text-lg md:text-xl">
+          <h1 className="font-bold text-primary text-lg md:text-xl max-sm: pt-20 max-sm:mb-1">
             FAZER LOGIN
           </h1>
           <Input
@@ -78,7 +78,7 @@ export default function Login() {
             <Link href={"/cadastro"}>
               <CustomButton
                 onClick={() => {}}
-                className="text-primary bg-transparent hover:text-white lg:w-40"
+                className="text-primary bg-transparent hover:text-white lg:w-40 max-sm:text-sm"
               >
                 CADASTRE-SE
               </CustomButton>
