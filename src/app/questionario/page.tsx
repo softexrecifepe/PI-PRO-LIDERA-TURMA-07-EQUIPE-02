@@ -24,7 +24,6 @@ type FormData = {
   [key: string]: string;
 };
 
-// Extrair todas as perguntas do JSON
 const questions: Question[] = data.flatMap(
   (item) => item.questions
 ) as Question[];
@@ -49,15 +48,29 @@ export default function TesteLideranca() {
   const currentTheme = data[currentThemeIndex]?.theme || "Tema não disponível";
 
   useEffect(() => {
-    // Carregar respostas do local storage ao montar o componente
-    const savedResponses = localStorage.getItem('responses');
-    if (savedResponses) {
-      const responses: FormData = JSON.parse(savedResponses);
-      for (const key in responses) {
-        setValue(key, responses[key]);
+    // Carregar respostas salvas do localStorage ao montar o componente
+    const savedData: { [key: string]: string } = JSON.parse(
+      localStorage.getItem("formData") || "{}"
+    );
+
+    // Garantir que a chave seja sempre uma string
+    Object.keys(savedData).forEach((key) => {
+      const stringKey = key as string;
+      const value = savedData[stringKey];
+
+      // Verificar se o valor é uma string
+      if (typeof value === "string") {
+        setValue(stringKey, value);
       }
-    }
+    });
   }, [setValue]);
+
+  // Salva as respostas no localStorage quando uma resposta é alterada
+  const saveResponseToLocalStorage = (fieldName: string, value: string) => {
+    const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
+    savedData[fieldName] = value;
+    localStorage.setItem("formData", JSON.stringify(savedData));
+  };
 
   const handleNextPage = () => {
     if (isPageComplete()) {
@@ -86,8 +99,6 @@ export default function TesteLideranca() {
 
   const onSubmit = (formData: FormData) => {
     let totalScore = 0;
-
-    // Itera sobre as respostas para calcular a pontuação total
     for (const key in formData) {
       const question = questions.find((q) => `question${q.id}` === key);
       const option = question?.options.find(
@@ -109,9 +120,11 @@ export default function TesteLideranca() {
       resultCategory || "Liderança não determinada"
     );
 
+    localStorage.removeItem("responses"); // Limpa as respostas ao enviar
     router.push(
       `/resultado-questionario?resultCategory=${encodedResultCategory}`
     );
+    localStorage.removeItem("formData"); // Limpa o localStorage após o envio
   };
 
   const handleSubmitDialog = (e?: FormEvent) => {
@@ -132,7 +145,7 @@ export default function TesteLideranca() {
         responses[`question${question.id}`] = response;
       }
     });
-    localStorage.setItem('responses', JSON.stringify(responses));
+    localStorage.setItem("responses", JSON.stringify(responses));
   };
 
   return (
@@ -170,6 +183,13 @@ export default function TesteLideranca() {
                         id={`question${question.id}_option${option.id}`}
                         value={option.value}
                         checked={field.value === option.value}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          saveResponseToLocalStorage(
+                            `question${question.id}`,
+                            e.target.value
+                          );
+                        }}
                         className="mr-2"
                       />
                       <label
