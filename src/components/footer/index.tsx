@@ -12,7 +12,7 @@ export function Footer() {
           <div className="flex items-center justify-center gap-2">
             <FaWhatsapp className="text-xl max-sm:size-8 max-sm:bg-slate-200 max-sm:border-2 border-black max-sm:rounded max-sm:p-1" />
             <p>
-              <a href="tel:+1234567890" className="text-gray-700 max-sm:hidden">
+            <a href="https://wa.me/+1234567890" className="text-gray-700 max-sm:hidden">
                 +55 81 xxxxx-xxxx
               </a>
             </p>

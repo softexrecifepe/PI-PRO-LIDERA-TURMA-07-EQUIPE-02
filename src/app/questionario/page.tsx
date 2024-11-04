@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import data from "../../lib/data.json";
 import { useForm, Controller } from "react-hook-form";
 import { CustomButton } from "@/components/button/custom-button";
@@ -30,7 +30,7 @@ const questions: Question[] = data.flatMap(
 ) as Question[];
 
 export default function TesteLideranca() {
-  const { control, handleSubmit, watch } = useForm<FormData>();
+  const { control, handleSubmit, watch, setValue } = useForm<FormData>();
   const [currentPage, setCurrentPage] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
@@ -48,9 +48,22 @@ export default function TesteLideranca() {
   );
   const currentTheme = data[currentThemeIndex]?.theme || "Tema não disponível";
 
+  useEffect(() => {
+    // Carregar respostas do local storage ao montar o componente
+    const savedResponses = localStorage.getItem('responses');
+    if (savedResponses) {
+      const responses: FormData = JSON.parse(savedResponses);
+      for (const key in responses) {
+        setValue(key, responses[key]);
+      }
+    }
+  }, [setValue]);
+
   const handleNextPage = () => {
     if (isPageComplete()) {
+      saveResponsesToLocalStorage(); // Salva as respostas antes de avançar
       setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
+      window.scrollTo(0, 0); // Rolar para o topo da página
     } else {
       toast({
         title: "Preencha todas as perguntas",
@@ -65,6 +78,7 @@ export default function TesteLideranca() {
 
   const handlePreviousPage = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 0));
+    window.scrollTo(0, 0); // Rolar para o topo da página
   };
 
   const isPageComplete = () =>
@@ -108,6 +122,17 @@ export default function TesteLideranca() {
 
   const confirmAction = () => {
     setIsDialogOpen(true);
+  };
+
+  const saveResponsesToLocalStorage = () => {
+    const responses: FormData = {};
+    currentQuestions.forEach((question) => {
+      const response = watch(`question${question.id}`);
+      if (response) {
+        responses[`question${question.id}`] = response;
+      }
+    });
+    localStorage.setItem('responses', JSON.stringify(responses));
   };
 
   return (
@@ -182,9 +207,8 @@ export default function TesteLideranca() {
           onClose={() => setIsDialogOpen(false)}
           onConfirm={handleSubmitDialog}
           icon={<ExclamationTriangleIcon />}
-          message="Deseja mesmo enviar o formulário?"
+          message="Deseja mesmo enviar o questionário?"
           confirmButtonLabel="Enviar"
-          alertColor="F45943"
         />
       </div>
     </div>

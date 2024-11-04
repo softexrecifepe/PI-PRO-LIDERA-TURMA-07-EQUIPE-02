@@ -1,5 +1,4 @@
 import { cloneElement, ReactElement } from "react";
-
 interface ConfirmDialogProps {
   isOpen: boolean;
   onClose: () => void;
@@ -7,7 +6,6 @@ interface ConfirmDialogProps {
   icon: ReactElement;
   message: string;
   confirmButtonLabel: string;
-  alertColor: string;
 }
 
 export const ConfirmDialog = ({
@@ -17,10 +15,9 @@ export const ConfirmDialog = ({
   icon,
   message,
   confirmButtonLabel,
-  alertColor,
 }: ConfirmDialogProps) => {
 
-  const iconStyle = `fill-current text-${alertColor} w-10 h-10`;
+  const iconStyle = `fill-current w-10 h-10`;
 
   if (!isOpen) return null;
 
