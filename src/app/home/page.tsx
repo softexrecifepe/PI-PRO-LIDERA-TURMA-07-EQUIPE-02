@@ -23,15 +23,15 @@ export default function HomePage() {
           </p>
 
           <div className="flex flex-col sm:flex-row sm:justify-around items-center gap-4 sm:gap-8">
-            <Link href={"/login"}>
-              <CustomButton className="w-32 sm:w-40" onClick={() => {}}>
-                Entrar
+            <Link href={"/cadastro"}>
+              <CustomButton className="w-32 sm:w-40 bg-opacity-60" onClick={() => {}}>
+              Criar Conta 
               </CustomButton>
             </Link>
 
-            <Link href={"/cadastro"}>
+            <Link href={"/login"}>
               <CustomButton className="w-32 sm:w-40" onClick={() => {}}>
-                Criar Conta
+                    Entrar
               </CustomButton>
             </Link>
           </div>

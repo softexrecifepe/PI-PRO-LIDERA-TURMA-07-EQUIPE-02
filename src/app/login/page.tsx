@@ -60,13 +60,13 @@ export default function Login() {
           </h2>
 
           <CustomButton
-            className="w-full flex items-center justify-center gap-x-3 shadow-lg"
+            className="w-full flex items-center justify-center gap-x-3 shadow-lg bg-opacity-60"
             onClick={() => {}}
           >
             <FcGoogle /> Google
           </CustomButton>
           <CustomButton
-            className="w-full flex items-center justify-center gap-x-3 shadow-lg"
+            className="w-full flex items-center justify-center gap-x-3 shadow-lg bg-opacity-60"
             onClick={() => {}}
           >
             <FaFacebook className="text-[#1d2c4c]" /> Facebook

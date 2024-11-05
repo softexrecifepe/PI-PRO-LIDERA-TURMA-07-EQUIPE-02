@@ -29,14 +29,14 @@ export default function Cadastro() {
             </div>
             <div className="flex flex-col md:flex-col gap-4 justify-center m-8 xl:flex-row xl:w-2/3">
               <CustomButton
-                className="w-80 flex items-center justify-center gap-x-3 shadow-lg"
+                className="w-80 flex items-center justify-center gap-x-3 shadow-lg bg-opacity-60"
                 onClick={() => {}}
               >
                 <FcGoogle />
                 Google
               </CustomButton>
               <CustomButton
-                className="w-80 flex items-center justify-center gap-x-3 shadow-lg"
+                className="w-80 flex items-center justify-center gap-x-3 shadow-lg bg-opacity-60"
                 onClick={() => {}}
               >
                 <FaFacebook className="text-[#1d2c4c]" />
