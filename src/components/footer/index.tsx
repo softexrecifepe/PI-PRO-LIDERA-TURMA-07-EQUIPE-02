@@ -9,15 +9,15 @@ export function Footer() {
       <div id="footer">
         <h2 className="text-xl font-bold max-sm:hidden">Contato</h2>
         <div className="flex gap-8 justify-around items-center max-sm:mb-4">
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex items-center justify-center gap-2 max-sm:cursor-pointer">
             <FaWhatsapp className="text-xl max-sm:size-8 max-sm:bg-slate-200 max-sm:border-2 border-black max-sm:rounded max-sm:p-1" />
             <p>
-            <a href="https://wa.me/+1234567890" className="text-gray-700 max-sm:hidden">
+            <a href="https://wa.me/+1234567890" className="text-gray-700 max-sm:hidden ">
                 +55 81 xxxxx-xxxx
               </a>
             </p>
           </div>
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex items-center justify-center gap-2 max-sm:cursor-pointer">
             <MdOutlineEmail className="text-xl max-sm:size-8 max-sm:bg-slate-200  max-sm:border-2 border-black max-sm:rounded max-sm:p-1" />
             <p>
               <a
@@ -28,7 +28,7 @@ export function Footer() {
               </a>
             </p>
           </div>
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex items-center justify-center gap-2 max-sm:cursor-pointer">
             <CiLocationOn className="text-xl max-sm:size-8 max-sm:bg-slate-200 max-sm:border-2 border-black max-sm:rounded max-sm:p-1" />
             <p className="text-gray-700 max-sm:hidden">Recife</p>
           </div>
