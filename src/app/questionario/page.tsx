@@ -1,12 +1,12 @@
-"use client";
-import React, { FormEvent, useEffect, useState } from "react";
-import data from "../../lib/data.json";
-import { useForm, Controller } from "react-hook-form";
-import { CustomButton } from "@/components/button/custom-button";
-import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
-import { ConfirmDialog } from "@/components/confirmDialog";
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+'use client';
+import React, { FormEvent, useEffect, useState } from 'react';
+import data from '../../lib/data.json';
+import { useForm, Controller } from 'react-hook-form';
+import { CustomButton } from '@/components/button/custom-button';
+import { useToast } from '@/hooks/use-toast';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { ConfirmDialog } from '@/components/confirmDialog';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
 type Option = {
   id: string;
@@ -24,9 +24,7 @@ type FormData = {
   [key: string]: string;
 };
 
-const questions: Question[] = data.flatMap(
-  (item) => item.questions
-) as Question[];
+const questions: Question[] = data.flatMap((item) => item.questions) as Question[];
 
 export default function TesteLideranca() {
   const { control, handleSubmit, watch, setValue } = useForm<FormData>();
@@ -34,6 +32,8 @@ export default function TesteLideranca() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const questionsPerPage = 3;
   const totalPages = Math.ceil(questions.length / questionsPerPage);
@@ -42,95 +42,99 @@ export default function TesteLideranca() {
     currentPage * questionsPerPage + questionsPerPage
   );
 
-  const currentThemeIndex = Math.floor(
-    currentPage / (data[0].questions.length / questionsPerPage)
-  );
-  const currentTheme = data[currentThemeIndex]?.theme || "Tema não disponível";
+  // Recupera o valor da página na URL ao carregar
+  useEffect(() => {
+    const savedPage = localStorage.getItem('currentPage');
+    const pageFromURL = parseInt(searchParams.get('page') || '0', 10);
+    const pageToSet = !isNaN(pageFromURL) && pageFromURL >= 0 && pageFromURL < totalPages
+      ? pageFromURL
+      : savedPage
+      ? parseInt(savedPage, 10)
+      : 0;
+
+    setCurrentPage(pageToSet);
+  }, [searchParams, totalPages]);
 
   useEffect(() => {
-    // Carregar respostas salvas do localStorage ao montar o componente
-    const savedData: { [key: string]: string } = JSON.parse(
-      localStorage.getItem("formData") || "{}"
-    );
+    // Atualiza a URL quando a página muda
+    router.replace(`${pathname}?page=${currentPage}`);
+    localStorage.setItem('currentPage', currentPage.toString());
+  }, [currentPage, pathname, router]);
 
-    // Garantir que a chave seja sempre uma string
+  const currentThemeIndex = Math.floor(currentPage / (data[0].questions.length / questionsPerPage));
+  const currentTheme = data[currentThemeIndex]?.theme || 'Tema não disponível';
+
+  useEffect(() => {
+    const savedData: { [key: string]: string } = JSON.parse(localStorage.getItem('formData') || '{}');
     Object.keys(savedData).forEach((key) => {
-      const stringKey = key as string;
-      const value = savedData[stringKey];
-
-      // Verificar se o valor é uma string
-      if (typeof value === "string") {
-        setValue(stringKey, value);
+      const value = savedData[key];
+      if (typeof value === 'string') {
+        setValue(key, value);
       }
     });
   }, [setValue]);
 
-  // Salva as respostas no localStorage quando uma resposta é alterada
   const saveResponseToLocalStorage = (fieldName: string, value: string) => {
-    const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
+    const savedData = JSON.parse(localStorage.getItem('formData') || '{}');
     savedData[fieldName] = value;
-    localStorage.setItem("formData", JSON.stringify(savedData));
+    localStorage.setItem('formData', JSON.stringify(savedData));
   };
 
   const handleNextPage = () => {
-    if (isPageComplete()) {
-      saveResponsesToLocalStorage(); // Salva as respostas antes de avançar
+    const incompleteQuestionIds = isPageComplete();
+    if (incompleteQuestionIds === null) {
+      saveResponsesToLocalStorage();
       setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
-      window.scrollTo(0, 0); // Rolar para o topo da página
+      window.scrollTo(0, 0);
     } else {
       toast({
-        title: "Preencha todas as perguntas",
-        description:
-          "Por favor, responda todas as perguntas antes de continuar.",
-        className:
-          "flex w-full max-w-sm py-5 px-6 bg-white rounded-xl border border-gray-200 shadow-sm mb-4 gap-4",
-        role: "alert",
+        title: 'Preencha todas as perguntas',
+        description: `Por favor, responda as perguntas: ${incompleteQuestionIds.join(', ')} antes de continuar.`,
+        className: 'flex w-full max-w-sm py-5 px-6 bg-white rounded-xl border border-gray-200 shadow-sm mb-4 gap-4',
+        role: 'alert',
       });
     }
   };
 
   const handlePreviousPage = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 0));
-    window.scrollTo(0, 0); // Rolar para o topo da página
+    window.scrollTo(0, 0);
   };
 
-  const isPageComplete = () =>
-    currentQuestions.every((question) => watch(`question${question.id}`));
+  const isPageComplete = () => {
+    const incompleteQuestions = currentQuestions
+      .filter((question) => !watch(`question${question.id}`))
+      .map((question) => question.id);
+    return incompleteQuestions.length > 0 ? incompleteQuestions : null;
+  };
 
   const onSubmit = (formData: FormData) => {
     let totalScore = 0;
     for (const key in formData) {
       const question = questions.find((q) => `question${q.id}` === key);
-      const option = question?.options.find(
-        (opt) => opt.value === formData[key]
-      );
+      const option = question?.options.find((opt) => opt.value === formData[key]);
       totalScore += option ? option.score : 0;
     }
 
     let resultCategory;
     if (totalScore >= 18 && totalScore <= 35) {
-      resultCategory = "Liderança frágil e pouco trabalhada";
+      resultCategory = 'Liderança frágil e pouco trabalhada';
     } else if (totalScore >= 36 && totalScore <= 53) {
-      resultCategory = "Liderança em desenvolvimento";
+      resultCategory = 'Liderança em desenvolvimento';
     } else if (totalScore >= 54 && totalScore <= 72) {
-      resultCategory = "Líder de alta performance";
+      resultCategory = 'Líder de alta performance';
     }
 
-    const encodedResultCategory = encodeURIComponent(
-      resultCategory || "Liderança não determinada"
-    );
-
-    localStorage.removeItem("responses"); // Limpa as respostas ao enviar
-    router.push(
-      `/resultado-questionario?resultCategory=${encodedResultCategory}`
-    );
-    localStorage.removeItem("formData"); // Limpa o localStorage após o envio
+    const encodedResultCategory = encodeURIComponent(resultCategory || 'Liderança não determinada');
+    localStorage.removeItem('responses');
+    router.push(`/resultado-questionario?resultCategory=${encodedResultCategory}`);
+    localStorage.removeItem('formData');
   };
 
   const handleSubmitDialog = (e?: FormEvent) => {
     e?.preventDefault();
-    handleSubmit(onSubmit)(); // Confirma e chama o envio dos dados
-    setIsDialogOpen(false); // Fecha o diálogo após confirmar
+    handleSubmit(onSubmit)();
+    setIsDialogOpen(false);
   };
 
   const confirmAction = () => {
@@ -145,7 +149,7 @@ export default function TesteLideranca() {
         responses[`question${question.id}`] = response;
       }
     });
-    localStorage.setItem("responses", JSON.stringify(responses));
+    localStorage.setItem('responses', JSON.stringify(responses));
   };
 
   return (
@@ -155,18 +159,13 @@ export default function TesteLideranca() {
           <h1 className="text-2xl font-bold text-center mb-8 text-primary">
             Teste de Liderança - PRO Lidera Skills
           </h1>
-          <span className="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:text-purple-400 border border-purple-400">
+          <span className="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-purple-400">
             Tema: {currentTheme}
           </span>
 
           {currentQuestions.map((question) => (
-            <div
-              key={question.id}
-              className="flex flex-col text-justify space-y-5"
-            >
-              <h2 className="text-xl text-primary font-bold">
-                Pergunta {question.id}
-              </h2>
+            <div key={question.id} className="flex flex-col text-justify space-y-5">
+              <h2 className="text-xl text-primary font-bold">Pergunta {question.id}</h2>
               <h3 className="font-semibold text-base">{question.question}</h3>
               {question.options.map((option) => (
                 <Controller
@@ -185,17 +184,11 @@ export default function TesteLideranca() {
                         checked={field.value === option.value}
                         onChange={(e) => {
                           field.onChange(e);
-                          saveResponseToLocalStorage(
-                            `question${question.id}`,
-                            e.target.value
-                          );
+                          saveResponseToLocalStorage(`question${question.id}`, e.target.value);
                         }}
                         className="mr-2"
                       />
-                      <label
-                        htmlFor={`question${question.id}_option${option.id}`}
-                        className="text-gray-700"
-                      >
+                      <label htmlFor={`question${question.id}_option${option.id}`} className="text-gray-700">
                         {option.value}
                       </label>
                     </div>
@@ -209,11 +202,7 @@ export default function TesteLideranca() {
             {currentPage > 0 && (
               <CustomButton onClick={handlePreviousPage}>Anterior</CustomButton>
             )}
-            {currentPage === 0 ? (
-              <div className="relative mx-auto max-sm:mx-[11.5rem]">
-                <CustomButton onClick={handleNextPage}>Próximo</CustomButton>
-              </div>
-            ) : currentPage < totalPages - 1 ? (
+            {currentPage < totalPages - 1 ? (
               <CustomButton onClick={handleNextPage}>Próximo</CustomButton>
             ) : (
               <CustomButton type="button" onClick={confirmAction}>
