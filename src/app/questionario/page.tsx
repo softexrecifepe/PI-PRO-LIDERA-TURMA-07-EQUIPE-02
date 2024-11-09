@@ -1,12 +1,12 @@
-'use client';
-import React, { FormEvent, useEffect, useState } from 'react';
-import data from '../../lib/data.json';
-import { useForm, Controller } from 'react-hook-form';
-import { CustomButton } from '@/components/button/custom-button';
-import { useToast } from '@/hooks/use-toast';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { ConfirmDialog } from '@/components/confirmDialog';
-import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+"use client";
+import React, { FormEvent, useEffect, useState } from "react";
+import data from "../../lib/data.json";
+import { useForm, Controller } from "react-hook-form";
+import { CustomButton } from "@/components/button/custom-button";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { ConfirmDialog } from "@/components/confirmDialog";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 type Option = {
   id: string;
@@ -24,7 +24,9 @@ type FormData = {
   [key: string]: string;
 };
 
-const questions: Question[] = data.flatMap((item) => item.questions) as Question[];
+const questions: Question[] = data.flatMap(
+  (item) => item.questions
+) as Question[];
 
 export default function TesteLideranca() {
   const { control, handleSubmit, watch, setValue } = useForm<FormData>();
@@ -42,15 +44,27 @@ export default function TesteLideranca() {
     currentPage * questionsPerPage + questionsPerPage
   );
 
+  useEffect(() => {
+    if (currentPage === 0) {
+      const savedPage = localStorage.getItem('currentPage');
+      if (savedPage) {
+        setCurrentPage(parseInt(savedPage, 10));
+      }
+    }
+  }, [currentPage]);
+  
+
   // Recupera o valor da página na URL ao carregar
   useEffect(() => {
-    const savedPage = localStorage.getItem('currentPage');
-    const pageFromURL = parseInt(searchParams.get('page') || '0', 10);
-    const pageToSet = !isNaN(pageFromURL) && pageFromURL >= 0 && pageFromURL < totalPages
-      ? pageFromURL
-      : savedPage
-      ? parseInt(savedPage, 10)
-      : 0;
+    const savedPage = localStorage.getItem("currentPage");
+    const pageFromURL = parseInt(searchParams.get("page") || "", 10);
+
+    const pageToSet =
+      !isNaN(pageFromURL) && pageFromURL >= 0 && pageFromURL < totalPages
+        ? pageFromURL
+        : savedPage
+        ? parseInt(savedPage, 10)
+        : 0;
 
     setCurrentPage(pageToSet);
   }, [searchParams, totalPages]);
@@ -58,26 +72,31 @@ export default function TesteLideranca() {
   useEffect(() => {
     // Atualiza a URL quando a página muda
     router.replace(`${pathname}?page=${currentPage}`);
-    localStorage.setItem('currentPage', currentPage.toString());
+    localStorage.setItem("currentPage", currentPage.toString());
   }, [currentPage, pathname, router]);
 
-  const currentThemeIndex = Math.floor(currentPage / (data[0].questions.length / questionsPerPage));
-  const currentTheme = data[currentThemeIndex]?.theme || 'Tema não disponível';
+  const currentThemeIndex = Math.floor(
+    currentPage / (data[0].questions.length / questionsPerPage)
+  );
+  const currentTheme = data[currentThemeIndex]?.theme || "Tema não disponível";
 
   useEffect(() => {
-    const savedData: { [key: string]: string } = JSON.parse(localStorage.getItem('formData') || '{}');
+    const savedData: { [key: string]: string } = JSON.parse(
+      localStorage.getItem("formData") || "{}"
+    );
     Object.keys(savedData).forEach((key) => {
       const value = savedData[key];
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         setValue(key, value);
       }
     });
   }, [setValue]);
 
   const saveResponseToLocalStorage = (fieldName: string, value: string) => {
-    const savedData = JSON.parse(localStorage.getItem('formData') || '{}');
+    const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
     savedData[fieldName] = value;
-    localStorage.setItem('formData', JSON.stringify(savedData));
+    localStorage.setItem("formData", JSON.stringify(savedData));
+    localStorage.setItem("currentPage", currentPage.toString()); //salva a página atual.
   };
 
   const handleNextPage = () => {
@@ -88,10 +107,13 @@ export default function TesteLideranca() {
       window.scrollTo(0, 0);
     } else {
       toast({
-        title: 'Preencha todas as perguntas',
-        description: `Por favor, responda as perguntas: ${incompleteQuestionIds.join(', ')} antes de continuar.`,
-        className: 'flex w-full max-w-sm py-5 px-6 bg-white rounded-xl border border-gray-200 shadow-sm mb-4 gap-4',
-        role: 'alert',
+        title: "Perguntas incompletas",
+        description: `Você não respondeu às seguintes perguntas: ${incompleteQuestionIds
+          .map((q) => q.id)
+          .join(", ")}.`,
+        className:
+          "flex w-full max-w-sm py-5 px-6 bg-white rounded-xl border border-gray-200 shadow-sm mb-4 gap-4",
+        role: "alert",
       });
     }
   };
@@ -104,31 +126,47 @@ export default function TesteLideranca() {
   const isPageComplete = () => {
     const incompleteQuestions = currentQuestions
       .filter((question) => !watch(`question${question.id}`))
-      .map((question) => question.id);
+      .map((question) => ({ id: question.id, text: question.question }));
+
     return incompleteQuestions.length > 0 ? incompleteQuestions : null;
   };
+
+  useEffect(() => {
+    const handleUnload = () => {
+      localStorage.setItem("currentPage", currentPage.toString());
+    };
+
+    window.addEventListener("beforeunload", handleUnload);
+    return () => window.removeEventListener("beforeunload", handleUnload);
+  }, [currentPage]);
 
   const onSubmit = (formData: FormData) => {
     let totalScore = 0;
     for (const key in formData) {
       const question = questions.find((q) => `question${q.id}` === key);
-      const option = question?.options.find((opt) => opt.value === formData[key]);
+      const option = question?.options.find(
+        (opt) => opt.value === formData[key]
+      );
       totalScore += option ? option.score : 0;
     }
 
     let resultCategory;
     if (totalScore >= 18 && totalScore <= 35) {
-      resultCategory = 'Liderança frágil e pouco trabalhada';
+      resultCategory = "Liderança frágil e pouco trabalhada";
     } else if (totalScore >= 36 && totalScore <= 53) {
-      resultCategory = 'Liderança em desenvolvimento';
+      resultCategory = "Liderança em desenvolvimento";
     } else if (totalScore >= 54 && totalScore <= 72) {
-      resultCategory = 'Líder de alta performance';
+      resultCategory = "Líder de alta performance";
     }
 
-    const encodedResultCategory = encodeURIComponent(resultCategory || 'Liderança não determinada');
-    localStorage.removeItem('responses');
-    router.push(`/resultado-questionario?resultCategory=${encodedResultCategory}`);
-    localStorage.removeItem('formData');
+    const encodedResultCategory = encodeURIComponent(
+      resultCategory || "Liderança não determinada"
+    );
+    localStorage.removeItem("responses");
+    router.push(
+      `/resultado-questionario?resultCategory=${encodedResultCategory}`
+    );
+    localStorage.removeItem("formData");
   };
 
   const handleSubmitDialog = (e?: FormEvent) => {
@@ -149,7 +187,7 @@ export default function TesteLideranca() {
         responses[`question${question.id}`] = response;
       }
     });
-    localStorage.setItem('responses', JSON.stringify(responses));
+    localStorage.setItem("responses", JSON.stringify(responses));
   };
 
   return (
@@ -164,8 +202,13 @@ export default function TesteLideranca() {
           </span>
 
           {currentQuestions.map((question) => (
-            <div key={question.id} className="flex flex-col text-justify space-y-5">
-              <h2 className="text-xl text-primary font-bold">Pergunta {question.id}</h2>
+            <div
+              key={question.id}
+              className="flex flex-col text-justify space-y-5"
+            >
+              <h2 className="text-xl text-primary font-bold">
+                Pergunta {question.id}
+              </h2>
               <h3 className="font-semibold text-base">{question.question}</h3>
               {question.options.map((option) => (
                 <Controller
@@ -184,11 +227,17 @@ export default function TesteLideranca() {
                         checked={field.value === option.value}
                         onChange={(e) => {
                           field.onChange(e);
-                          saveResponseToLocalStorage(`question${question.id}`, e.target.value);
+                          saveResponseToLocalStorage(
+                            `question${question.id}`,
+                            e.target.value
+                          );
                         }}
                         className="mr-2"
                       />
-                      <label htmlFor={`question${question.id}_option${option.id}`} className="text-gray-700">
+                      <label
+                        htmlFor={`question${question.id}_option${option.id}`}
+                        className="text-gray-700"
+                      >
                         {option.value}
                       </label>
                     </div>
