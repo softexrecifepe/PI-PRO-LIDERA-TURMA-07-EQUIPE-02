@@ -7,8 +7,20 @@ import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { Separator } from "@/components/ui/separator";
+import { signIn } from "next-auth/react";
 
 export default function Login() {
+
+  const handleLoginGoogle = async () => {
+    try {
+      await signIn("google", {
+        redirectTo: "/instrucoes",
+      });
+    } catch (error) {
+      console.error("Erro no login:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
       <section className="hidden md:flex w-1/2 relative">
@@ -41,7 +53,7 @@ export default function Login() {
             <Link href={"/instrucoes"}>
               <CustomButton
                 className="w-full flex items-center justify-center gap-x-3 shadow-lg"
-                onClick={() => {}}
+                onClick={() => { }}
               >
                 Entrar
               </CustomButton>
@@ -61,13 +73,13 @@ export default function Login() {
 
           <CustomButton
             className="w-full flex items-center justify-center gap-x-3 shadow-lg bg-opacity-60"
-            onClick={() => {}}
+            onClick={handleLoginGoogle}
           >
             <FcGoogle /> Google
           </CustomButton>
           <CustomButton
             className="w-full flex items-center justify-center gap-x-3 shadow-lg bg-opacity-60"
-            onClick={() => {}}
+            onClick={() => { }}
           >
             <FaFacebook className="text-[#1d2c4c]" /> Facebook
           </CustomButton>
@@ -77,7 +89,7 @@ export default function Login() {
             </h2>
             <Link href={"/cadastro"}>
               <CustomButton
-                onClick={() => {}}
+                onClick={() => { }}
                 className="text-primary bg-transparent hover:text-white lg:w-40 max-sm:text-sm"
               >
                 CADASTRE-SE
