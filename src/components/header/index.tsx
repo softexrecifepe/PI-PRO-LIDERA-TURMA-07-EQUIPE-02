@@ -6,6 +6,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { Switch } from "../ui/switch";
 import { TbAccessible } from "react-icons/tb";
 import { useSession } from "next-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export function Header() {
   const [isActive, setIsActive] = useState(false);
@@ -57,11 +58,12 @@ export function Header() {
 
           {session?.user && (
             <li>
-              <a
-                className="text-[var(--text-color)] hover:text-primary text-base transition-colors duration-200 ease-in-out"
-              >
-                {session?.user?.name}
-              </a>
+              <Avatar>
+                <AvatarImage src={session?.user?.image || ""} />
+                <AvatarFallback>
+                  {session?.user?.name?.split(" ").map((n) => n[0]).join("")}
+                </AvatarFallback>
+              </Avatar>
             </li>)}
 
           < li className="flex items-center gap-1">
