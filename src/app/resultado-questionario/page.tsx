@@ -5,8 +5,10 @@ import { Title } from "@/components/title";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { jsPDF } from "jspdf";
+import { useSession } from "next-auth/react";
 
 export default function ResultadoQuestionario() {
+  const { data: session } = useSession();
   const searchParams = useSearchParams();
   const resultCategoryFromQuery = searchParams.get("resultCategory");
 
@@ -44,7 +46,7 @@ export default function ResultadoQuestionario() {
 
   // Função para gerar o PDF
   const handleDownload = async () => {
-
+    const userName = session?.user?.name || "Usuário";
     const doc = new jsPDF("landscape", "mm", "a4");
     try {
       const base64Image = await getBase64ImageFromUrl("/Certificado.png");
@@ -55,9 +57,14 @@ export default function ResultadoQuestionario() {
       // Adiciona o nome e categoria de resultado ao PDF
       doc.setFontSize(32);
       doc.setFont("helvetica", "bold");
-      doc.text("NOME", 148, 120, { align: "center" });
+      doc.text(userName, 148, 120, { align: "center" });
       doc.setFontSize(12);
-      doc.text(`${resultCategoryFromQuery}.`, 92, 164, { align: "center", maxWidth: 270 });
+      doc.text(
+        `${resultCategoryFromQuery}.`,
+        92,
+        164,
+        { align: "center", maxWidth: 270 }
+      );
 
       // Gera o PDF e faz o download
       doc.save("resultado_teste_lideranca.pdf");
@@ -100,4 +107,3 @@ export default function ResultadoQuestionario() {
     </div>
   );
 }
-
