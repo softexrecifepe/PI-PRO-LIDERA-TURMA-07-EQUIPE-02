@@ -57,7 +57,7 @@ export default function ResultadoQuestionario() {
       doc.setFont("helvetica", "bold");
       doc.text("NOME", 148, 120, { align: "center" });
       doc.setFontSize(12);
-      doc.text(`${resultCategoryFromQuery}.`, 98, 164, { align: "center", maxWidth: 270 });
+      doc.text(`${resultCategoryFromQuery}.`, 92, 164, { align: "center", maxWidth: 270 });
 
       // Gera o PDF e faz o download
       doc.save("resultado_teste_lideranca.pdf");
