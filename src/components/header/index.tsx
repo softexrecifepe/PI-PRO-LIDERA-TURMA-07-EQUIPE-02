@@ -7,6 +7,8 @@ import { Switch } from "../ui/switch";
 import { TbAccessible } from "react-icons/tb";
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { DropdownMenuDemo } from "../menu";
+
 
 export function Header() {
   const [isActive, setIsActive] = useState(false);
@@ -64,8 +66,9 @@ export function Header() {
                   {session?.user?.name?.split(" ").map((n) => n[0]).join("")}
                 </AvatarFallback>
               </Avatar>
-            </li>)}
-
+            </li>
+          )}
+          <DropdownMenuDemo />
           < li className="flex items-center gap-1">
             <Switch
               id="airplane-mode"
