@@ -15,6 +15,7 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { data: session } = useSession();
+  console.log(`usuario: ${session?.user?.name}`)
 
 
 
@@ -70,7 +71,11 @@ export function Header() {
               </Avatar>
             </li>
           )}
-          <DropdownMenuDemo />
+
+          {session?.user && (
+            <DropdownMenuDemo />
+          )}
+
           < li className="flex items-center gap-1">
             <Switch
               id="airplane-mode"
