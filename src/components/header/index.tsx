@@ -16,6 +16,8 @@ export function Header() {
 
   const { data: session } = useSession();
 
+
+
   return (
     <header className="w-full fixed top-0 bg-[var(--background-color)] shadow-md z-20">
       <nav className="flex items-center justify-between h-16 max-w-[1240px] mx-auto px-4">

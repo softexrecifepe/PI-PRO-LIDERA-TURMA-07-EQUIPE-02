@@ -17,8 +17,17 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { signOut } from "next-auth/react";
 
 export function DropdownMenuDemo() {
+
+    const handleLogOutGoogle = async () => {
+        try {
+            await signOut({ redirectTo: "/" });
+        } catch (error) {
+            console.log("Erro ao sair", error);
+        }
+    }
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -51,7 +60,7 @@ export function DropdownMenuDemo() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                     <LogOut />
-                    <span>Sair</span>
+                    <button onClick={handleLogOutGoogle}>Sair</button>
                     <DropdownMenuShortcut>⇧ + Win + Q</DropdownMenuShortcut>
                 </DropdownMenuItem>
             </DropdownMenuContent>
