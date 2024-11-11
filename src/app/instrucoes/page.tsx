@@ -5,8 +5,6 @@ import Link from "next/link";
 import { Title } from "@/components/title";
 import { useSession } from "next-auth/react";
 
-
-
 export default function Instrucoes() {
   const { data: session } = useSession();
 
