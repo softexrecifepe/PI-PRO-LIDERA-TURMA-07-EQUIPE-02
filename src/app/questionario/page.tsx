@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, Suspense, useEffect, useState } from "react";
 import data from "../../lib/data.json";
 import { useForm, Controller } from "react-hook-form";
 import { CustomButton } from "@/components/button/custom-button";
@@ -52,7 +52,7 @@ export default function TesteLideranca() {
       }
     }
   }, [currentPage]);
-  
+
 
   // Recupera o valor da página na URL ao carregar
   useEffect(() => {
@@ -63,8 +63,8 @@ export default function TesteLideranca() {
       !isNaN(pageFromURL) && pageFromURL >= 0 && pageFromURL < totalPages
         ? pageFromURL
         : savedPage
-        ? parseInt(savedPage, 10)
-        : 0;
+          ? parseInt(savedPage, 10)
+          : 0;
 
     setCurrentPage(pageToSet);
   }, [searchParams, totalPages]);
@@ -191,84 +191,86 @@ export default function TesteLideranca() {
   };
 
   return (
-    <div className="flex justify-center items-center h-full py-24 min-h-screen">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-screen-md relative">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-          <h1 className="text-2xl font-bold text-center mb-8 text-primary">
-            Teste de Liderança - PRO Lidera Skills
-          </h1>
-          <span className="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-purple-400">
-            Tema: {currentTheme}
-          </span>
+    <Suspense>
+      <div className="flex justify-center items-center h-full py-24 min-h-screen">
+        <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-screen-md relative">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            <h1 className="text-2xl font-bold text-center mb-8 text-primary">
+              Teste de Liderança - PRO Lidera Skills
+            </h1>
+            <span className="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-purple-400">
+              Tema: {currentTheme}
+            </span>
 
-          {currentQuestions.map((question) => (
-            <div
-              key={question.id}
-              className="flex flex-col text-justify space-y-5"
-            >
-              <h2 className="text-xl text-primary font-bold">
-                Pergunta {question.id}
-              </h2>
-              <h3 className="font-semibold text-base">{question.question}</h3>
-              {question.options.map((option) => (
-                <Controller
-                  key={option.id}
-                  name={`question${question.id}`}
-                  control={control}
-                  defaultValue=""
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <div className="flex items-center">
-                      <input
-                        {...field}
-                        type="radio"
-                        id={`question${question.id}_option${option.id}`}
-                        value={option.value}
-                        checked={field.value === option.value}
-                        onChange={(e) => {
-                          field.onChange(e);
-                          saveResponseToLocalStorage(
-                            `question${question.id}`,
-                            e.target.value
-                          );
-                        }}
-                        className="mr-2"
-                      />
-                      <label
-                        htmlFor={`question${question.id}_option${option.id}`}
-                        className="text-gray-700"
-                      >
-                        {option.value}
-                      </label>
-                    </div>
-                  )}
-                />
-              ))}
+            {currentQuestions.map((question) => (
+              <div
+                key={question.id}
+                className="flex flex-col text-justify space-y-5"
+              >
+                <h2 className="text-xl text-primary font-bold">
+                  Pergunta {question.id}
+                </h2>
+                <h3 className="font-semibold text-base">{question.question}</h3>
+                {question.options.map((option) => (
+                  <Controller
+                    key={option.id}
+                    name={`question${question.id}`}
+                    control={control}
+                    defaultValue=""
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <div className="flex items-center">
+                        <input
+                          {...field}
+                          type="radio"
+                          id={`question${question.id}_option${option.id}`}
+                          value={option.value}
+                          checked={field.value === option.value}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            saveResponseToLocalStorage(
+                              `question${question.id}`,
+                              e.target.value
+                            );
+                          }}
+                          className="mr-2"
+                        />
+                        <label
+                          htmlFor={`question${question.id}_option${option.id}`}
+                          className="text-gray-700"
+                        >
+                          {option.value}
+                        </label>
+                      </div>
+                    )}
+                  />
+                ))}
+              </div>
+            ))}
+
+            <div className="flex justify-between mt-8">
+              {currentPage > 0 && (
+                <CustomButton onClick={handlePreviousPage}>Anterior</CustomButton>
+              )}
+              {currentPage < totalPages - 1 ? (
+                <CustomButton onClick={handleNextPage}>Próximo</CustomButton>
+              ) : (
+                <CustomButton type="button" onClick={confirmAction}>
+                  Enviar
+                </CustomButton>
+              )}
             </div>
-          ))}
-
-          <div className="flex justify-between mt-8">
-            {currentPage > 0 && (
-              <CustomButton onClick={handlePreviousPage}>Anterior</CustomButton>
-            )}
-            {currentPage < totalPages - 1 ? (
-              <CustomButton onClick={handleNextPage}>Próximo</CustomButton>
-            ) : (
-              <CustomButton type="button" onClick={confirmAction}>
-                Enviar
-              </CustomButton>
-            )}
-          </div>
-        </form>
-        <ConfirmDialog
-          isOpen={isDialogOpen}
-          onClose={() => setIsDialogOpen(false)}
-          onConfirm={handleSubmitDialog}
-          icon={<ExclamationTriangleIcon />}
-          message="Deseja mesmo enviar o questionário?"
-          confirmButtonLabel="Enviar"
-        />
+          </form>
+          <ConfirmDialog
+            isOpen={isDialogOpen}
+            onClose={() => setIsDialogOpen(false)}
+            onConfirm={handleSubmitDialog}
+            icon={<ExclamationTriangleIcon />}
+            message="Deseja mesmo enviar o questionário?"
+            confirmButtonLabel="Enviar"
+          />
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 }

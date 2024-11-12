@@ -15,9 +15,6 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { data: session } = useSession();
-  console.log(`usuario: ${session?.user?.name}`)
-
-
 
   return (
     <header className="w-full fixed top-0 bg-[var(--background-color)] shadow-md z-20">
