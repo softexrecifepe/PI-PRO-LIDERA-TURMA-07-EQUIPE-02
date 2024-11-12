@@ -191,7 +191,7 @@ export default function TesteLideranca() {
   };
 
   return (
-    <Suspense>
+    <Suspense fallback={<div>Carregando...</div>}>
       <div className="flex justify-center items-center h-full py-24 min-h-screen">
         <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-screen-md relative">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
