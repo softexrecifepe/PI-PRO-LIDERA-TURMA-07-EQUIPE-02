@@ -29,6 +29,14 @@ const questions: Question[] = data.flatMap(
 ) as Question[];
 
 export default function TesteLideranca() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <QuestionarioContent />
+    </Suspense>
+  );
+}
+
+function QuestionarioContent() {
   const { control, handleSubmit, watch, setValue } = useForm<FormData>();
   const [currentPage, setCurrentPage] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -46,13 +54,12 @@ export default function TesteLideranca() {
 
   useEffect(() => {
     if (currentPage === 0) {
-      const savedPage = localStorage.getItem('currentPage');
+      const savedPage = localStorage.getItem("currentPage");
       if (savedPage) {
         setCurrentPage(parseInt(savedPage, 10));
       }
     }
   }, [currentPage]);
-
 
   // Recupera o valor da página na URL ao carregar
   useEffect(() => {
@@ -67,6 +74,7 @@ export default function TesteLideranca() {
           : 0;
 
     setCurrentPage(pageToSet);
+
   }, [searchParams, totalPages]);
 
   useEffect(() => {
@@ -96,7 +104,7 @@ export default function TesteLideranca() {
     const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
     savedData[fieldName] = value;
     localStorage.setItem("formData", JSON.stringify(savedData));
-    localStorage.setItem("currentPage", currentPage.toString()); //salva a página atual.
+    localStorage.setItem("currentPage", currentPage.toString());
   };
 
   const handleNextPage = () => {
@@ -191,86 +199,90 @@ export default function TesteLideranca() {
   };
 
   return (
-    <Suspense fallback={<div>Carregando...</div>}>
-      <div className="flex justify-center items-center h-full py-24 min-h-screen">
-        <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-screen-md relative">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-            <h1 className="text-2xl font-bold text-center mb-8 text-primary">
-              Teste de Liderança - PRO Lidera Skills
-            </h1>
-            <span className="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-purple-400">
-              Tema: {currentTheme}
-            </span>
+    <div className="flex justify-center items-center h-full py-24 min-h-screen">
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-screen-md relative">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <h1 className="text-2xl font-bold text-center mb-8 text-primary">
+            Teste de Liderança - PRO Lidera Skills
+          </h1>
+          <span className="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-purple-400">
+            Tema: {currentTheme}
+          </span>
 
-            {currentQuestions.map((question) => (
-              <div
-                key={question.id}
-                className="flex flex-col text-justify space-y-5"
-              >
-                <h2 className="text-xl text-primary font-bold">
-                  Pergunta {question.id}
-                </h2>
-                <h3 className="font-semibold text-base">{question.question}</h3>
-                {question.options.map((option) => (
-                  <Controller
-                    key={option.id}
-                    name={`question${question.id}`}
-                    control={control}
-                    defaultValue=""
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <div className="flex items-center">
-                        <input
-                          {...field}
-                          type="radio"
-                          id={`question${question.id}_option${option.id}`}
-                          value={option.value}
-                          checked={field.value === option.value}
-                          onChange={(e) => {
-                            field.onChange(e);
-                            saveResponseToLocalStorage(
-                              `question${question.id}`,
-                              e.target.value
-                            );
-                          }}
-                          className="mr-2"
-                        />
-                        <label
-                          htmlFor={`question${question.id}_option${option.id}`}
-                          className="text-gray-700"
-                        >
-                          {option.value}
-                        </label>
-                      </div>
-                    )}
-                  />
-                ))}
-              </div>
-            ))}
-
-            <div className="flex justify-between mt-8">
-              {currentPage > 0 && (
-                <CustomButton onClick={handlePreviousPage}>Anterior</CustomButton>
-              )}
-              {currentPage < totalPages - 1 ? (
-                <CustomButton onClick={handleNextPage}>Próximo</CustomButton>
-              ) : (
-                <CustomButton type="button" onClick={confirmAction}>
-                  Enviar
-                </CustomButton>
-              )}
+          {currentQuestions.map((question) => (
+            <div
+              key={question.id}
+              className="flex flex-col text-justify space-y-5"
+            >
+              <h2 className="text-xl text-primary font-bold">
+                Pergunta {question.id}
+              </h2>
+              <h3 className="font-semibold text-base">{question.question}</h3>
+              {question.options.map((option) => (
+                <Controller
+                  key={option.id}
+                  name={`question${question.id}`}
+                  control={control}
+                  defaultValue=""
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <div className="flex items-center">
+                      <input
+                        {...field}
+                        type="radio"
+                        id={`question${question.id}_option${option.id}`}
+                        value={option.value}
+                        checked={field.value === option.value}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          saveResponseToLocalStorage(
+                            `question${question.id}`,
+                            e.target.value
+                          );
+                        }}
+                        className="mr-2"
+                      />
+                      <label
+                        htmlFor={`question${question.id}_option${option.id}`}
+                        className="text-gray-700"
+                      >
+                        {option.value}
+                      </label>
+                    </div>
+                  )}
+                />
+              ))}
             </div>
-          </form>
+          ))}
+
+          <div className="flex justify-between mt-8">
+            {currentPage > 0 && (
+              <CustomButton onClick={handlePreviousPage}>Anterior</CustomButton>
+            )}
+            {currentPage < totalPages - 1 ? (
+
+              <CustomButton onClick={handleNextPage}>Próxima</CustomButton>
+            ) : (
+              <CustomButton
+                onClick={confirmAction}
+                className="bg-red-500 text-white"
+              >
+                Enviar
+              </CustomButton>
+            )}
+          </div>
           <ConfirmDialog
             isOpen={isDialogOpen}
-            onClose={() => setIsDialogOpen(false)}
             onConfirm={handleSubmitDialog}
-            icon={<ExclamationTriangleIcon />}
-            message="Deseja mesmo enviar o questionário?"
-            confirmButtonLabel="Enviar"
+            onCancel={() => setIsDialogOpen(false)}
+            onClose={() => setIsDialogOpen(false)}
+            confirmButtonLabel="Confirmar"
+            icon={<ExclamationTriangleIcon className="h-6 w-6 text-red-600" />}
+            title="Confirmação de Envio"
+            message="Tem certeza de que deseja enviar o formulário? Após o envio, não será possível alterar as respostas."
           />
-        </div>
+        </form>
       </div>
-    </Suspense>
+    </div>
   );
 }
