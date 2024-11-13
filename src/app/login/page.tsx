@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import image from "@/assets/images/sign.jpg";
+import image from "../../assets/images/sign.jpg";
 import { Input } from "@/components/ui/input";
 import { CustomButton } from "@/components/button/custom-button";
 import Link from "next/link";
@@ -83,7 +83,9 @@ export default function Login() {
             placeholder="E-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className={`border w-full ${errors.email ? "border-red-500" : "border-black"}`}
+            className={`border w-full ${
+              errors.email ? "border-red-500" : "border-black"
+            }`}
             required
           />
           {errors.email && <p className="text-red-500">{errors.email}</p>}
@@ -92,10 +94,12 @@ export default function Login() {
             placeholder="Senha"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className={`border w-full ${errors.password ? "border-red-500" : "border-black"}`}
+            className={`border w-full ${
+              errors.password ? "border-red-500" : "border-black"
+            }`}
             required
           />
-            {errors.password && <p className="text-red-500">{errors.password}</p>}
+          {errors.password && <p className="text-red-500">{errors.password}</p>}
           <div className="w-full">
             <Link href={"/instrucoes"}>
               <CustomButton
@@ -126,7 +130,7 @@ export default function Login() {
           </CustomButton>
           <CustomButton
             className="w-full flex items-center justify-center gap-x-3 shadow-lg bg-opacity-60"
-            onClick={() => { }}
+            onClick={() => {}}
           >
             <FaFacebook className="text-[#1d2c4c]" /> Facebook
           </CustomButton>
@@ -136,7 +140,7 @@ export default function Login() {
             </h2>
             <Link href={"/cadastro"}>
               <CustomButton
-                onClick={() => { }}
+                onClick={() => {}}
                 className="text-primary bg-transparent hover:text-white lg:w-40 max-sm:text-sm"
               >
                 CADASTRE-SE
