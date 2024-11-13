@@ -6,8 +6,17 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { jsPDF } from "jspdf";
 import { useSession } from "next-auth/react";
+import { Suspense } from "react";
 
 export default function ResultadoQuestionario() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <ResultadoContent />
+    </Suspense>
+  );
+}
+
+function ResultadoContent() {
   const { data: session } = useSession();
   const searchParams = useSearchParams();
   const resultCategoryFromQuery = searchParams.get("resultCategory");

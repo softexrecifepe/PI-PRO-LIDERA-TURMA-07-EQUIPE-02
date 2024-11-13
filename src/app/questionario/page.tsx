@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, Suspense, useEffect, useState } from "react";
 import data from "../../lib/data.json";
 import { useForm, Controller } from "react-hook-form";
 import { CustomButton } from "@/components/button/custom-button";
@@ -29,6 +29,14 @@ const questions: Question[] = data.flatMap(
 ) as Question[];
 
 export default function TesteLideranca() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <QuestionarioContent />
+    </Suspense>
+  );
+}
+
+function QuestionarioContent() {
   const { control, handleSubmit, watch, setValue } = useForm<FormData>();
   const [currentPage, setCurrentPage] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -46,13 +54,12 @@ export default function TesteLideranca() {
 
   useEffect(() => {
     if (currentPage === 0) {
-      const savedPage = localStorage.getItem('currentPage');
+      const savedPage = localStorage.getItem("currentPage");
       if (savedPage) {
         setCurrentPage(parseInt(savedPage, 10));
       }
     }
   }, [currentPage]);
-  
 
   // Recupera o valor da página na URL ao carregar
   useEffect(() => {
@@ -63,10 +70,11 @@ export default function TesteLideranca() {
       !isNaN(pageFromURL) && pageFromURL >= 0 && pageFromURL < totalPages
         ? pageFromURL
         : savedPage
-        ? parseInt(savedPage, 10)
-        : 0;
+          ? parseInt(savedPage, 10)
+          : 0;
 
     setCurrentPage(pageToSet);
+
   }, [searchParams, totalPages]);
 
   useEffect(() => {
@@ -96,7 +104,7 @@ export default function TesteLideranca() {
     const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
     savedData[fieldName] = value;
     localStorage.setItem("formData", JSON.stringify(savedData));
-    localStorage.setItem("currentPage", currentPage.toString()); //salva a página atual.
+    localStorage.setItem("currentPage", currentPage.toString());
   };
 
   const handleNextPage = () => {
@@ -252,22 +260,28 @@ export default function TesteLideranca() {
               <CustomButton onClick={handlePreviousPage}>Anterior</CustomButton>
             )}
             {currentPage < totalPages - 1 ? (
-              <CustomButton onClick={handleNextPage}>Próximo</CustomButton>
+
+              <CustomButton onClick={handleNextPage}>Próxima</CustomButton>
             ) : (
-              <CustomButton type="button" onClick={confirmAction}>
+              <CustomButton
+                onClick={confirmAction}
+                className="bg-red-500 text-white"
+              >
                 Enviar
               </CustomButton>
             )}
           </div>
+          <ConfirmDialog
+            isOpen={isDialogOpen}
+            onConfirm={handleSubmitDialog}
+            onCancel={() => setIsDialogOpen(false)}
+            onClose={() => setIsDialogOpen(false)}
+            confirmButtonLabel="Confirmar"
+            icon={<ExclamationTriangleIcon className="h-6 w-6 text-red-600" />}
+            title="Confirmação de Envio"
+            message="Tem certeza de que deseja enviar o formulário? Após o envio, não será possível alterar as respostas."
+          />
         </form>
-        <ConfirmDialog
-          isOpen={isDialogOpen}
-          onClose={() => setIsDialogOpen(false)}
-          onConfirm={handleSubmitDialog}
-          icon={<ExclamationTriangleIcon />}
-          message="Deseja mesmo enviar o questionário?"
-          confirmButtonLabel="Enviar"
-        />
       </div>
     </div>
   );
