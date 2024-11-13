@@ -5,10 +5,16 @@ import logo from "../../../src/assets/images/logo.png";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Switch } from "../ui/switch";
 import { TbAccessible } from "react-icons/tb";
+import { useSession } from "next-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { DropdownMenuDemo } from "../menu";
+
 
 export function Header() {
   const [isActive, setIsActive] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const { data: session } = useSession();
 
   return (
     <header className="w-full fixed top-0 bg-[var(--background-color)] shadow-md z-20">
@@ -24,9 +30,8 @@ export function Header() {
           </h1>
         </div>
         <ul
-          className={`flex items-center list-none gap-8 max-sm:flex-col max-sm:absolute max-sm:bg-[var(--background-color)] max-sm:w-full max-sm:top-16 max-sm:left-0 max-sm:z-10 max-sm:shadow-md transition-all duration-300 ${
-            isMenuOpen ? "block" : "hidden"
-          } sm:flex`}
+          className={`flex items-center list-none gap-8 max-sm:flex-col max-sm:absolute max-sm:bg-[var(--background-color)] max-sm:w-full max-sm:top-16 max-sm:left-0 max-sm:z-10 max-sm:shadow-md transition-all duration-300 ${isMenuOpen ? "block" : "hidden"
+            } sm:flex`}
         >
           <li>
             <a
@@ -52,13 +57,28 @@ export function Header() {
               Contato
             </a>
           </li>
-          <li className="flex items-center gap-1">
+
+          {session?.user && (
+            <li>
+              <Avatar>
+                <AvatarImage src={session?.user?.image || ""} />
+                <AvatarFallback>
+                  {session?.user?.name?.split(" ").map((n) => n[0]).join("")}
+                </AvatarFallback>
+              </Avatar>
+            </li>
+          )}
+
+          {session?.user && (
+            <DropdownMenuDemo />
+          )}
+
+          < li className="flex items-center gap-1">
             <Switch
               id="airplane-mode"
               onClick={() => setIsActive(!isActive)}
-              className={`peer inline-flex ${
-                isActive ? "bg-primary" : "bg-textColor border-textColor"
-              }`}
+              className={`peer inline-flex ${isActive ? "bg-primary" : "bg-textColor border-textColor"
+                }`}
             />
             <span className="font-bold">Acessibilidade</span>
             <TbAccessible />
@@ -71,6 +91,6 @@ export function Header() {
           />
         </aside>
       </nav>
-    </header>
+    </header >
   );
 }

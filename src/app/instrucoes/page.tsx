@@ -3,15 +3,18 @@ import { GoDotFill } from "react-icons/go";
 import { CustomButton } from "@/components/button/custom-button";
 import Link from "next/link";
 import { Title } from "@/components/title";
+import { useSession } from "next-auth/react";
 
 export default function Instrucoes() {
+  const { data: session } = useSession();
+
   return (
     <div className="p-4 sm:p-8 md:p-16 lg:p-24 text-justify max-w-4xl mx-auto">
       <div className="mb-6">
         <Title />
         <p className="font-semibold text-lg sm:text-xl">
           Olá
-          <span className="text-primary font-semibold ml-2">Pessoa</span>,
+          <span className="text-primary font-semibold ml-2">{session?.user?.name}</span>,
         </p>
       </div>
       <span className="font-bold text-lg sm:text-xl">Instruções!</span>

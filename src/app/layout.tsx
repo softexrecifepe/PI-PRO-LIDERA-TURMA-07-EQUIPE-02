@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
+import { SessionProvider } from "next-auth/react";
 
 const balooFont = localFont({
   src: "./fonts/BalooPaaji2-VariableFont_wght.ttf",
@@ -25,8 +26,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${balooFont.variable}  antialiased h-auto`}>
-        <Header />
-        {children}
+
+        <SessionProvider>
+          <Header />
+          {children}
+        </SessionProvider>
         <Toaster />
         <Footer />
       </body>

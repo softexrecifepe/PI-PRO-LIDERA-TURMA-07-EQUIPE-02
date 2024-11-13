@@ -1,4 +1,5 @@
 "use client";
+import { useState } from 'react';
 import { CustomButton } from "@/components/button/custom-button";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
@@ -11,10 +12,43 @@ import Image from "next/image";
 import image from "@/assets/images/sign.jpg";
 
 export default function Cadastro() {
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  
+  // Adiciona o estado para capturar os valores dos campos
+const [nome, setNome] = useState('');
+const [email, setEmail] = useState('');
+const [senha, setSenha] = useState('');
+const [confirmarSenha, setConfirmarSenha] = useState('');
+const [error, setError] = useState('');
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    alert("Cadastro realizado com sucesso!");
-  };
+   // Validação simples de senha
+   if (senha !== confirmarSenha) {
+    setError('As senhas não coincidem.');
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ nome, email, senha }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert('Cadastro realizado com sucesso!');
+      // Redirecionar ou limpar campos conforme necessário
+    } else {
+      setError(data.message || 'Erro ao cadastrar usuário.');
+    }
+  } catch (error) {
+    console.error('Erro ao fazer a solicitação:', error);
+    setError('Erro ao se conectar com o servidor.');
+  }
+};
 
   return (
     <div className="flex min-h-screen">
@@ -54,27 +88,36 @@ export default function Cadastro() {
               <Input
                 type="text"
                 placeholder="Nome completo*"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
                 className="border border-black"
                 required
               />
               <Input
                 type="email"
                 placeholder="E-mail*"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="border border-black"
                 required
               />
               <Input
                 type="password"
                 placeholder="Crie sua senha*"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
                 className="border border-black"
                 required
               />
               <Input
                 type="password"
                 placeholder="Confirme sua senha*"
+                value={confirmarSenha}
+                onChange={(e) => setConfirmarSenha(e.target.value)}
                 className="border border-black"
                 required
               />
+              {error && <p className="text-red-500">{error}</p>}
             </div>
 
             <div className="font-bold flex flex-col gap-4 mb-4">
