@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import Image from "next/image";
 import image from "@/assets/images/sign.jpg";
 import { Input } from "@/components/ui/input";
@@ -7,8 +8,60 @@ import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { Separator } from "@/components/ui/separator";
+import { signIn } from "next-auth/react";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({ email: "", password: "" });
+
+  const validateForm = () => {
+    let valid = true;
+    let emailError = "";
+    let passwordError = "";
+
+    // Validação de e-mail
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      emailError = "E-mail é obrigatório.";
+      valid = false;
+    } else if (!emailRegex.test(email)) {
+      emailError = "E-mail inválido.";
+      valid = false;
+    }
+
+    // Validação de senha
+    if (!password) {
+      passwordError = "Senha é obrigatória.";
+      valid = false;
+    } else if (password.length < 6) {
+      passwordError = "A senha deve ter pelo menos 6 caracteres.";
+      valid = false;
+    }
+
+    setErrors({ email: emailError, password: passwordError });
+    return valid;
+  };
+
+  const handleSubmit = () => {
+    if (validateForm()) {
+      // Continuar com a lógica de autenticação
+      console.log("Formulário válido. Autenticação em andamento...");
+    } else {
+      console.log("Formulário inválido. Verifique os erros.");
+    }
+  };
+
+  const handleLoginGoogle = async () => {
+    try {
+      await signIn("google", {
+        redirectTo: "/instrucoes",
+      });
+    } catch (error) {
+      console.error("Erro no login:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
       <section className="hidden md:flex w-1/2 relative">
@@ -28,20 +81,26 @@ export default function Login() {
           <Input
             type="email"
             placeholder="E-mail"
-            className="border border-black w-full"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={`border w-full ${errors.email ? "border-red-500" : "border-black"}`}
             required
           />
+          {errors.email && <p className="text-red-500">{errors.email}</p>}
           <Input
             type="password"
             placeholder="Senha"
-            className="border border-black w-full"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={`border w-full ${errors.password ? "border-red-500" : "border-black"}`}
             required
           />
+            {errors.password && <p className="text-red-500">{errors.password}</p>}
           <div className="w-full">
             <Link href={"/instrucoes"}>
               <CustomButton
                 className="w-full flex items-center justify-center gap-x-3 shadow-lg"
-                onClick={() => {}}
+                onClick={handleSubmit}
               >
                 Entrar
               </CustomButton>
@@ -61,13 +120,13 @@ export default function Login() {
 
           <CustomButton
             className="w-full flex items-center justify-center gap-x-3 shadow-lg bg-opacity-60"
-            onClick={() => {}}
+            onClick={handleLoginGoogle}
           >
             <FcGoogle /> Google
           </CustomButton>
           <CustomButton
             className="w-full flex items-center justify-center gap-x-3 shadow-lg bg-opacity-60"
-            onClick={() => {}}
+            onClick={() => { }}
           >
             <FaFacebook className="text-[#1d2c4c]" /> Facebook
           </CustomButton>
@@ -77,7 +136,7 @@ export default function Login() {
             </h2>
             <Link href={"/cadastro"}>
               <CustomButton
-                onClick={() => {}}
+                onClick={() => { }}
                 className="text-primary bg-transparent hover:text-white lg:w-40 max-sm:text-sm"
               >
                 CADASTRE-SE

@@ -3,8 +3,10 @@ interface ConfirmDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
+  onCancel: () => void;
   icon: ReactElement;
-  message: string;
+  message?: string;
+  title?: string;
   confirmButtonLabel: string;
 }
 

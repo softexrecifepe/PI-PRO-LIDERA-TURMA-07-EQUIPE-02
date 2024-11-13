@@ -1,10 +1,10 @@
 "use client";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, Suspense, useEffect, useState } from "react";
 import data from "../../lib/data.json";
 import { useForm, Controller } from "react-hook-form";
 import { CustomButton } from "@/components/button/custom-button";
 import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { ConfirmDialog } from "@/components/confirmDialog";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
@@ -29,11 +29,21 @@ const questions: Question[] = data.flatMap(
 ) as Question[];
 
 export default function TesteLideranca() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <QuestionarioContent />
+    </Suspense>
+  );
+}
+
+function QuestionarioContent() {
   const { control, handleSubmit, watch, setValue } = useForm<FormData>();
   const [currentPage, setCurrentPage] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const questionsPerPage = 3;
   const totalPages = Math.ceil(questions.length / questionsPerPage);
@@ -42,46 +52,73 @@ export default function TesteLideranca() {
     currentPage * questionsPerPage + questionsPerPage
   );
 
+  useEffect(() => {
+    if (currentPage === 0) {
+      const savedPage = localStorage.getItem("currentPage");
+      if (savedPage) {
+        setCurrentPage(parseInt(savedPage, 10));
+      }
+    }
+  }, [currentPage]);
+
+  // Recupera o valor da página na URL ao carregar
+  useEffect(() => {
+    const savedPage = localStorage.getItem("currentPage");
+    const pageFromURL = parseInt(searchParams.get("page") || "", 10);
+
+    const pageToSet =
+      !isNaN(pageFromURL) && pageFromURL >= 0 && pageFromURL < totalPages
+        ? pageFromURL
+        : savedPage
+          ? parseInt(savedPage, 10)
+          : 0;
+
+    setCurrentPage(pageToSet);
+
+  }, [searchParams, totalPages]);
+
+  useEffect(() => {
+    // Atualiza a URL quando a página muda
+    router.replace(`${pathname}?page=${currentPage}`);
+    localStorage.setItem("currentPage", currentPage.toString());
+  }, [currentPage, pathname, router]);
+
   const currentThemeIndex = Math.floor(
     currentPage / (data[0].questions.length / questionsPerPage)
   );
   const currentTheme = data[currentThemeIndex]?.theme || "Tema não disponível";
 
   useEffect(() => {
-    // Carregar respostas salvas do localStorage ao montar o componente
     const savedData: { [key: string]: string } = JSON.parse(
       localStorage.getItem("formData") || "{}"
     );
-
-    // Garantir que a chave seja sempre uma string
     Object.keys(savedData).forEach((key) => {
-      const stringKey = key as string;
-      const value = savedData[stringKey];
-
-      // Verificar se o valor é uma string
+      const value = savedData[key];
       if (typeof value === "string") {
-        setValue(stringKey, value);
+        setValue(key, value);
       }
     });
   }, [setValue]);
 
-  // Salva as respostas no localStorage quando uma resposta é alterada
   const saveResponseToLocalStorage = (fieldName: string, value: string) => {
     const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
     savedData[fieldName] = value;
     localStorage.setItem("formData", JSON.stringify(savedData));
+    localStorage.setItem("currentPage", currentPage.toString());
   };
 
   const handleNextPage = () => {
-    if (isPageComplete()) {
-      saveResponsesToLocalStorage(); // Salva as respostas antes de avançar
+    const incompleteQuestionIds = isPageComplete();
+    if (incompleteQuestionIds === null) {
+      saveResponsesToLocalStorage();
       setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
-      window.scrollTo(0, 0); // Rolar para o topo da página
+      window.scrollTo(0, 0);
     } else {
       toast({
-        title: "Preencha todas as perguntas",
-        description:
-          "Por favor, responda todas as perguntas antes de continuar.",
+        title: "Perguntas incompletas",
+        description: `Você não respondeu às seguintes perguntas: ${incompleteQuestionIds
+          .map((q) => q.id)
+          .join(", ")}.`,
         className:
           "flex w-full max-w-sm py-5 px-6 bg-white rounded-xl border border-gray-200 shadow-sm mb-4 gap-4",
         role: "alert",
@@ -91,11 +128,25 @@ export default function TesteLideranca() {
 
   const handlePreviousPage = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 0));
-    window.scrollTo(0, 0); // Rolar para o topo da página
+    window.scrollTo(0, 0);
   };
 
-  const isPageComplete = () =>
-    currentQuestions.every((question) => watch(`question${question.id}`));
+  const isPageComplete = () => {
+    const incompleteQuestions = currentQuestions
+      .filter((question) => !watch(`question${question.id}`))
+      .map((question) => ({ id: question.id, text: question.question }));
+
+    return incompleteQuestions.length > 0 ? incompleteQuestions : null;
+  };
+
+  useEffect(() => {
+    const handleUnload = () => {
+      localStorage.setItem("currentPage", currentPage.toString());
+    };
+
+    window.addEventListener("beforeunload", handleUnload);
+    return () => window.removeEventListener("beforeunload", handleUnload);
+  }, [currentPage]);
 
   const onSubmit = (formData: FormData) => {
     let totalScore = 0;
@@ -119,18 +170,17 @@ export default function TesteLideranca() {
     const encodedResultCategory = encodeURIComponent(
       resultCategory || "Liderança não determinada"
     );
-
-    localStorage.removeItem("responses"); // Limpa as respostas ao enviar
+    localStorage.removeItem("responses");
     router.push(
       `/resultado-questionario?resultCategory=${encodedResultCategory}`
     );
-    localStorage.removeItem("formData"); // Limpa o localStorage após o envio
+    localStorage.removeItem("formData");
   };
 
   const handleSubmitDialog = (e?: FormEvent) => {
     e?.preventDefault();
-    handleSubmit(onSubmit)(); // Confirma e chama o envio dos dados
-    setIsDialogOpen(false); // Fecha o diálogo após confirmar
+    handleSubmit(onSubmit)();
+    setIsDialogOpen(false);
   };
 
   const confirmAction = () => {
@@ -155,7 +205,7 @@ export default function TesteLideranca() {
           <h1 className="text-2xl font-bold text-center mb-8 text-primary">
             Teste de Liderança - PRO Lidera Skills
           </h1>
-          <span className="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:text-purple-400 border border-purple-400">
+          <span className="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-purple-400">
             Tema: {currentTheme}
           </span>
 
@@ -209,27 +259,29 @@ export default function TesteLideranca() {
             {currentPage > 0 && (
               <CustomButton onClick={handlePreviousPage}>Anterior</CustomButton>
             )}
-            {currentPage === 0 ? (
-              <div className="relative mx-auto max-sm:mx-[11.5rem]">
-                <CustomButton onClick={handleNextPage}>Próximo</CustomButton>
-              </div>
-            ) : currentPage < totalPages - 1 ? (
-              <CustomButton onClick={handleNextPage}>Próximo</CustomButton>
+            {currentPage < totalPages - 1 ? (
+
+              <CustomButton onClick={handleNextPage}>Próxima</CustomButton>
             ) : (
-              <CustomButton type="button" onClick={confirmAction}>
+              <CustomButton
+                onClick={confirmAction}
+                className="bg-red-500 text-white"
+              >
                 Enviar
               </CustomButton>
             )}
           </div>
+          <ConfirmDialog
+            isOpen={isDialogOpen}
+            onConfirm={handleSubmitDialog}
+            onCancel={() => setIsDialogOpen(false)}
+            onClose={() => setIsDialogOpen(false)}
+            confirmButtonLabel="Confirmar"
+            icon={<ExclamationTriangleIcon className="h-6 w-6 text-red-600" />}
+            title="Confirmação de Envio"
+            message="Tem certeza de que deseja enviar o formulário? Após o envio, não será possível alterar as respostas."
+          />
         </form>
-        <ConfirmDialog
-          isOpen={isDialogOpen}
-          onClose={() => setIsDialogOpen(false)}
-          onConfirm={handleSubmitDialog}
-          icon={<ExclamationTriangleIcon />}
-          message="Deseja mesmo enviar o questionário?"
-          confirmButtonLabel="Enviar"
-        />
       </div>
     </div>
   );
