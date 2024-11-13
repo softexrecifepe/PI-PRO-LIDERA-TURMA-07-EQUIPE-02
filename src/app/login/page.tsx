@@ -66,7 +66,7 @@ export default function Login() {
     <div className="flex flex-col md:flex-row min-h-screen">
       <section className="hidden md:flex w-1/2 relative">
         <Image
-          src={image.src}
+          src={image}
           alt="Imagem de Login"
           fill
           className="object-cover bg-no-repeat"
