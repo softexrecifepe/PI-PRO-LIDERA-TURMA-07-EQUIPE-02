@@ -16,7 +16,7 @@
 
 ### Links
 
-- Live Site URL: [clique aqui](https://pro-lidera-skils-softex-equipe-2.vercel.app/)
+- Live Site URL: [clique aqui]
 
 ## Tecnologias Utilizadas
 - ![HTML5](https://img.icons8.com/color/20/000000/html-5.png) Semantic HTML5 markup
@@ -29,7 +29,7 @@
 
 ### Screenshot
 
-![image](https://github.com/user-attachments/assets/3c831876-20dc-4a81-9905-df2f079a5613)
+![image](https://github.com/user-attachments/assets/dbe7b22d-6dd6-4de4-81e6-449ac1a8dfe9)
 
 ## Como Executar o Projeto
 
