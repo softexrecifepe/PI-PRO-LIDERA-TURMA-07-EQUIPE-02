@@ -9,6 +9,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        primary: "#3590B5",
+        secundary: "#88C16C",
+        terciary: "#AE85E9",
+        hover: "bg-blue-700",
+        textColor: "#4d4d4d",
+        btnTextColor: "#ffff",
+        shadowColor: "rgba(0, 0, 0, 0.25)",
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
