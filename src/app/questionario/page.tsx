@@ -52,29 +52,30 @@ function QuestionarioContent() {
     currentPage * questionsPerPage + questionsPerPage
   );
 
-  useEffect(() => {
-    if (currentPage === 0) {
-      const savedPage = localStorage.getItem("currentPage");
-      if (savedPage) {
-        setCurrentPage(parseInt(savedPage, 10));
-      }
-    }
-  }, [currentPage]);
-
-  // Recupera o valor da página na URL ao carregar
+  // Recupera a página inicial com base nas respostas salvas
   useEffect(() => {
     const savedPage = localStorage.getItem("currentPage");
+    const savedResponses = JSON.parse(localStorage.getItem("formData") || "{}");
     const pageFromURL = parseInt(searchParams.get("page") || "", 10);
+
+    // Determina a última página respondida com base nas respostas salvas
+    let maxAnsweredPage = 0;
+    questions.forEach((question, index) => {
+      if (savedResponses[`question${question.id}`]) {
+        maxAnsweredPage = Math.floor(index / questionsPerPage);
+      }
+    });
 
     const pageToSet =
       !isNaN(pageFromURL) && pageFromURL >= 0 && pageFromURL < totalPages
         ? pageFromURL
+        : maxAnsweredPage > 0
+        ? maxAnsweredPage
         : savedPage
-          ? parseInt(savedPage, 10)
-          : 0;
+        ? parseInt(savedPage, 10)
+        : 0;
 
     setCurrentPage(pageToSet);
-
   }, [searchParams, totalPages]);
 
   useEffect(() => {
@@ -200,7 +201,7 @@ function QuestionarioContent() {
 
   return (
     <div className="flex justify-center items-center h-full py-24 min-h-screen">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-screen-md relative">
+      <div className="bg-[#f9f9f9] shadow-lg rounded-lg p-8 w-full max-w-screen-md relative">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           <h1 className="text-2xl font-bold text-center mb-8 text-primary">
             Teste de Liderança - PRO Lidera Skills
@@ -212,7 +213,7 @@ function QuestionarioContent() {
           {currentQuestions.map((question) => (
             <div
               key={question.id}
-              className="flex flex-col text-justify space-y-5"
+              className="bg-white shadow-lg rounded-lg p-4 mb-6 space-y-4"
             >
               <h2 className="text-xl text-primary font-bold">
                 Pergunta {question.id}
@@ -255,23 +256,34 @@ function QuestionarioContent() {
             </div>
           ))}
 
-          <div className="flex justify-between mt-8">
-            {currentPage > 0 && (
-              <CustomButton onClick={handlePreviousPage}>Anterior</CustomButton>
-            )}
-            {currentPage < totalPages - 1 ? (
-
-              <CustomButton onClick={handleNextPage}>Próxima</CustomButton>
-            ) : (
+          <div className="flex justify-between">
+            <CustomButton
+              type="button"
+              onClick={handlePreviousPage}
+              disabled={currentPage === 0}
+            >
+              Voltar
+            </CustomButton>
+            {currentPage === totalPages - 1 ? (
               <CustomButton
+                type="submit"
                 onClick={confirmAction}
-                className="bg-red-500 text-white"
+                className="bg-green-500 hover:bg-green-600 text-white"
               >
                 Enviar
               </CustomButton>
+            ) : (
+              <CustomButton
+                type="button"
+                onClick={handleNextPage}
+                className="bg-blue-500 hover:bg-blue-600 text-white"
+              >
+                Próximo
+              </CustomButton>
             )}
           </div>
-          <ConfirmDialog
+        </form>
+        <ConfirmDialog
             isOpen={isDialogOpen}
             onConfirm={handleSubmitDialog}
             onCancel={() => setIsDialogOpen(false)}
@@ -281,7 +293,6 @@ function QuestionarioContent() {
             title="Confirmação de Envio"
             message="Tem certeza de que deseja enviar o formulário? Após o envio, não será possível alterar as respostas."
           />
-        </form>
       </div>
     </div>
   );
