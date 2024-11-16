@@ -265,7 +265,7 @@ function QuestionarioContent() {
             ) : (
               <CustomButton
                 onClick={confirmAction}
-                className="bg-red-500 text-white"
+                className=" text-white"
               >
                 Enviar
               </CustomButton>

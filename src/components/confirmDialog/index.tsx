@@ -29,7 +29,7 @@ export const ConfirmDialog = ({
       aria-modal="true"
       role="dialog"
     >
-      <div className="w-72 h-52 bg-gray-100 rounded-xl flex flex-col items-center justify-between px-4 py-1 shadow-lg">
+      <div className="w-72 h-80 bg-gray-100 rounded-xl flex flex-col items-center justify-between px-4 py-1 shadow-lg">
         <div className="flex flex-col items-center gap-2 w-3/4 p-4">
           {cloneElement(icon, { className: iconStyle })}
           <p className="font-medium text-[#2D3134] text-xl text-center">{message}</p>
