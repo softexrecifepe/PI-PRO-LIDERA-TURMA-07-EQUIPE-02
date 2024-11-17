@@ -6,7 +6,9 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { jsPDF } from "jspdf";
 import { useSession } from "next-auth/react";
-import { Suspense } from "react";
+import { Suspense, useCallback } from "react";
+import resultData from "../../lib/resultData.json";
+import React from "react";
 
 export default function ResultadoQuestionario() {
   return (
@@ -19,68 +21,59 @@ export default function ResultadoQuestionario() {
 function ResultadoContent() {
   const { data: session } = useSession();
   const searchParams = useSearchParams();
-  const resultCategoryFromQuery = searchParams.get("resultCategory");
+  const resultCategoryFromQuery = searchParams.get("resultCategory") || "";
 
-  // Objeto que mapeia categorias de resultado para mensagens dinâmicas
-  const resultMessages: { [key: string]: string } = {
-    "Liderança frágil e pouco trabalhada":
-      "Você está apenas começando a desenvolver suas habilidades de liderança. É importante focar em autoconhecimento e na construção de relacionamentos dentro da equipe. Considere investir tempo em treinamentos e em feedbacks constantes.",
-    "Liderança em desenvolvimento":
-      "Você está no caminho certo! Suas habilidades de liderança estão em crescimento e isso é um bom sinal. Continue a praticar a empatia e a comunicação clara, e busque oportunidades de liderança em projetos.",
-    "Líder de alta performance":
-      "Parabéns! Você é um líder inspirador e eficaz. Sua capacidade de engajar sua equipe e promover um ambiente colaborativo é excepcional. Continue a buscar inovações e a desenvolver sua equipe para alcançar resultados ainda melhores.",
+  // Mapeamento de categorias de resultado para mensagens
+  const resultMessages: Record<string, string> = {
+    "Liderança frágil e pouco trabalhada": resultData[0].textresult,
+    "Liderança em desenvolvimento": resultData[1].textresult,
+    "Líder de alta performance": resultData[2].textresult,
   };
 
-  // Obtém a mensagem correspondente à categoria de resultado
+  // Obter a mensagem correspondente
   const resultMessage =
-    resultMessages[resultCategoryFromQuery as string] ||
-    "Resultado não encontrado.";
+    resultMessages[resultCategoryFromQuery] || "Resultado não encontrado.";
 
-  // Função auxiliar para converter uma imagem para base64
-  const getBase64ImageFromUrl = async (url: string) => {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Falha ao carregar a imagem.");
+  // Converter imagem para base64
+  const getBase64ImageFromUrl = async (url: string): Promise<string> => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Falha ao carregar a imagem.");
+
+      const blob = await response.blob();
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = () => reject("Erro ao ler a imagem.");
+        reader.readAsDataURL(blob);
+      });
+    } catch (error) {
+      console.error("Erro ao converter imagem para base64:", error);
+      throw error;
     }
-    const blob = await response.blob();
-    return new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        resolve(reader.result as string);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
   };
 
-  // Função para gerar o PDF
-  const handleDownload = async () => {
+  // Função de download de PDF
+  const handleDownload = useCallback(async () => {
     const userName = session?.user?.name || "Usuário";
     const doc = new jsPDF("landscape", "mm", "a4");
+
     try {
       const base64Image = await getBase64ImageFromUrl("/Certificado.png");
 
-      // Adiciona a imagem do certificado no PDF
       doc.addImage(base64Image, "PNG", 0, 0, 297, 210, undefined, "FAST");
-
-      // Adiciona o nome e categoria de resultado ao PDF
-      doc.setFontSize(32);
-      doc.setFont("helvetica", "bold");
+      doc.setFontSize(32).setFont("helvetica", "bold");
       doc.text(userName, 148, 120, { align: "center" });
-      doc.setFontSize(12);
-      doc.text(
-        `${resultCategoryFromQuery}.`,
-        92,
-        164,
-        { align: "center", maxWidth: 270 }
-      );
+      doc.setFontSize(12).text(resultCategoryFromQuery, 92, 164, {
+        align: "center",
+        maxWidth: 270,
+      });
 
-      // Gera o PDF e faz o download
       doc.save("resultado_teste_lideranca.pdf");
     } catch (error) {
-      console.error("Erro ao carregar a imagem:", error);
+      console.error("Erro ao gerar o PDF:", error);
     }
-  };
+  }, [session, resultCategoryFromQuery]);
 
   return (
     <div className="py-10 px-4 sm:px-8 md:py-24 flex flex-col items-center justify-center text-center w-full">
@@ -89,11 +82,24 @@ function ResultadoContent() {
         <h3 className="text-lg sm:text-xl font-semibold text-gray-500">
           O resultado do seu teste é:
         </h3>
-        <p className="text-base sm:text-lg font-semibold text-justify mb-8">
-          O tipo de
-          <span className="text-primary ml-2">
-            {resultCategoryFromQuery}
-          </span>. {resultMessage}
+        <p className="text-base sm:text-lg font-semibold text-justify">
+          &nbsp;O tipo de
+          <span className="text-primary ml-2">{resultCategoryFromQuery}</span>.
+          <span className="italic leading-relaxed">
+            {" "}
+            {resultMessage.split(".").map((sentence, index, array) => {
+              // Adiciona ponto final e quebra de linha a cada terceiro elemento
+              const isThird =
+                (index + 1) % 3 === 0 && index !== array.length - 1;
+              return (
+                <React.Fragment key={index}>
+                  &nbsp;{sentence.trim()}
+                  {sentence && "."}
+                  {isThird && <br />}
+                </React.Fragment>
+              );
+            })}
+          </span>
         </p>
 
         <div className="flex justify-center mb-8">
