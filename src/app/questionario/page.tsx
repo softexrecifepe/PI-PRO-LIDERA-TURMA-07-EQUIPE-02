@@ -39,19 +39,30 @@ export default function TesteLideranca() {
 
 function QuestionarioContent() {
   const { control, handleSubmit, watch, setValue } = useForm<FormData>();
+
   const [currentPage, setCurrentPage] = useState(0);
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
   const pathname = usePathname();
+
   const searchParams = useSearchParams();
+  const pageUrl = Number(searchParams.get("page"));
 
   const questionsPerPage = 3;
   const totalPages = Math.ceil(questions.length / questionsPerPage);
   const currentQuestions = questions.slice(
+    pageUrl * questionsPerPage,
+    pageUrl * questionsPerPage + questionsPerPage
+  );
+
+  /*
+  const currentQuestions = questions.slice(
     currentPage * questionsPerPage,
     currentPage * questionsPerPage + questionsPerPage
   );
+  */
 
   // Calcula o progresso baseado nas perguntas respondidas
   const totalAnswered = questions.filter(
@@ -86,11 +97,13 @@ function QuestionarioContent() {
     setCurrentPage(pageToSet);
   }, [searchParams, totalPages]);
 
+  /*
   useEffect(() => {
     // Atualiza a URL quando a página muda
     router.replace(`${pathname}?page=${currentPage}`);
     localStorage.setItem("currentPage", currentPage.toString());
   }, [currentPage, pathname, router]);
+  */
 
   const currentThemeIndex = Math.floor(
     currentPage / (data[0].questions.length / questionsPerPage)
@@ -120,7 +133,8 @@ function QuestionarioContent() {
     const incompleteQuestionIds = isPageComplete();
     if (incompleteQuestionIds === null) {
       saveResponsesToLocalStorage();
-      setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
+      // setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
+      router.push(`/questionario?page=${pageUrl + 1}`);
       window.scrollTo(0, 0);
     } else {
       toast({
@@ -136,7 +150,8 @@ function QuestionarioContent() {
   };
 
   const handlePreviousPage = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 0));
+    // setCurrentPage((prev) => Math.max(prev - 1, 0));
+    router.push(`/questionario?page=${pageUrl - 1}`);
     window.scrollTo(0, 0);
   };
 
