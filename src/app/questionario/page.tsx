@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { ConfirmDialog } from "@/components/confirmDialog";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { motion } from "framer-motion";
 
 type Option = {
   id: string;
@@ -52,6 +53,15 @@ function QuestionarioContent() {
     currentPage * questionsPerPage + questionsPerPage
   );
 
+  // Calcula o progresso baseado nas perguntas respondidas
+  const totalAnswered = questions.filter(
+    (question) =>
+      watch(`question${question.id}`) !== undefined &&
+      watch(`question${question.id}`) !== ""
+  ).length;
+
+  const progress = (totalAnswered / questions.length) * 100; // Progresso total, baseado no número total de perguntas
+
   useEffect(() => {
     if (currentPage === 0) {
       const savedPage = localStorage.getItem("currentPage");
@@ -70,11 +80,10 @@ function QuestionarioContent() {
       !isNaN(pageFromURL) && pageFromURL >= 0 && pageFromURL < totalPages
         ? pageFromURL
         : savedPage
-          ? parseInt(savedPage, 10)
-          : 0;
+        ? parseInt(savedPage, 10)
+        : 0;
 
     setCurrentPage(pageToSet);
-
   }, [searchParams, totalPages]);
 
   useEffect(() => {
@@ -209,64 +218,79 @@ function QuestionarioContent() {
             Tema: {currentTheme}
           </span>
 
-          {currentQuestions.map((question) => (
-            <div
-              key={question.id}
-              className="bg-white shadow-lg rounded-lg p-4 mb-6 space-y-4"
-            >
-              <h2 className="text-xl text-primary font-bold">
-                Pergunta {question.id}
-              </h2>
-              <h3 className="font-semibold text-base">{question.question}</h3>
-              {question.options.map((option) => (
-                <Controller
-                  key={option.id}
-                  name={`question${question.id}`}
-                  control={control}
-                  defaultValue=""
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <div className="flex items-center">
-                      <input
-                        {...field}
-                        type="radio"
-                        id={`question${question.id}_option${option.id}`}
-                        value={option.value}
-                        checked={field.value === option.value}
-                        onChange={(e) => {
-                          field.onChange(e);
-                          saveResponseToLocalStorage(
-                            `question${question.id}`,
-                            e.target.value
-                          );
-                        }}
-                        className="mr-2"
-                      />
-                      <label
-                        htmlFor={`question${question.id}_option${option.id}`}
-                        className="text-gray-700"
-                      >
-                        {option.value}
-                      </label>
-                    </div>
-                  )}
-                />
-              ))}
-            </div>
-          ))}
+          <div className="w-full h-2 bg-gray-300 rounded-full mt-4">
+            <motion.div
+              className="h-full bg-purple-600 rounded-full"
+              style={{ width: `${progress}%` }}
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.5 }}
+            />
+          </div>
+          <div className="text-right mt-2">
+            {totalAnswered} de 18 questões respondidas
+          </div>
+
+          <div className="space-y-6">
+            {currentQuestions.map((question) => (
+              <div
+                key={question.id}
+                className="bg-white shadow-lg rounded-lg p-4 mb-6 space-y-4"
+              >
+                <h2 className="text-xl text-primary font-bold">
+                  Pergunta {question.id}
+                </h2>
+                <h3 className="font-semibold text-base">{question.question}</h3>
+                {question.options.map((option) => (
+                  <Controller
+                    key={option.id}
+                    name={`question${question.id}`}
+                    control={control}
+                    defaultValue=""
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <div className="flex items-center">
+                        <input
+                          {...field}
+                          type="radio"
+                          id={`question${question.id}_option${option.id}`}
+                          value={option.value}
+                          checked={field.value === option.value}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            saveResponseToLocalStorage(
+                              `question${question.id}`,
+                              e.target.value
+                            );
+                          }}
+                          className="mr-2"
+                        />
+                        <label
+                          htmlFor={`question${question.id}_option${option.id}`}
+                          className="text-gray-700"
+                        >
+                          {option.value}
+                        </label>
+                      </div>
+                    )}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
 
           <div className="flex justify-between mt-8">
             {currentPage > 0 && (
-              <CustomButton onClick={handlePreviousPage}>Anterior</CustomButton>
+              <CustomButton type="button" onClick={handlePreviousPage}>
+                Anterior
+              </CustomButton>
             )}
             {currentPage < totalPages - 1 ? (
-
-              <CustomButton onClick={handleNextPage}>Próxima</CustomButton>
+              <CustomButton type="button" onClick={handleNextPage}>
+                Próxima
+              </CustomButton>
             ) : (
-              <CustomButton
-                onClick={confirmAction}
-                className=" text-white"
-              >
+              <CustomButton onClick={confirmAction} className="text-white">
                 Enviar
               </CustomButton>
             )}

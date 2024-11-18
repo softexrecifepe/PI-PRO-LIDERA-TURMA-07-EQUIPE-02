@@ -83,8 +83,8 @@ function ResultadoContent() {
           O resultado do seu teste é:
         </h3>
         <p className="text-base sm:text-lg font-semibold text-justify">
-          &nbsp;O tipo de
-          <span className="text-primary ml-2">{resultCategoryFromQuery}</span>.
+          &nbsp;O tipo de&nbsp;
+          <span className="text-primary">{resultCategoryFromQuery}</span>.
           <span className="italic leading-relaxed">
             {" "}
             {resultMessage.split(".").map((sentence, index, array) => {
