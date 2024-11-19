@@ -4,10 +4,11 @@ import data from "../../lib/data.json";
 import { useForm, Controller } from "react-hook-form";
 import { CustomButton } from "@/components/button/custom-button";
 import { useToast } from "@/hooks/use-toast";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ConfirmDialog } from "@/components/confirmDialog";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { motion } from "framer-motion";
+import { Vortex } from "react-loader-spinner";
 
 type Option = {
   id: string;
@@ -39,14 +40,12 @@ export default function TesteLideranca() {
 
 function QuestionarioContent() {
   const { control, handleSubmit, watch, setValue } = useForm<FormData>();
-
   const [currentPage, setCurrentPage] = useState(0);
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
-  const pathname = usePathname();
-
+  // const pathname = usePathname();
   const searchParams = useSearchParams();
   const pageUrl = Number(searchParams.get("page"));
 
@@ -135,7 +134,7 @@ function QuestionarioContent() {
       saveResponsesToLocalStorage();
       // setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
       router.push(`/questionario?page=${pageUrl + 1}`);
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
       toast({
         title: "Perguntas incompletas",
@@ -152,7 +151,7 @@ function QuestionarioContent() {
   const handlePreviousPage = () => {
     // setCurrentPage((prev) => Math.max(prev - 1, 0));
     router.push(`/questionario?page=${pageUrl - 1}`);
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const isPageComplete = () => {
@@ -203,6 +202,7 @@ function QuestionarioContent() {
 
   const handleSubmitDialog = (e?: FormEvent) => {
     e?.preventDefault();
+    setIsLoading(true); // Ativa o carregamento
     handleSubmit(onSubmit)();
     setIsDialogOpen(false);
   };
@@ -225,102 +225,121 @@ function QuestionarioContent() {
   return (
     <div className="flex justify-center items-center h-full py-24 min-h-screen">
       <div className="bg-[#f9f9f9] shadow-lg rounded-lg p-8 w-full max-w-screen-md relative">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-          <h1 className="text-2xl font-bold text-center mb-8 text-primary">
-            Teste de Liderança - PRO Lidera Skills
-          </h1>
-          <span className="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-purple-400">
-            Tema: {currentTheme}
-          </span>
+        {isLoading ? (
+          <div className="flex flex-col justify-center items-center text-center text-lg font-semibold w-full ">
+            Enviando... Aguarde.
+            <div>
+              <Vortex
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="vortex-loading"
+                wrapperStyle={{}}
+                wrapperClass="vortex-wrapper"
+                colors={["green", "blue", "purple", "green", "blue", "purple"]}
+              />
+            </div>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            <h1 className="text-2xl font-bold text-center mb-8 text-primary">
+              Teste de Liderança - PRO Lidera Skills
+            </h1>
+            <span className="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-purple-400">
+              Tema: {currentTheme}
+            </span>
 
-          <div className="w-full h-2 bg-gray-300 rounded-full mt-4">
-            <motion.div
-              className="h-full bg-purple-600 rounded-full"
-              style={{ width: `${progress}%` }}
-              initial={{ width: 0 }}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.5 }}
+            <div className="w-full h-2 bg-gray-300 rounded-full mt-4">
+              <motion.div
+                className="h-full bg-purple-600 rounded-full"
+                style={{ width: `${progress}%` }}
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.5 }}
+              />
+            </div>
+            <div className="text-right mt-2">
+              {totalAnswered} de 18 questões respondidas
+            </div>
+
+            <div className="space-y-6">
+              {currentQuestions.map((question) => (
+                <div
+                  key={question.id}
+                  className="bg-white shadow-lg rounded-lg p-4 mb-6 space-y-4"
+                >
+                  <h2 className="text-xl text-primary font-bold">
+                    Pergunta {question.id}
+                  </h2>
+                  <h3 className="font-semibold text-base">
+                    {question.question}
+                  </h3>
+                  {question.options.map((option) => (
+                    <Controller
+                      key={option.id}
+                      name={`question${question.id}`}
+                      control={control}
+                      defaultValue=""
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <div className="flex items-center">
+                          <input
+                            {...field}
+                            type="radio"
+                            id={`question${question.id}_option${option.id}`}
+                            value={option.value}
+                            checked={field.value === option.value}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              saveResponseToLocalStorage(
+                                `question${question.id}`,
+                                e.target.value
+                              );
+                            }}
+                            className="mr-2"
+                          />
+                          <label
+                            htmlFor={`question${question.id}_option${option.id}`}
+                            className="text-gray-700"
+                          >
+                            {option.value}
+                          </label>
+                        </div>
+                      )}
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-between mt-8">
+              {currentPage > 0 && (
+                <CustomButton type="button" onClick={handlePreviousPage}>
+                  Anterior
+                </CustomButton>
+              )}
+              {currentPage < totalPages - 1 ? (
+                <CustomButton type="button" onClick={handleNextPage}>
+                  Próxima
+                </CustomButton>
+              ) : (
+                <CustomButton onClick={confirmAction} className="text-white">
+                  Enviar
+                </CustomButton>
+              )}
+            </div>
+            <ConfirmDialog
+              isOpen={isDialogOpen}
+              onConfirm={handleSubmitDialog}
+              onCancel={() => setIsDialogOpen(false)}
+              onClose={() => setIsDialogOpen(false)}
+              confirmButtonLabel="Confirmar"
+              icon={<ExclamationTriangleIcon className="h-6 w-6" />}
+              title="Confirmação de Envio"
+              message="Tem certeza de que deseja enviar o formulário? Após o envio, não será possível alterar as respostas."
             />
-          </div>
-          <div className="text-right mt-2">
-            {totalAnswered} de 18 questões respondidas
-          </div>
-
-          <div className="space-y-6">
-            {currentQuestions.map((question) => (
-              <div
-                key={question.id}
-                className="bg-white shadow-lg rounded-lg p-4 mb-6 space-y-4"
-              >
-                <h2 className="text-xl text-primary font-bold">
-                  Pergunta {question.id}
-                </h2>
-                <h3 className="font-semibold text-base">{question.question}</h3>
-                {question.options.map((option) => (
-                  <Controller
-                    key={option.id}
-                    name={`question${question.id}`}
-                    control={control}
-                    defaultValue=""
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <div className="flex items-center">
-                        <input
-                          {...field}
-                          type="radio"
-                          id={`question${question.id}_option${option.id}`}
-                          value={option.value}
-                          checked={field.value === option.value}
-                          onChange={(e) => {
-                            field.onChange(e);
-                            saveResponseToLocalStorage(
-                              `question${question.id}`,
-                              e.target.value
-                            );
-                          }}
-                          className="mr-2"
-                        />
-                        <label
-                          htmlFor={`question${question.id}_option${option.id}`}
-                          className="text-gray-700"
-                        >
-                          {option.value}
-                        </label>
-                      </div>
-                    )}
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
-
-          <div className="flex justify-between mt-8">
-            {currentPage > 0 && (
-              <CustomButton type="button" onClick={handlePreviousPage}>
-                Anterior
-              </CustomButton>
-            )}
-            {currentPage < totalPages - 1 ? (
-              <CustomButton type="button" onClick={handleNextPage}>
-                Próxima
-              </CustomButton>
-            ) : (
-              <CustomButton onClick={confirmAction} className="text-white">
-                Enviar
-              </CustomButton>
-            )}
-          </div>
-          <ConfirmDialog
-            isOpen={isDialogOpen}
-            onConfirm={handleSubmitDialog}
-            onCancel={() => setIsDialogOpen(false)}
-            onClose={() => setIsDialogOpen(false)}
-            confirmButtonLabel="Confirmar"
-            icon={<ExclamationTriangleIcon className="h-6 w-6" />}
-            title="Confirmação de Envio"
-            message="Tem certeza de que deseja enviar o formulário? Após o envio, não será possível alterar as respostas."
-          />
-        </form>
+          </form>
+        )}
       </div>
     </div>
   );
