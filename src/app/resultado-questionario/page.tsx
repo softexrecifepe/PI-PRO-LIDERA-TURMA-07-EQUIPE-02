@@ -27,7 +27,6 @@ function ResultadoContent() {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user?.user_metadata.name);
-      console.log(user?.user_metadata.name);
     };
 
     getUser();
