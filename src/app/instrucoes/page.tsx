@@ -3,13 +3,31 @@ import { GoDotFill } from "react-icons/go";
 import { CustomButton } from "@/components/button/custom-button";
 import Link from "next/link";
 import { Title } from "@/components/title";
-import { useSession } from "next-auth/react";
+
 import { Vortex } from "react-loader-spinner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function Instrucoes() {
-  const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user?.user_metadata.name);
+    };
+
+    getUser();
+
+    const { data: subscription } = supabase.auth.onAuthStateChange(
+      (_, session) => {
+        setUser(session?.user || null);
+      }
+    );
+
+    return () => subscription.subscription.unsubscribe();
+  }, []);
 
   return (
     <div className="flex justify-center items-center h-full py-24 min-h-screen">
@@ -36,7 +54,7 @@ export default function Instrucoes() {
             <Title />
             <p className="font-semibold text-lg sm:text-xl">
               Olá
-              <span className="text-primary font-semibold ml-2">{session?.user?.name}</span>,
+              <span className="text-primary font-semibold ml-2">{user?.user_metadata.name}</span>,
             </p>
           </div>
           <span className="font-bold text-lg sm:text-xl">Instruções!</span>
