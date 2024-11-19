@@ -54,7 +54,7 @@ export default function Instrucoes() {
             <Title />
             <p className="font-semibold text-lg sm:text-xl">
               Olá
-              <span className="text-primary font-semibold ml-2">{user?.user_metadata.name}</span>,
+              <span className="text-primary font-semibold ml-2">{user?.user_metadata?.name}</span>,
             </p>
           </div>
           <span className="font-bold text-lg sm:text-xl">Instruções!</span>

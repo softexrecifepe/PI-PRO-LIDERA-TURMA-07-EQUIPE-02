@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { supabase } from "@/lib/supabaseClient";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/compat/router";
+import { useRouter } from "next/navigation";
 
 export function DropdownMenuDemo() {
     const [user, setUser] = useState(null);
@@ -55,7 +55,7 @@ export function DropdownMenuDemo() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button>Menu</Button>
+                <Button className="text-white">Menu</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-slate-200">
                 <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
@@ -64,10 +64,10 @@ export function DropdownMenuDemo() {
                     <DropdownMenuGroup>
                         <DropdownMenuItem>
                             <User />
-                            <span>{user.user_metadata?.name || "Perfil"}</span>
+                            <span>{user.user_metadata?.name?.split(" ")[0] || "Perfil"}</span>
                             <DropdownMenuShortcut>⇧ + Win + P</DropdownMenuShortcut>
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => router.push("/instrucoes")} className="cursor-pointer">
                             <CreditCard />
                             <span>Realizar teste</span>
                             <DropdownMenuShortcut>Win + B</DropdownMenuShortcut>
@@ -84,7 +84,7 @@ export function DropdownMenuDemo() {
                     <span>Suporte</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogOut}>
+                <DropdownMenuItem onClick={handleLogOut} className="cursor-pointer">
                     <LogOut />
                     <span>Sair</span>
                     <DropdownMenuShortcut>⇧ + Win + Q</DropdownMenuShortcut>
