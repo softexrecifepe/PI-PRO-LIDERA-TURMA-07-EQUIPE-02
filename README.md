@@ -16,7 +16,8 @@
 
 ### Links
 
-- Live Site URL: [clique aqui](https://pro-lidera-skils-softex-equipe-2.vercel.app/)
+- Live Site URL: [clique aqui](pi-pro-lidera-turma-07-equipe-02-fcm63ywkd.vercel.app)
+
 
 ## Tecnologias Utilizadas
 - ![HTML5](https://img.icons8.com/color/20/000000/html-5.png) Semantic HTML5 markup
