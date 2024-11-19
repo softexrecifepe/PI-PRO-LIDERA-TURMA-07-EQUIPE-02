@@ -8,7 +8,9 @@ import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { Separator } from "@/components/ui/separator";
-import { signIn } from "next-auth/react";
+import { supabase } from "@/lib/supabaseClient";
+
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -53,12 +55,17 @@ export default function Login() {
   };
 
   const handleLoginGoogle = async () => {
-    try {
-      await signIn("google", {
-        redirectTo: "/instrucoes",
-      });
-    } catch (error) {
-      console.error("Erro no login:", error);
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/questionario`,
+      }
+    });
+
+    if (error) {
+      console.error("Erro ao logar:", error.message);
+    } else {
+      console.log("Usuário logado:", data);
     }
   };
 
@@ -95,7 +102,7 @@ export default function Login() {
             className={`border w-full ${errors.password ? "border-red-500" : "border-black"}`}
             required
           />
-            {errors.password && <p className="text-red-500">{errors.password}</p>}
+          {errors.password && <p className="text-red-500">{errors.password}</p>}
           <div className="w-full">
             <Link href={"/instrucoes"}>
               <CustomButton

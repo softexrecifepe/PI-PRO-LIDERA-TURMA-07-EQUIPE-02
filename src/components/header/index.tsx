@@ -1,20 +1,35 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import logo from "../../../src/assets/images/logo.png";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Switch } from "../ui/switch";
 import { TbAccessible } from "react-icons/tb";
-import { useSession } from "next-auth/react";
+import { supabase } from "@/lib/supabaseClient";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { DropdownMenuDemo } from "../menu";
-
 
 export function Header() {
   const [isActive, setIsActive] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
 
-  const { data: session } = useSession();
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+
+    getUser();
+
+    const { data: subscription } = supabase.auth.onAuthStateChange(
+      (_, session) => {
+        setUser(session?.user || null);
+      }
+    );
+
+    return () => subscription.subscription.unsubscribe();
+  }, []);
 
   return (
     <header className="w-full fixed top-0 bg-[var(--background-color)] shadow-md z-20">
@@ -58,26 +73,30 @@ export function Header() {
             </a>
           </li>
 
-          {session?.user && (
-            <li>
-              <Avatar>
-                <AvatarImage src={session?.user?.image || ""} />
-                <AvatarFallback>
-                  {session?.user?.name?.split(" ").map((n) => n[0]).join("")}
-                </AvatarFallback>
-              </Avatar>
-            </li>
+          {user && (
+            <>
+              <li>
+                <Avatar>
+                  <AvatarImage src={user?.user_metadata?.avatar_url || ""} />
+                  <AvatarFallback>
+                    {user?.user_metadata?.full_name
+                      ?.split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </AvatarFallback>
+                </Avatar>
+              </li>
+              <DropdownMenuDemo />
+            </>
           )}
 
-          {session?.user && (
-            <DropdownMenuDemo />
-          )}
-
-          < li className="flex items-center gap-1">
+          <li className="flex items-center gap-1">
             <Switch
               id="airplane-mode"
               onClick={() => setIsActive(!isActive)}
-              className={`peer inline-flex ${isActive ? "bg-primary" : "bg-textColor border-textColor"
+              className={`peer inline-flex ${isActive
+                ? "bg-primary"
+                : "bg-textColor border-textColor"
                 }`}
             />
             <span className="font-bold">Acessibilidade</span>
@@ -91,6 +110,6 @@ export function Header() {
           />
         </aside>
       </nav>
-    </header >
+    </header>
   );
 }

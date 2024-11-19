@@ -1,12 +1,13 @@
+"use client";
+
 import {
     CreditCard,
     LifeBuoy,
     LogOut,
     Settings,
     User,
-} from "lucide-react"
-
-import { Button } from "@/components/ui/button"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -16,54 +17,79 @@ import {
     DropdownMenuSeparator,
     DropdownMenuShortcut,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { signOut } from "next-auth/react";
+} from "@/components/ui/dropdown-menu";
+import { supabase } from "@/lib/supabaseClient";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/compat/router";
 
 export function DropdownMenuDemo() {
+    const [user, setUser] = useState(null);
+    const router = useRouter();
 
-    const handleLogOutGoogle = async () => {
+    useEffect(() => {
+        const getUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            setUser(user);
+        };
+
+        getUser();
+
+        const { data: subscription } = supabase.auth.onAuthStateChange(
+            (_, session) => {
+                setUser(session?.user || null);
+            }
+        );
+
+        return () => subscription.subscription.unsubscribe();
+    }, []);
+
+    const handleLogOut = async () => {
         try {
-            await signOut({ redirectTo: "/" });
+            await supabase.auth.signOut();
+            router.push("/")
         } catch (error) {
-            console.log("Erro ao sair", error);
+            console.error("Erro ao sair:", error);
         }
-    }
+    };
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline">Menu</Button>
+                <Button>Menu</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-slate-200">
                 <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        <User />
-                        <span>Perfil</span>
-                        <DropdownMenuShortcut>⇧ + Win + P</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <CreditCard />
-                        <span>Realizar teste</span>
-                        <DropdownMenuShortcut>Win + B</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Settings />
-                        <span>Configurações</span>
-                        <DropdownMenuShortcut>Win + S</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
+                {user && (
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem>
+                            <User />
+                            <span>{user.user_metadata?.name || "Perfil"}</span>
+                            <DropdownMenuShortcut>⇧ + Win + P</DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <CreditCard />
+                            <span>Realizar teste</span>
+                            <DropdownMenuShortcut>Win + B</DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Settings />
+                            <span>Configurações</span>
+                            <DropdownMenuShortcut>Win + S</DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                )}
                 <DropdownMenuItem>
                     <LifeBuoy />
                     <span>Suporte</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogOut}>
                     <LogOut />
-                    <button onClick={handleLogOutGoogle}>Sair</button>
+                    <span>Sair</span>
                     <DropdownMenuShortcut>⇧ + Win + Q</DropdownMenuShortcut>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
-    )
+    );
 }

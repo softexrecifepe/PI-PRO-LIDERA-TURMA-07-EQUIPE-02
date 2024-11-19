@@ -5,10 +5,10 @@ import { Title } from "@/components/title";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { jsPDF } from "jspdf";
-import { useSession } from "next-auth/react";
-import { Suspense, useCallback } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import resultData from "../../lib/resultData.json";
 import React from "react";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function ResultadoQuestionario() {
   return (
@@ -19,9 +19,27 @@ export default function ResultadoQuestionario() {
 }
 
 function ResultadoContent() {
-  const { data: session } = useSession();
   const searchParams = useSearchParams();
   const resultCategoryFromQuery = searchParams.get("resultCategory") || "";
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user?.user_metadata.name);
+      console.log(user?.user_metadata.name);
+    };
+
+    getUser();
+
+    const { data: subscription } = supabase.auth.onAuthStateChange(
+      (_, session) => {
+        setUser(session?.user || null);
+      }
+    );
+
+    return () => subscription.subscription.unsubscribe();
+  }, []);
 
   // Mapeamento de categorias de resultado para mensagens
   const resultMessages: Record<string, string> = {
@@ -55,7 +73,7 @@ function ResultadoContent() {
 
   // Função de download de PDF
   const handleDownload = useCallback(async () => {
-    const userName = session?.user?.name || "Usuário";
+    const userName = user?.user_metadata.name || "Usuário";
     const doc = new jsPDF("landscape", "mm", "a4");
 
     try {
@@ -73,7 +91,7 @@ function ResultadoContent() {
     } catch (error) {
       console.error("Erro ao gerar o PDF:", error);
     }
-  }, [session, resultCategoryFromQuery]);
+  }, [user, resultCategoryFromQuery]);
 
   return (
     <div className="py-10 px-4 sm:px-8 md:py-24 flex flex-col items-center justify-center text-center w-full">
