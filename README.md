@@ -16,7 +16,7 @@
 
 ### Links
 
-- Live Site URL: [clique aqui](pi-pro-lidera-turma-07-equipe-02-fcm63ywkd.vercel.app)
+- Live Site URL: [clique aqui](https://pi-pro-lidera-turma-07-equipe-02-fcm63ywkd.vercel.app/)
 
 
 ## Tecnologias Utilizadas
