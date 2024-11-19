@@ -18,8 +18,8 @@ type ToasterToast = ToastProps & {
   action?: ToastActionElement
 }
 
-// // Definindo ActionType como um tipo literal em vez de uma constante
-// type ActionType = "ADD_TOAST" | "UPDATE_TOAST" | "DISMISS_TOAST" | "REMOVE_TOAST";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type ActionType = "ADD_TOAST" | "UPDATE_TOAST" | "DISMISS_TOAST" | "REMOVE_TOAST";
 
 let count = 0
 
