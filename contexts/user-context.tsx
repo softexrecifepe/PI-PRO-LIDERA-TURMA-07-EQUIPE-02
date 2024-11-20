@@ -20,24 +20,48 @@ export function UserProvider({ children }: { children: ReactNode }) {
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                setUser({ name: user.user_metadata.name });
-                setAvatarUrl(user.user_metadata.avatar_url || null);
-            }
-        };
+        const storedUser = JSON.parse(localStorage.getItem("user") || "null");
+        const storedAvatarUrl = localStorage.getItem("avatarUrl");
 
-        fetchUser();
+        if (storedUser && storedAvatarUrl) {
+            setUser(storedUser);
+            setAvatarUrl(storedAvatarUrl);
+        } else {
+            const fetchUser = async () => {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user) {
+                    const userData = { name: user.user_metadata.name };
+                    const avatar = user.user_metadata.avatar_url || null;
+
+                    setUser(userData);
+                    setAvatarUrl(avatar);
+
+                    // Armazenar no localStorage
+                    localStorage.setItem("user", JSON.stringify(userData));
+                    if (avatar) localStorage.setItem("avatarUrl", avatar);
+                }
+            };
+
+            fetchUser();
+        }
 
         const { data: subscription } = supabase.auth.onAuthStateChange(
             (_, session) => {
                 if (session?.user) {
-                    setUser({ name: session.user.user_metadata.name });
-                    setAvatarUrl(session.user.user_metadata.avatar_url || null);
+                    const userData = { name: session.user.user_metadata.name };
+                    const avatar = session.user.user_metadata.avatar_url || null;
+
+                    setUser(userData);
+                    setAvatarUrl(avatar);
+
+                    // Atualizar no localStorage
+                    localStorage.setItem("user", JSON.stringify(userData));
+                    if (avatar) localStorage.setItem("avatarUrl", avatar);
                 } else {
                     setUser(null);
                     setAvatarUrl(null);
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("avatarUrl");
                 }
             }
         );
