@@ -1,35 +1,20 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import logo from "../../../src/assets/images/logo.png";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Switch } from "../ui/switch";
 import { TbAccessible } from "react-icons/tb";
-import { supabase } from "@/lib/supabaseClient";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { DropdownMenuDemo } from "../menu";
+import { useSession } from "../../../contexts/user-context";
 
 export function Header() {
   const [isActive, setIsActive] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [user, setUser] = useState(null);
+  const { user, avatarUrl } = useSession();
 
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-    };
 
-    getUser();
-
-    const { data: subscription } = supabase.auth.onAuthStateChange(
-      (_, session) => {
-        setUser(session?.user || null);
-      }
-    );
-
-    return () => subscription.subscription.unsubscribe();
-  }, []);
 
   return (
     <header className="w-full fixed top-0 bg-[var(--background-color)] shadow-md z-20">
@@ -77,9 +62,9 @@ export function Header() {
             <>
               <li>
                 <Avatar>
-                  <AvatarImage src={user?.user_metadata?.avatar_url || ""} />
+                  <AvatarImage src={avatarUrl || ""} />
                   <AvatarFallback>
-                    {user?.user_metadata?.full_name
+                    {user?.name
                       ?.split(" ")
                       .map((n) => n[0])
                       .join("")}

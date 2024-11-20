@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
+import { UserProvider } from "../../contexts/user-context";
 
 
 const balooFont = localFont({
@@ -26,11 +27,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${balooFont.variable}  antialiased h-auto`}>
-
-        <Header />
-        {children}
-        <Toaster />
-        <Footer />
+        <UserProvider>
+          <Header />
+          {children}
+          <Toaster />
+          <Footer />
+        </UserProvider>
       </body>
     </html>
   );

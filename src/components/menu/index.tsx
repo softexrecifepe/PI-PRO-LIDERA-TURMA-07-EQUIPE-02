@@ -19,29 +19,12 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { supabase } from "@/lib/supabaseClient";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "../../../contexts/user-context";
 
 export function DropdownMenuDemo() {
-    const [user, setUser] = useState(null);
     const router = useRouter();
-
-    useEffect(() => {
-        const getUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            setUser(user);
-        };
-
-        getUser();
-
-        const { data: subscription } = supabase.auth.onAuthStateChange(
-            (_, session) => {
-                setUser(session?.user || null);
-            }
-        );
-
-        return () => subscription.subscription.unsubscribe();
-    }, []);
+    const { user } = useSession();
 
     const handleLogOut = async () => {
         try {
@@ -64,7 +47,7 @@ export function DropdownMenuDemo() {
                     <DropdownMenuGroup>
                         <DropdownMenuItem>
                             <User />
-                            <span>{user.user_metadata?.name?.split(" ")[0] || "Perfil"}</span>
+                            <span>{user.name.split(" ")[0] || "Perfil"}</span>
                             <DropdownMenuShortcut>⇧ + Win + P</DropdownMenuShortcut>
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => router.push("/instrucoes")} className="cursor-pointer">

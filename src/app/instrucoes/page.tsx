@@ -5,29 +5,12 @@ import Link from "next/link";
 import { Title } from "@/components/title";
 
 import { Vortex } from "react-loader-spinner";
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { useState } from "react";
+import { useSession } from "../../../contexts/user-context";
 
 export default function Instrucoes() {
   const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user?.user_metadata.name);
-    };
-
-    getUser();
-
-    const { data: subscription } = supabase.auth.onAuthStateChange(
-      (_, session) => {
-        setUser(session?.user || null);
-      }
-    );
-
-    return () => subscription.subscription.unsubscribe();
-  }, []);
+  const { user } = useSession();
 
   return (
     <div className="flex justify-center items-center h-full py-24 min-h-screen">
@@ -54,7 +37,7 @@ export default function Instrucoes() {
             <Title />
             <p className="font-semibold text-lg sm:text-xl">
               Olá
-              <span className="text-primary font-semibold ml-2">{user?.user_metadata?.name}</span>,
+              <span className="text-primary font-semibold ml-2">{user?.name}</span>,
             </p>
           </div>
           <span className="font-bold text-lg sm:text-xl">Instruções!</span>
