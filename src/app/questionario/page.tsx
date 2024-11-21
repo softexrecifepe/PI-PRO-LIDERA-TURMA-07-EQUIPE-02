@@ -45,7 +45,6 @@ function QuestionarioContent() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
-  // const pathname = usePathname();
   const searchParams = useSearchParams();
   const pageUrl = Number(searchParams.get("page"));
 
@@ -55,13 +54,6 @@ function QuestionarioContent() {
     pageUrl * questionsPerPage,
     pageUrl * questionsPerPage + questionsPerPage
   );
-
-  /*
-  const currentQuestions = questions.slice(
-    currentPage * questionsPerPage,
-    currentPage * questionsPerPage + questionsPerPage
-  );
-  */
 
   // Calcula o progresso baseado nas perguntas respondidas
   const totalAnswered = questions.filter(
@@ -96,14 +88,6 @@ function QuestionarioContent() {
     setCurrentPage(pageToSet);
   }, [searchParams, totalPages]);
 
-  /*
-  useEffect(() => {
-    // Atualiza a URL quando a página muda
-    router.replace(`${pathname}?page=${currentPage}`);
-    localStorage.setItem("currentPage", currentPage.toString());
-  }, [currentPage, pathname, router]);
-  */
-
   const currentThemeIndex = Math.floor(
     currentPage / (data[0].questions.length / questionsPerPage)
   );
@@ -121,6 +105,28 @@ function QuestionarioContent() {
     });
   }, [setValue]);
 
+  // useEffect(() => {
+  //   // Verificar e redirecionar caso o parâmetro "page" esteja ausente
+  //   const pageParam = searchParams.get("page");
+  //   if (!pageParam) {
+  //     router.replace(`/questionario?page=0`);
+  //     return;
+  //   }
+  
+  //   const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
+  //   const savedPage = localStorage.getItem("currentPage");
+  
+  //   Object.keys(savedData).forEach((key) => {
+  //     setValue(key, savedData[key]);
+  //   });
+  
+  //   if (savedPage) {
+  //     setCurrentPage(Number(savedPage));
+  //   } else if (pageParam) {
+  //     setCurrentPage(Number(pageParam));
+  //   }
+  // }, [setValue, searchParams, router]);
+  
   const saveResponseToLocalStorage = (fieldName: string, value: string) => {
     const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
     savedData[fieldName] = value;
@@ -132,7 +138,6 @@ function QuestionarioContent() {
     const incompleteQuestionIds = isPageComplete();
     if (incompleteQuestionIds === null) {
       saveResponsesToLocalStorage();
-      // setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
       router.push(`/questionario?page=${pageUrl + 1}`);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
@@ -149,7 +154,6 @@ function QuestionarioContent() {
   };
 
   const handlePreviousPage = () => {
-    // setCurrentPage((prev) => Math.max(prev - 1, 0));
     router.push(`/questionario?page=${pageUrl - 1}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -314,13 +318,13 @@ function QuestionarioContent() {
 
             <div className="flex justify-between mt-8">
               {currentPage > 0 && (
-                <CustomButton type="button" onClick={handlePreviousPage}>
+                <CustomButton type="button" onClick={handlePreviousPage} disabled={currentPage === 0}>
                   Anterior
                 </CustomButton>
               )}
               {currentPage < totalPages - 1 ? (
                 <CustomButton type="button" onClick={handleNextPage}>
-                  Próxima
+                  Próximo
                 </CustomButton>
               ) : (
                 <CustomButton onClick={confirmAction} className="text-white">
