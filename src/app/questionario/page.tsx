@@ -76,14 +76,16 @@ function QuestionarioContent() {
   // Recupera o valor da página na URL ao carregar
   useEffect(() => {
     const savedPage = localStorage.getItem("currentPage");
-    const pageFromURL = parseInt(searchParams.get("page") || "", 10);
+    const pageFromURL = parseInt(searchParams.get("page") || "0", 10);
+    setCurrentPage(pageFromURL);
 
+    // Garante que a página seja válida e dentro do intervalo
     const pageToSet =
       !isNaN(pageFromURL) && pageFromURL >= 0 && pageFromURL < totalPages
         ? pageFromURL
         : savedPage
-        ? parseInt(savedPage, 10)
-        : 0;
+          ? parseInt(savedPage, 10)
+          : 0;
 
     setCurrentPage(pageToSet);
   }, [searchParams, totalPages]);
@@ -105,28 +107,23 @@ function QuestionarioContent() {
     });
   }, [setValue]);
 
-  // useEffect(() => {
-  //   // Verificar e redirecionar caso o parâmetro "page" esteja ausente
-  //   const pageParam = searchParams.get("page");
-  //   if (!pageParam) {
-  //     router.replace(`/questionario?page=0`);
-  //     return;
-  //   }
-  
-  //   const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
-  //   const savedPage = localStorage.getItem("currentPage");
-  
-  //   Object.keys(savedData).forEach((key) => {
-  //     setValue(key, savedData[key]);
-  //   });
-  
-  //   if (savedPage) {
-  //     setCurrentPage(Number(savedPage));
-  //   } else if (pageParam) {
-  //     setCurrentPage(Number(pageParam));
-  //   }
-  // }, [setValue, searchParams, router]);
-  
+  useEffect(() => {
+    const pageParam = searchParams.get("page");
+    if (!pageParam || isNaN(pageUrl)) {
+      router.replace(`/questionario?page=0`);
+      localStorage.setItem("currentPage", "0");
+      setCurrentPage(0);
+    } else {
+      const pageToSet =
+        !isNaN(pageUrl) && pageUrl >= 0 && pageUrl < totalPages
+          ? pageUrl
+          : 0; // Se o valor estiver errado, cai para a primeira página
+
+      setCurrentPage(pageToSet);
+    }
+  }, [searchParams, pageUrl, totalPages, router]);
+
+
   const saveResponseToLocalStorage = (fieldName: string, value: string) => {
     const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
     savedData[fieldName] = value;
@@ -138,7 +135,9 @@ function QuestionarioContent() {
     const incompleteQuestionIds = isPageComplete();
     if (incompleteQuestionIds === null) {
       saveResponsesToLocalStorage();
-      router.push(`/questionario?page=${pageUrl + 1}`);
+      const nextPage = pageUrl + 1;
+      router.push(`/questionario?page=${nextPage}`);
+      localStorage.setItem("currentPage", nextPage.toString()); // Atualiza o localStorage
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
       toast({
@@ -154,18 +153,22 @@ function QuestionarioContent() {
   };
 
   const handlePreviousPage = () => {
-    router.push(`/questionario?page=${pageUrl - 1}`);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (currentPage > 0) {
+      const prevPage = currentPage - 1;
+      router.push(`/questionario?page=${prevPage}`);
+      localStorage.setItem("currentPage", prevPage.toString()); // Atualiza o localStorage
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   const isPageComplete = () => {
     const incompleteQuestions = currentQuestions
       .filter((question) => !watch(`question${question.id}`))
       .map((question) => ({ id: question.id, text: question.question }));
-
+  
     return incompleteQuestions.length > 0 ? incompleteQuestions : null;
   };
-
+  
   useEffect(() => {
     const handleUnload = () => {
       localStorage.setItem("currentPage", currentPage.toString());
@@ -318,10 +321,11 @@ function QuestionarioContent() {
 
             <div className="flex justify-between mt-8">
               {currentPage > 0 && (
-                <CustomButton type="button" onClick={handlePreviousPage} disabled={currentPage === 0}>
+                <CustomButton type="button" onClick={handlePreviousPage}>
                   Anterior
                 </CustomButton>
               )}
+
               {currentPage < totalPages - 1 ? (
                 <CustomButton type="button" onClick={handleNextPage}>
                   Próximo
@@ -332,6 +336,8 @@ function QuestionarioContent() {
                 </CustomButton>
               )}
             </div>
+
+
             <ConfirmDialog
               isOpen={isDialogOpen}
               onConfirm={handleSubmitDialog}
