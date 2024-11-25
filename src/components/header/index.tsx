@@ -8,13 +8,12 @@ import { TbAccessible } from "react-icons/tb";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { DropdownMenuDemo } from "../menu";
 import { useSession } from "../../../contexts/user-context";
+import Link from "next/link";
 
 export function Header() {
   const [isActive, setIsActive] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, avatarUrl } = useSession();
-
-
 
   return (
     <header className="w-full fixed top-0 bg-[var(--background-color)] shadow-md z-20">
@@ -30,16 +29,17 @@ export function Header() {
           </h1>
         </div>
         <ul
-          className={`flex items-center list-none gap-8 max-sm:flex-col max-sm:absolute max-sm:bg-[var(--background-color)] max-sm:w-full max-sm:top-16 max-sm:left-0 max-sm:z-10 max-sm:shadow-md transition-all duration-300 ${isMenuOpen ? "block" : "hidden"
-            } sm:flex`}
+          className={`flex items-center list-none gap-8 max-sm:flex-col max-sm:absolute max-sm:bg-[var(--background-color)] max-sm:w-full max-sm:top-16 max-sm:left-0 max-sm:z-10 max-sm:shadow-md transition-all duration-300 ${
+            isMenuOpen ? "block" : "hidden"
+          } sm:flex`}
         >
           <li>
-            <a
+            <Link
               href="/"
               className="text-[var(--text-color)] hover:text-primary text-base transition-colors duration-200 ease-in-out"
             >
               Home
-            </a>
+            </Link>
           </li>
           <li>
             <a
@@ -79,10 +79,9 @@ export function Header() {
             <Switch
               id="airplane-mode"
               onClick={() => setIsActive(!isActive)}
-              className={`peer inline-flex ${isActive
-                ? "bg-primary"
-                : "bg-textColor border-textColor"
-                }`}
+              className={`peer inline-flex ${
+                isActive ? "bg-primary" : "bg-textColor border-textColor"
+              }`}
             />
             <span className="font-bold">Acessibilidade</span>
             <TbAccessible />
