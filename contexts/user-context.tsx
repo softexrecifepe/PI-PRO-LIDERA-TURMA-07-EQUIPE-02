@@ -9,6 +9,7 @@ const supabase = createClient(
 );
 
 interface UserContextType {
+    id: string | null;
     user: { name: string } | null;
     avatarUrl: string | null;
 }
@@ -16,27 +17,33 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | null>(null);
 
 export function UserProvider({ children }: { children: ReactNode }) {
+    const [id, setId] = useState<string | null>(null);
     const [user, setUser] = useState<{ name: string } | null>(null);
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
     useEffect(() => {
+        const storedId = localStorage.getItem("id");
         const storedUser = JSON.parse(localStorage.getItem("user") || "null");
         const storedAvatarUrl = localStorage.getItem("avatarUrl");
 
-        if (storedUser && storedAvatarUrl) {
+        if (storedId && storedUser && storedAvatarUrl) {
+            setId(storedId);
             setUser(storedUser);
             setAvatarUrl(storedAvatarUrl);
         } else {
             const fetchUser = async () => {
                 const { data: { user } } = await supabase.auth.getUser();
                 if (user) {
+                    const userId = user.id;
                     const userData = { name: user.user_metadata.name };
                     const avatar = user.user_metadata.avatar_url || null;
 
+                    setId(userId);
                     setUser(userData);
                     setAvatarUrl(avatar);
 
                     // Armazenar no localStorage
+                    localStorage.setItem("id", userId);
                     localStorage.setItem("user", JSON.stringify(userData));
                     if (avatar) localStorage.setItem("avatarUrl", avatar);
                 }
@@ -48,18 +55,23 @@ export function UserProvider({ children }: { children: ReactNode }) {
         const { data: subscription } = supabase.auth.onAuthStateChange(
             (_, session) => {
                 if (session?.user) {
+                    const userId = session.user.id;
                     const userData = { name: session.user.user_metadata.name };
                     const avatar = session.user.user_metadata.avatar_url || null;
 
+                    setId(userId);
                     setUser(userData);
                     setAvatarUrl(avatar);
 
                     // Atualizar no localStorage
+                    localStorage.setItem("id", userId);
                     localStorage.setItem("user", JSON.stringify(userData));
                     if (avatar) localStorage.setItem("avatarUrl", avatar);
                 } else {
+                    setId(null);
                     setUser(null);
                     setAvatarUrl(null);
+                    localStorage.removeItem("id");
                     localStorage.removeItem("user");
                     localStorage.removeItem("avatarUrl");
                 }
@@ -70,7 +82,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, avatarUrl }}>
+        <UserContext.Provider value={{ id, user, avatarUrl }}>
             {children}
         </UserContext.Provider>
     );

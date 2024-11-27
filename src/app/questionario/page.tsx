@@ -9,6 +9,8 @@ import { ConfirmDialog } from "@/components/confirmDialog";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { motion } from "framer-motion";
 import { Vortex } from "react-loader-spinner";
+import { useSession } from "../../../contexts/user-context";
+
 
 type Option = {
   id: string;
@@ -63,6 +65,8 @@ function QuestionarioContent() {
   ).length;
 
   const progress = (totalAnswered / questions.length) * 100; // Progresso total, baseado no número total de perguntas
+  const { id } = useSession();
+  const userId = id;
 
   useEffect(() => {
     if (currentPage === 0) {
@@ -165,10 +169,10 @@ function QuestionarioContent() {
     const incompleteQuestions = currentQuestions
       .filter((question) => !watch(`question${question.id}`))
       .map((question) => ({ id: question.id, text: question.question }));
-  
+
     return incompleteQuestions.length > 0 ? incompleteQuestions : null;
   };
-  
+
   useEffect(() => {
     const handleUnload = () => {
       localStorage.setItem("currentPage", currentPage.toString());
@@ -178,7 +182,7 @@ function QuestionarioContent() {
     return () => window.removeEventListener("beforeunload", handleUnload);
   }, [currentPage]);
 
-  const onSubmit = (formData: FormData) => {
+  const onSubmit = async (formData: FormData) => {
     let totalScore = 0;
     for (const key in formData) {
       const question = questions.find((q) => `question${q.id}` === key);
@@ -195,6 +199,25 @@ function QuestionarioContent() {
       resultCategory = "Liderança em desenvolvimento";
     } else if (totalScore >= 54 && totalScore <= 72) {
       resultCategory = "Líder de alta performance";
+    }
+
+    // Salvar no banco de dados
+    const result = await fetch("/api/saveTestResult", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+        score: totalScore,
+        category: resultCategory || "Liderança não determinada",
+      }),
+    });
+
+    if (!result.ok) {
+      console.error("Erro ao salvar resultado no front.");
+    } else {
+      console.log("Resultado salvo com sucesso.");
     }
 
     const encodedResultCategory = encodeURIComponent(
@@ -228,6 +251,7 @@ function QuestionarioContent() {
     });
     localStorage.setItem("responses", JSON.stringify(responses));
   };
+
 
   return (
     <div className="flex justify-center items-center h-full py-24 min-h-screen">
@@ -303,11 +327,11 @@ function QuestionarioContent() {
                                 e.target.value
                               );
                             }}
-                            className="mr-2"
+                            className="mr-2 cursor-pointer"
                           />
                           <label
                             htmlFor={`question${question.id}_option${option.id}`}
-                            className="text-gray-700"
+                            className="text-gray-700 cursor-pointer"
                           >
                             {option.value}
                           </label>
@@ -336,7 +360,6 @@ function QuestionarioContent() {
                 </CustomButton>
               )}
             </div>
-
 
             <ConfirmDialog
               isOpen={isDialogOpen}
