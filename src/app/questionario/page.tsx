@@ -10,6 +10,7 @@ import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { motion } from "framer-motion";
 import { Vortex } from "react-loader-spinner";
 import { useSession } from "../../../contexts/user-context";
+import { supabase } from "@/lib/supabaseClient";
 
 
 type Option = {
@@ -57,6 +58,7 @@ function QuestionarioContent() {
     pageUrl * questionsPerPage + questionsPerPage
   );
 
+
   // Calcula o progresso baseado nas perguntas respondidas
   const totalAnswered = questions.filter(
     (question) =>
@@ -92,6 +94,7 @@ function QuestionarioContent() {
           : 0;
 
     setCurrentPage(pageToSet);
+
   }, [searchParams, totalPages]);
 
   const currentThemeIndex = Math.floor(
@@ -201,24 +204,18 @@ function QuestionarioContent() {
       resultCategory = "Líder de alta performance";
     }
 
-    // Salvar no banco de dados
-    const result = await fetch("/api/saveTestResult", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId,
-        score: totalScore,
-        category: resultCategory || "Liderança não determinada",
-      }),
-    });
 
-    if (!result.ok) {
-      console.error("Erro ao salvar resultado no front.");
-    } else {
-      console.log("Resultado salvo com sucesso.");
-    }
+    const { data, error } = await supabase.from("results").insert([
+      {
+        user_id: userId,
+        score: totalScore,
+        category: resultCategory,
+        created_at: new Date().toISOString(),
+      },
+    ]);
+
+    console.log(data);
+    console.log(error);
 
     const encodedResultCategory = encodeURIComponent(
       resultCategory || "Liderança não determinada"
