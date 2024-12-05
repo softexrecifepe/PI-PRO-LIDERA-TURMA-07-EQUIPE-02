@@ -13,17 +13,35 @@ import image from "@/assets/images/sign.jpg";
 
 export default function Cadastro() {
   
-  // Adiciona o estado para capturar os valores dos campos
+// Adiciona o estado para capturar os valores dos campos
 const [nome, setNome] = useState('');
 const [email, setEmail] = useState('');
 const [senha, setSenha] = useState('');
 const [confirmarSenha, setConfirmarSenha] = useState('');
 const [error, setError] = useState('');
+const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-   // Validação simples de senha
-   if (senha !== confirmarSenha) {
+const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  event.preventDefault();
+  setIsLoading(true);
+
+  // Resetando erros
+  setError('');
+
+  // Validações
+  if (!nome.trim()) {
+    setError('O nome é obrigatório.');
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    setError('Por favor, insira um e-mail válido.');
+    return;
+  }
+  if (senha.length < 8 || !/[0-9]/.test(senha) || !/[!@#$%^&*]/.test(senha)) {
+    setError('A senha deve ter pelo menos 8 caracteres, incluindo números e caracteres especiais.');
+    return;
+  }
+  if (senha !== confirmarSenha) {
     setError('As senhas não coincidem.');
     return;
   }
@@ -31,24 +49,24 @@ const [error, setError] = useState('');
   try {
     const response = await fetch('/api/auth/register', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome, email, senha }),
     });
 
     const data = await response.json();
     if (response.ok) {
       alert('Cadastro realizado com sucesso!');
-      // Redirecionar ou limpar campos conforme necessário
     } else {
       setError(data.message || 'Erro ao cadastrar usuário.');
     }
   } catch (error) {
     console.error('Erro ao fazer a solicitação:', error);
     setError('Erro ao se conectar com o servidor.');
+  } finally {
+    setIsLoading(false);
   }
 };
+
 
   return (
     <div className="flex min-h-screen">
@@ -98,9 +116,10 @@ const [error, setError] = useState('');
                 placeholder="E-mail*"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="border border-black"
+                className={`border ${error.includes('email') ? 'border-red-500' : 'border-black'}`}
                 required
               />
+              {error.includes('email') && <p className="text-red-500 text-sm">{error}</p>}
               <Input
                 type="password"
                 placeholder="Crie sua senha*"
@@ -139,11 +158,10 @@ const [error, setError] = useState('');
                 </span>
               </div>
               <div className="flex flex-col gap-4 items-center">
-                <Link href={"/login"}>
-                  <CustomButton onClick={() => {}} className="w-52">
-                    Cadastrar
-                  </CustomButton>
-                </Link>
+                
+                  <CustomButton onClick={() => {}} className="w-52" disabled={isLoading}>
+                  {isLoading ? 'Carregando...' : 'Cadastrar'}
+                  </CustomButton>     
                 <Separator className="border border-primary w-52" />
                 <div className="flex items-center gap-2">
                   <div className="text-primary">Já possui cadastro?</div>

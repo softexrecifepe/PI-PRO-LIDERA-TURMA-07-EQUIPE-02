@@ -1,12 +1,13 @@
+"use client";
+
 import {
     CreditCard,
     LifeBuoy,
     LogOut,
     Settings,
     User,
-} from "lucide-react"
-
-import { Button } from "@/components/ui/button"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -16,54 +17,62 @@ import {
     DropdownMenuSeparator,
     DropdownMenuShortcut,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { signOut } from "next-auth/react";
+} from "@/components/ui/dropdown-menu";
+import { supabase } from "@/lib/supabaseClient";
+import { useRouter } from "next/navigation";
+import { useSession } from "../../../contexts/user-context";
 
 export function DropdownMenuDemo() {
+    const router = useRouter();
+    const { user } = useSession();
 
-    const handleLogOutGoogle = async () => {
+    const handleLogOut = async () => {
         try {
-            await signOut({ redirectTo: "/" });
+            await supabase.auth.signOut();
+            router.push("/")
         } catch (error) {
-            console.log("Erro ao sair", error);
+            console.error("Erro ao sair:", error);
         }
-    }
+    };
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline">Menu</Button>
+                <Button className="text-white">Menu</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-slate-200">
                 <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        <User />
-                        <span>Perfil</span>
-                        <DropdownMenuShortcut>⇧ + Win + P</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <CreditCard />
-                        <span>Realizar teste</span>
-                        <DropdownMenuShortcut>Win + B</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Settings />
-                        <span>Configurações</span>
-                        <DropdownMenuShortcut>Win + S</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
+                {user && (
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem>
+                            <User />
+                            <span>{user.name.split(" ")[0] || "Perfil"}</span>
+                            <DropdownMenuShortcut>⇧ + Win + P</DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => router.push("/instrucoes")} className="cursor-pointer">
+                            <CreditCard />
+                            <span>Realizar teste</span>
+                            <DropdownMenuShortcut>Win + B</DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Settings />
+                            <span>Configurações</span>
+                            <DropdownMenuShortcut>Win + S</DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                )}
                 <DropdownMenuItem>
                     <LifeBuoy />
                     <span>Suporte</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogOut} className="cursor-pointer">
                     <LogOut />
-                    <button onClick={handleLogOutGoogle}>Sair</button>
+                    <span>Sair</span>
                     <DropdownMenuShortcut>⇧ + Win + Q</DropdownMenuShortcut>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
-    )
+    );
 }
