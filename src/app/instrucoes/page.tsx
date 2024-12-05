@@ -3,14 +3,22 @@ import { GoDotFill } from "react-icons/go";
 import { CustomButton } from "@/components/button/custom-button";
 import Link from "next/link";
 import { Title } from "@/components/title";
-
 import { Vortex } from "react-loader-spinner";
 import { useState } from "react";
 import { useSession } from "../../../contexts/user-context";
 
+
 export default function Instrucoes() {
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useSession();
+
+  const handleStartTest = async () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); 
+  };
+  
 
   return (
     <div className="flex justify-center items-center h-full py-24 min-h-screen">
@@ -73,7 +81,7 @@ export default function Instrucoes() {
           </div>
           <div className="flex justify-center items-center mt-16">
             <Link href="/questionario">
-              <CustomButton className="text-white" onClick={() => setIsLoading(true)}>
+              <CustomButton className="text-white" onClick={handleStartTest}>
                 Iniciar Teste
               </CustomButton>
             </Link>

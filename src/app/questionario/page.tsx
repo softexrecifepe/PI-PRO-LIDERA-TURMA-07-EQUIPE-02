@@ -12,7 +12,6 @@ import { Vortex } from "react-loader-spinner";
 import { useSession } from "../../../contexts/user-context";
 import { supabase } from "@/lib/supabaseClient";
 
-
 type Option = {
   id: string;
   value: string;
@@ -57,7 +56,6 @@ function QuestionarioContent() {
     pageUrl * questionsPerPage,
     pageUrl * questionsPerPage + questionsPerPage
   );
-
 
   // Calcula o progresso baseado nas perguntas respondidas
   const totalAnswered = questions.filter(
@@ -125,11 +123,9 @@ function QuestionarioContent() {
         !isNaN(pageUrl) && pageUrl >= 0 && pageUrl < totalPages
           ? pageUrl
           : 0; // Se o valor estiver errado, cai para a primeira página
-
       setCurrentPage(pageToSet);
     }
   }, [searchParams, pageUrl, totalPages, router]);
-
 
   const saveResponseToLocalStorage = (fieldName: string, value: string) => {
     const savedData = JSON.parse(localStorage.getItem("formData") || "{}");
@@ -203,7 +199,6 @@ function QuestionarioContent() {
     } else if (totalScore >= 54 && totalScore <= 72) {
       resultCategory = "Líder de alta performance";
     }
-
 
     const { data, error } = await supabase.from("results").insert([
       {

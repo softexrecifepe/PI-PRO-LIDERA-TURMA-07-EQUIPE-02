@@ -87,7 +87,7 @@ export default function Login() {
       setIsLoading(false);
     }
   };
-
+  
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
       {isLoading ? (
@@ -151,7 +151,7 @@ export default function Login() {
 
               {/* Links e Separador */}
               <div className="w-full text-right">
-                <span className="text-textColor underline opacity-70">
+                <span className="text-textColor underline opacity-70 cursor-pointer">
                   Esqueceu a senha?
                 </span>
               </div>

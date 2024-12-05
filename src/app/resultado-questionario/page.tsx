@@ -5,7 +5,7 @@ import { Title } from "@/components/title";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { jsPDF } from "jspdf";
-import { Suspense, useCallback } from "react";
+import { Suspense, useCallback, useState } from "react";
 import resultData from "../../lib/resultData.json";
 import React from "react";
 import { useSession } from "../../../contexts/user-context";
@@ -22,6 +22,8 @@ function ResultadoContent() {
   const searchParams = useSearchParams();
   const resultCategoryFromQuery = searchParams.get("resultCategory") || "";
   const { user } = useSession();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Mapeamento de categorias de resultado para mensagens
   const resultMessages: Record<string, string> = {
@@ -49,12 +51,19 @@ function ResultadoContent() {
       });
     } catch (error) {
       console.error("Erro ao converter imagem para base64:", error);
+      setError("Erro ao carregar a imagem.");
       throw error;
     }
   };
 
   // Função de download de PDF
   const handleDownload = useCallback(async () => {
+    if (!user?.name) {
+      setError("Nome do usuário não encontrado.");
+      return;
+    }
+
+    setLoading(true);
     const userName = user?.name || "Usuário";
     const doc = new jsPDF("landscape", "mm", "a4");
 
@@ -63,15 +72,25 @@ function ResultadoContent() {
 
       doc.addImage(base64Image, "PNG", 0, 0, 297, 210, undefined, "FAST");
       doc.setFontSize(32).setFont("helvetica", "bold");
-      doc.text(userName, 148, 120, { align: "center" });
-      doc.setFontSize(12).text(resultCategoryFromQuery, 92, 164, {
-        align: "center",
-        maxWidth: 270,
-      });
+
+      // Calcular a posição do nome
+      const userNameWidth = doc.getTextWidth(userName); // Largura do nome
+      const userNameX = (297 - userNameWidth) / 2; // Centraliza o nome
+      doc.text(userName, userNameX, 120); // Posiciona o nome no certificado
+
+      // Ajustar a posição da categoria para começar no começo da última linha
+      const categoryX = 66; // Coloca no início da página (lado esquerdo)
+      const categoryY = 164; // Defina a posição Y fixa (na última linha da página)
+
+      // Exibir a categoria de resultado na última linha
+      doc.setFontSize(12).text(resultCategoryFromQuery, categoryX, categoryY);
 
       doc.save("resultado_teste_lideranca.pdf");
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error("Erro ao gerar o PDF:", error);
+      setError("Erro ao gerar o PDF");
     }
   }, [user, resultCategoryFromQuery]);
 
@@ -84,7 +103,7 @@ function ResultadoContent() {
         </h3>
         <p className="text-base sm:text-lg font-semibold text-justify">
           &nbsp;O tipo de&nbsp;
-          <span className="text-primary">{resultCategoryFromQuery}</span>.
+          <span className="text-primary">{resultCategoryFromQuery}.</span>.
           <span className="italic leading-relaxed">
             {" "}
             {resultMessage.split(".").map((sentence, index, array) => {
@@ -112,11 +131,17 @@ function ResultadoContent() {
           />
         </div>
 
+        {error && (
+          <div className="text-red-500 text-sm mt-4">
+            <p>{error}</p>
+          </div>
+        )}
+
         <small className="text-sm text-gray-600">
           Clique no botão abaixo para baixar o resultado em PDF:
         </small>
         <div className="flex justify-center items-center mt-4">
-          <CustomButton onClick={handleDownload}>Download</CustomButton>
+          <CustomButton onClick={handleDownload} disabled={loading}>{loading ? "Gerando PDF..." : "Download"}</CustomButton>
         </div>
       </div>
     </div>
